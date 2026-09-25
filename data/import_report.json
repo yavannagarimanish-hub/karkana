@@ -1,0 +1,14 @@
+{
+  "csvRowsDetected": 138,
+  "productsImported": 138,
+  "productsSkipped": 0,
+  "duplicateProductIds": [],
+  "imageFilesDetected": 209,
+  "imagesSuccessfullyMatched": 138,
+  "missingProductImages": [],
+  "unmatchedImageFiles": [],
+  "basicProductCount": 118,
+  "customizedProductCount": 20,
+  "personalizedExampleCount": 6,
+  "errors": []
+}

@@ -80,11 +80,14 @@ export default async function HomePage() {
                 BASIC
               </h3>
               <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
-                Pure, timeless celebration essentials. Master formulations constructed for pristine acoustic clarity and radiant illuminations.
+                Pure, timeless celebration essentials. Master formulations constructed for acoustic clarity and radiant illuminations.
               </p>
+              <div className="text-[11px] font-mono text-white/50 tracking-wider">
+                KRK001 – KRK118 // 118 PRODUCTS
+              </div>
             </div>
             <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
-              <span>EXPLORE BASIC</span>
+              <span>OPEN BASIC (118 ITEMS)</span>
               <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
                 →
               </span>
@@ -109,11 +112,14 @@ export default async function HomePage() {
                 CUSTOMIZED
               </h3>
               <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
-                Curated themed designs including cinematic icons, political legends, and distinctive artistic concepts curated by Karkana.
+                Curated themed designs including cinematic icons, political series, and distinctive artistic concepts curated by Karkana.
               </p>
+              <div className="text-[11px] font-mono text-white/50 tracking-wider">
+                KRK119 – KRK138 // 20 PRODUCTS
+              </div>
             </div>
             <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
-              <span>EXPLORE THEMES</span>
+              <span>OPEN CUSTOMIZED (20 ITEMS)</span>
               <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
                 →
               </span>
@@ -129,8 +135,8 @@ export default async function HomePage() {
               <span className="text-5xl sm:text-6xl font-extrabold font-mono text-kred/40 group-hover:text-kred transition-colors duration-300">
                 03
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest border border-kred/50 text-kred px-3 py-1">
-                COMMISSION
+              <span className="text-[10px] font-mono uppercase tracking-widest border border-kred/50 text-kred px-3 py-1 font-bold">
+                ₹499 COMMISSION
               </span>
             </div>
             <div className="space-y-4">
@@ -140,9 +146,12 @@ export default async function HomePage() {
               <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
                 Bespoke commemorative boxes. Direct customer upload of personal photographs and specific customization directives for packaging.
               </p>
+              <div className="text-[11px] font-mono text-kred/70 tracking-wider">
+                INCLUDES 6 REFERENCE EXAMPLES (KRK133–KRK138)
+              </div>
             </div>
             <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
-              <span>BESPOKE UPLOAD</span>
+              <span>COMMISSION BOX (₹499)</span>
               <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
                 →
               </span>

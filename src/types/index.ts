@@ -22,8 +22,50 @@ export interface Product {
   is_popular: boolean;
   is_visible: boolean;
   in_stock: boolean;
+  brand?: string;
+  subcategory?: string;
+  short_description?: string;
+  raw_mrp?: string;
+  raw_selling_price?: string;
+  discount_percent?: string | number;
+  stock_quantity?: number | null;
+  unit?: string;
+  safety_instructions?: string;
+  notes?: string;
+  search_keywords?: string;
   created_at: string;
   updated_at: string;
+}
+
+export type ValidationSeverity = 'ERROR' | 'WARNING' | 'INCOMPLETE';
+
+export interface ValidationIssue {
+  id: string;
+  productName: string;
+  field: string;
+  issue: string;
+  severity: ValidationSeverity;
+  details?: string;
+}
+
+export interface CatalogueValidationReport {
+  totalProducts: number;
+  duplicateIds: { id: string; count: number }[];
+  missingIds: { row: number; name?: string }[];
+  missingNames: { id: string }[];
+  invalidPrices: { id: string; name: string; mrp?: number | null; price?: number | null; issue: string }[];
+  incorrectDiscounts: { id: string; name: string; mrp: number; price: number; listedDiscount: string; calculatedDiscount: string; diff: number }[];
+  missingImages: { id: string; name: string; image?: string; issue: string }[];
+  missingDescriptions: { id: string; name: string }[];
+  missingCategories: { id: string; name: string }[];
+  missingBrands: { id: string; name: string }[];
+  missingStockValues: { id: string; name: string }[];
+  otherSchemaViolations: { id: string; name: string; field: string; issue: string }[];
+  errors: ValidationIssue[];
+  warnings: ValidationIssue[];
+  incompleteOptional: ValidationIssue[];
+  productsRequiringAttentionCount: number;
+  productsRequiringAttentionIds: string[];
 }
 
 export interface StorefrontSection {

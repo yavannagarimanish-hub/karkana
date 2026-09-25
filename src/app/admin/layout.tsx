@@ -9,6 +9,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { label: 'OVERVIEW', href: '/admin' },
+    { label: 'VALIDATION', href: '/admin/validation' },
     { label: 'PRODUCTS', href: '/admin/products' },
     { label: 'DRAG & DROP ORDERING', href: '/admin/ordering' },
     { label: 'ORDERS', href: '/admin/orders' },
