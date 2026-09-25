@@ -145,11 +145,11 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
 
             {photoUrl ? (
               <div className="space-y-4">
-                <div className="relative aspect-[4/3] w-full border border-white/20 bg-black overflow-hidden flex items-center justify-center">
+                <div className="relative w-full min-h-[280px] max-h-[460px] border border-white/20 bg-black p-4 flex items-center justify-center overflow-hidden">
                   <img
                     src={photoUrl}
                     alt="Customer photograph preview"
-                    className="w-full h-full object-contain"
+                    className="max-w-full max-h-[420px] object-contain"
                   />
                   <div className="absolute bottom-4 right-4 bg-black/80 border border-white/20 px-3 py-1 text-[10px] font-mono text-white uppercase">
                     HIGH-RES READY
@@ -295,11 +295,11 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
           {/* Active Big Showcase */}
           {examples.length > 0 && (
             <div className="border border-white/10 bg-white/[0.01] p-6 space-y-4">
-              <div className="relative aspect-[4/5] w-full border border-white/10 bg-black overflow-hidden flex items-center justify-center">
+              <div className="relative w-full min-h-[360px] max-h-[500px] border border-white/10 bg-black/40 p-6 flex items-center justify-center overflow-hidden">
                 <img
                   src={examples[activeExampleIndex]?.image || examples[0]?.image}
                   alt={examples[activeExampleIndex]?.name || 'Example Box'}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto max-h-[450px] object-contain transition-all duration-300"
                 />
                 <div className="absolute top-4 left-4 bg-black/80 border border-white/20 px-3 py-1 text-[9px] font-mono text-white uppercase">
                   {examples[activeExampleIndex]?.id} {'//'} REFERENCE
@@ -324,11 +324,11 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
                 key={ex.id}
                 type="button"
                 onClick={() => setActiveExampleIndex(idx)}
-                className={`relative aspect-square border overflow-hidden transition-all ${
+                className={`relative aspect-square border p-1 bg-black/40 flex items-center justify-center overflow-hidden transition-all ${
                   activeExampleIndex === idx ? 'border-kred scale-105' : 'border-white/10 opacity-60 hover:opacity-100'
                 }`}
               >
-                <img src={ex.image} alt={ex.name} className="w-full h-full object-cover" />
+                <img src={ex.image} alt={ex.name} className="max-w-full max-h-full object-contain" />
               </button>
             ))}
           </div>

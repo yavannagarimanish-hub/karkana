@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getProducts, getSections } from '@/lib/db';
 import SectionHeader from '@/components/SectionHeader';
-import ProductCard from '@/components/ProductCard';
+import ProductGrid from '@/components/ProductGrid';
 import EmptyState from '@/components/EmptyState';
 
 // Ensure fresh dynamic data from the database
@@ -48,7 +48,7 @@ export default async function HomePage() {
             EXPLORE MODULES ↓
           </a>
           <span className="text-white/30 tracking-widest">
-            CONTROLLED VIA CENTRAL ADMIN
+            DIRECT SIVAKASI ATELIER
           </span>
         </div>
       </section>
@@ -170,17 +170,11 @@ export default async function HomePage() {
           />
 
           {popularProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {popularProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            <ProductGrid products={popularProducts} />
           ) : (
             <EmptyState
               title="NO PRODUCTS AVAILABLE YET"
-              message="No items have been assigned to Popular status in the Admin Portal."
-              actionText="OPEN CONTROL CENTRE"
-              actionHref="/admin/products"
+              message="Curated popular selections will appear here once allocated."
             />
           )}
         </section>
@@ -196,17 +190,11 @@ export default async function HomePage() {
           />
 
           {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            <ProductGrid products={featuredProducts} />
           ) : (
             <EmptyState
               title="NO PRODUCTS AVAILABLE YET"
-              message="No items have been tagged as Featured in the Admin Portal."
-              actionText="CURATE FEATURED ITEMS"
-              actionHref="/admin/products"
+              message="Curated featured formulations will appear here once allocated."
             />
           )}
         </section>
@@ -226,17 +214,11 @@ export default async function HomePage() {
         </div>
 
         {allProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {allProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <ProductGrid products={allProducts} />
         ) : (
           <EmptyState
             title="NO PRODUCTS AVAILABLE YET"
-            message="The storefront is dynamically synchronized with the database. Real catalogue entries can be introduced at any time via the Control Centre."
-            actionText="ADD FIRST PRODUCT VIA ADMIN"
-            actionHref="/admin/products"
+            message="No products are currently visible in the active catalogue."
           />
         )}
       </section>
@@ -262,12 +244,12 @@ export default async function HomePage() {
             >
               VIEW CART
             </Link>
-            <Link
-              href="/admin"
-              className="px-8 py-4 bg-kred text-white font-bold hover:bg-kred-hover transition-colors text-center"
+            <a
+              href="#modules"
+              className="px-8 py-4 bg-white text-black font-bold uppercase hover:bg-kred hover:text-white transition-colors text-center"
             >
-              ADMIN PORTAL
-            </Link>
+              EXPLORE MODULES →
+            </a>
           </div>
         </div>
       </section>

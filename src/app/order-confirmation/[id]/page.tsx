@@ -75,11 +75,11 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
               <div key={idx} className="pt-4 first:pt-0 flex items-start justify-between gap-6">
                 <div className="flex items-start space-x-4">
                   {item.personalizationImage ? (
-                    <div className="w-14 h-14 border border-kred/50 overflow-hidden flex-shrink-0 bg-black">
+                    <div className="w-14 h-14 border border-kred/50 p-0.5 overflow-hidden flex-shrink-0 bg-black flex items-center justify-center">
                       <img
                         src={item.personalizationImage}
                         alt="Personalized Customer Upload"
-                        className="w-full h-full object-cover"
+                        className="max-w-full max-h-full object-contain"
                       />
                     </div>
                   ) : (
@@ -172,18 +172,12 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
       </div>
 
       {/* Post Actions */}
-      <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6 font-mono text-xs tracking-widest">
+      <div className="mt-12 flex justify-center items-center font-mono text-xs tracking-widest">
         <Link
           href="/"
           className="px-8 py-4 bg-white text-black font-bold uppercase hover:bg-kred hover:text-white transition-colors"
         >
           RETURN TO HOME
-        </Link>
-        <Link
-          href="/admin/orders"
-          className="px-8 py-4 border border-white/20 text-white uppercase hover:border-white transition-colors"
-        >
-          VIEW IN ADMIN PORTAL →
         </Link>
       </div>
     </div>

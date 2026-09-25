@@ -31,7 +31,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T16:30:44.948Z",
+      "image_width": 1254,
+      "image_height": 1254,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK002",
@@ -64,7 +68,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1254,
+      "image_height": 1254,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK003",
@@ -97,7 +105,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1254,
+      "image_height": 1254,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK004",
@@ -130,7 +142,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK005",
@@ -163,7 +179,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK006",
@@ -196,7 +216,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK007",
@@ -229,7 +253,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK008",
@@ -262,7 +290,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK009",
@@ -295,7 +327,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK010",
@@ -328,7 +364,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK011",
@@ -361,7 +401,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK012",
@@ -394,7 +438,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK013",
@@ -427,7 +475,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK014",
@@ -460,7 +512,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 798,
+      "image_height": 1024,
+      "aspect_ratio": 0.779,
+      "orientation": "TALL"
     },
     {
       "id": "KRK015",
@@ -493,7 +549,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK016",
@@ -526,7 +586,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK017",
@@ -559,7 +623,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK018",
@@ -592,7 +660,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1717,
+      "image_height": 916,
+      "aspect_ratio": 1.874,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK019",
@@ -625,7 +697,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1774,
+      "image_height": 887,
+      "aspect_ratio": 2,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK020",
@@ -658,7 +734,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1774,
+      "image_height": 887,
+      "aspect_ratio": 2,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK021",
@@ -691,7 +771,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1774,
+      "image_height": 887,
+      "aspect_ratio": 2,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK022",
@@ -724,7 +808,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1774,
+      "image_height": 887,
+      "aspect_ratio": 2,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK023",
@@ -757,7 +845,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1774,
+      "image_height": 887,
+      "aspect_ratio": 2,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK024",
@@ -790,7 +882,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 225,
+      "image_height": 225,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK025",
@@ -823,7 +919,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 250,
+      "image_height": 250,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK026",
@@ -856,7 +956,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 506,
+      "image_height": 506,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK027",
@@ -889,7 +993,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 447,
+      "image_height": 447,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK028",
@@ -922,7 +1030,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 398,
+      "image_height": 502,
+      "aspect_ratio": 0.793,
+      "orientation": "TALL"
     },
     {
       "id": "KRK029",
@@ -955,7 +1067,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 2036,
+      "image_height": 1357,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK030",
@@ -988,7 +1104,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 447,
+      "image_height": 447,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK031",
@@ -1021,7 +1141,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1600,
+      "image_height": 1067,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK032",
@@ -1054,7 +1178,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK033",
@@ -1087,7 +1215,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK034",
@@ -1120,7 +1252,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK035",
@@ -1153,7 +1289,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK036",
@@ -1186,7 +1326,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK037",
@@ -1219,7 +1363,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 225,
+      "image_height": 225,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK038",
@@ -1252,7 +1400,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 447,
+      "image_height": 447,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK039",
@@ -1285,7 +1437,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK040",
@@ -1318,7 +1474,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK041",
@@ -1351,7 +1511,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK042",
@@ -1384,7 +1548,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 321,
+      "aspect_ratio": 1.558,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK043",
@@ -1417,7 +1585,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 250,
+      "image_height": 250,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK044",
@@ -1450,7 +1622,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 506,
+      "image_height": 506,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK045",
@@ -1483,7 +1659,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 408,
+      "image_height": 490,
+      "aspect_ratio": 0.833,
+      "orientation": "TALL"
     },
     {
       "id": "KRK046",
@@ -1516,7 +1696,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 447,
+      "image_height": 447,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK047",
@@ -1549,7 +1733,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK048",
@@ -1582,7 +1770,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 225,
+      "image_height": 225,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK049",
@@ -1615,7 +1807,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK050",
@@ -1648,7 +1844,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK051",
@@ -1681,7 +1881,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK052",
@@ -1714,7 +1918,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK053",
@@ -1747,7 +1955,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK054",
@@ -1780,7 +1992,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK055",
@@ -1813,7 +2029,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK056",
@@ -1846,7 +2066,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK057",
@@ -1879,7 +2103,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK058",
@@ -1912,7 +2140,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK059",
@@ -1945,7 +2177,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK060",
@@ -1978,7 +2214,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK061",
@@ -2011,7 +2251,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK062",
@@ -2044,7 +2288,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK063",
@@ -2077,7 +2325,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1000,
+      "image_height": 1000,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK064",
@@ -2110,7 +2362,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 2000,
+      "image_height": 2000,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK065",
@@ -2143,7 +2399,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 894,
+      "image_height": 894,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK066",
@@ -2176,7 +2436,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK067",
@@ -2209,7 +2473,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK068",
@@ -2242,7 +2510,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK069",
@@ -2275,7 +2547,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK070",
@@ -2308,7 +2584,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK071",
@@ -2341,7 +2621,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1000,
+      "image_height": 1000,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK072",
@@ -2374,7 +2658,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1000,
+      "image_height": 1000,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK073",
@@ -2407,7 +2695,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK074",
@@ -2440,7 +2732,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK075",
@@ -2473,7 +2769,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK076",
@@ -2506,7 +2806,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK077",
@@ -2539,7 +2843,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK078",
@@ -2572,7 +2880,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK079",
@@ -2605,7 +2917,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK080",
@@ -2638,7 +2954,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK081",
@@ -2671,7 +2991,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK082",
@@ -2704,7 +3028,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK083",
@@ -2737,7 +3065,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK084",
@@ -2770,7 +3102,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK085",
@@ -2803,7 +3139,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK086",
@@ -2836,7 +3176,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK087",
@@ -2869,7 +3213,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 480,
+      "image_height": 639,
+      "aspect_ratio": 0.751,
+      "orientation": "TALL"
     },
     {
       "id": "KRK088",
@@ -2902,7 +3250,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 666,
+      "aspect_ratio": 0.751,
+      "orientation": "TALL"
     },
     {
       "id": "KRK089",
@@ -2935,7 +3287,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK090",
@@ -2968,7 +3324,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK091",
@@ -3001,7 +3361,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK092",
@@ -3034,7 +3398,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1536,
+      "aspect_ratio": 0.667,
+      "orientation": "TALL"
     },
     {
       "id": "KRK093",
@@ -3067,7 +3435,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK094",
@@ -3100,7 +3472,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK095",
@@ -3133,7 +3509,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK096",
@@ -3166,7 +3546,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK097",
@@ -3199,7 +3583,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK098",
@@ -3232,7 +3620,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK099",
@@ -3265,7 +3657,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK100",
@@ -3298,7 +3694,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 378,
+      "image_height": 529,
+      "aspect_ratio": 0.715,
+      "orientation": "TALL"
     },
     {
       "id": "KRK101",
@@ -3331,7 +3731,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 376,
+      "image_height": 531,
+      "aspect_ratio": 0.708,
+      "orientation": "TALL"
     },
     {
       "id": "KRK102",
@@ -3364,7 +3768,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 265,
+      "image_height": 265,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK103",
@@ -3397,7 +3805,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK104",
@@ -3430,7 +3842,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK105",
@@ -3463,7 +3879,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK106",
@@ -3496,7 +3916,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK107",
@@ -3529,7 +3953,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK108",
@@ -3562,7 +3990,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK109",
@@ -3595,7 +4027,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK110",
@@ -3628,7 +4064,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 657,
+      "aspect_ratio": 1.559,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK111",
@@ -3661,7 +4101,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 321,
+      "aspect_ratio": 1.558,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK112",
@@ -3694,7 +4138,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1024,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK113",
@@ -3727,7 +4175,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 500,
+      "image_height": 500,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK114",
@@ -3760,7 +4212,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 346,
+      "image_height": 346,
+      "aspect_ratio": 1,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK115",
@@ -3793,7 +4249,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 891,
+      "aspect_ratio": 1.149,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK116",
@@ -3826,7 +4286,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 559,
+      "aspect_ratio": 1.832,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK117",
@@ -3859,7 +4323,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 577,
+      "image_height": 1024,
+      "aspect_ratio": 0.563,
+      "orientation": "TALL"
     },
     {
       "id": "KRK118",
@@ -3892,7 +4360,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 836,
+      "aspect_ratio": 1.225,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK119",
@@ -3925,7 +4397,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK120",
@@ -3958,7 +4434,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK121",
@@ -3991,7 +4471,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1536,
+      "aspect_ratio": 0.667,
+      "orientation": "TALL"
     },
     {
       "id": "KRK122",
@@ -4024,7 +4508,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1312,
+      "image_height": 1199,
+      "aspect_ratio": 1.094,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK123",
@@ -4057,7 +4545,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1312,
+      "image_height": 1199,
+      "aspect_ratio": 1.094,
+      "orientation": "SQUARE"
     },
     {
       "id": "KRK124",
@@ -4090,7 +4582,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK125",
@@ -4123,7 +4619,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1536,
+      "aspect_ratio": 0.667,
+      "orientation": "TALL"
     },
     {
       "id": "KRK126",
@@ -4156,7 +4656,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK127",
@@ -4189,7 +4693,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1774,
+      "image_height": 887,
+      "aspect_ratio": 2,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK128",
@@ -4222,7 +4730,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1536,
+      "aspect_ratio": 0.667,
+      "orientation": "TALL"
     },
     {
       "id": "KRK129",
@@ -4255,7 +4767,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1024,
+      "image_height": 1536,
+      "aspect_ratio": 0.667,
+      "orientation": "TALL"
     },
     {
       "id": "KRK130",
@@ -4288,7 +4804,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1466,
+      "image_height": 1073,
+      "aspect_ratio": 1.366,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK131",
@@ -4321,7 +4841,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK132",
@@ -4354,7 +4878,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK133",
@@ -4387,7 +4915,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK134",
@@ -4420,7 +4952,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK135",
@@ -4453,7 +4989,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK136",
@@ -4486,7 +5026,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK137",
@@ -4519,7 +5063,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     },
     {
       "id": "KRK138",
@@ -4552,7 +5100,11 @@
       "safety_instructions": "",
       "notes": "",
       "created_at": "2026-09-25T15:52:51.762Z",
-      "updated_at": "2026-09-25T15:52:51.762Z"
+      "updated_at": "2026-09-25T15:52:51.762Z",
+      "image_width": 1536,
+      "image_height": 1024,
+      "aspect_ratio": 1.5,
+      "orientation": "WIDE"
     }
   ],
   "sections": [

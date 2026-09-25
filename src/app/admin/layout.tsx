@@ -16,6 +16,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: 'SECTIONS', href: '/admin/sections' },
   ];
 
+  // For login page, render clean container without administrative nav
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      window.location.href = '/admin/login';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Admin Secondary Bar */}
@@ -48,10 +63,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             })}
           </nav>
 
-          {/* System Badge */}
-          <div className="flex items-center space-x-3 text-[11px] font-mono text-white/40">
-            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-            <span className="uppercase tracking-widest">LIVE DB REPOSITORY</span>
+          {/* System Badge & Logout */}
+          <div className="flex items-center space-x-6 text-[11px] font-mono text-white/40">
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="uppercase tracking-widest">LIVE DB REPOSITORY</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-white/50 hover:text-kred uppercase tracking-widest border border-white/10 hover:border-kred px-2.5 py-1 transition-colors duration-200"
+            >
+              LOGOUT [→]
+            </button>
           </div>
         </div>
       </div>

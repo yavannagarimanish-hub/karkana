@@ -327,12 +327,12 @@ export default function AdminProductsPage() {
                     {/* Product & Image */}
                     <td className="p-4">
                       <div className="flex items-center space-x-4">
-                        <div className="w-12 h-14 border border-white/10 bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <div className="w-14 h-16 border border-white/10 bg-white/5 p-1 flex-shrink-0 flex items-center justify-center">
                           {hasImg ? (
                             <img
                               src={p.images[0]}
                               alt={p.name}
-                              className="w-full h-full object-cover"
+                              className="max-w-full max-h-full object-contain"
                             />
                           ) : (
                             <span className="text-[9px] text-white/30 uppercase">NO IMG</span>
@@ -569,11 +569,13 @@ export default function AdminProductsPage() {
                 </label>
                 {imageUrl ? (
                   <div className="flex items-center space-x-6 p-4 border border-white/20">
-                    <img
-                      src={imageUrl}
-                      alt="Product preview"
-                      className="w-20 h-20 object-cover border border-white/10"
-                    />
+                    <div className="w-24 h-24 p-1.5 border border-white/10 bg-white/5 flex items-center justify-center flex-shrink-0">
+                      <img
+                        src={imageUrl}
+                        alt="Product preview"
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
                     <div className="space-y-2">
                       <span className="text-[11px] font-mono text-white/60 block truncate max-w-xs">
                         {imageUrl}

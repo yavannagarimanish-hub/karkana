@@ -51,12 +51,12 @@ export default function CartPage() {
                 {/* Product & Personalization Previews */}
                 <div className="flex items-center space-x-6">
                   {/* Product Thumbnail */}
-                  <div className="relative w-20 h-24 bg-white/[0.03] border border-white/10 flex-shrink-0 overflow-hidden flex items-center justify-center">
+                  <div className="relative w-24 h-24 bg-white/[0.02] border border-white/10 flex-shrink-0 flex items-center justify-center p-2">
                     {hasProdImage ? (
                       <img
                         src={item.product.images[0]}
                         alt={item.product.name}
-                        className="w-full h-full object-cover"
+                        className="max-w-full max-h-full w-auto h-auto object-contain"
                       />
                     ) : (
                       <span className="text-[9px] font-mono text-white/30 text-center uppercase p-1">
@@ -80,11 +80,11 @@ export default function CartPage() {
                     {/* Personalization Details if present */}
                     {item.personalizationImage && (
                       <div className="mt-3 pt-3 border-t border-white/10 flex items-center space-x-3">
-                        <div className="w-10 h-10 border border-kred/50 overflow-hidden flex-shrink-0">
+                        <div className="w-12 h-12 border border-kred/50 p-1 flex-shrink-0 bg-black flex items-center justify-center">
                           <img
                             src={item.personalizationImage}
                             alt="Custom Customer Upload"
-                            className="w-full h-full object-cover"
+                            className="max-w-full max-h-full w-auto h-auto object-contain"
                           />
                         </div>
                         <div className="text-[10px] font-mono text-white/50">

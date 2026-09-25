@@ -80,12 +80,6 @@ export default function Navbar() {
                   {totalCount}
                 </span>
               </Link>
-              <Link
-                href="/admin"
-                className="hidden sm:inline-block text-white/40 hover:text-white border border-white/10 hover:border-white/40 px-3 py-1.5 transition-all duration-200 text-[11px]"
-              >
-                ADMIN
-              </Link>
             </>
           ) : (
             <Link

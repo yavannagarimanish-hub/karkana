@@ -218,12 +218,12 @@ export default function AdminOrderingPage() {
                   </div>
 
                   {/* Thumbnail */}
-                  <div className="w-12 h-14 border border-white/10 bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                  <div className="w-14 h-16 border border-white/10 bg-white/5 p-1 flex-shrink-0 flex items-center justify-center">
                     {hasImg ? (
                       <img
                         src={item.images[0]}
                         alt={item.name}
-                        className="w-full h-full object-cover"
+                        className="max-w-full max-h-full object-contain"
                       />
                     ) : (
                       <span className="text-[8px] font-mono text-white/30 uppercase">

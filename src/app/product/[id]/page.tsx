@@ -153,17 +153,20 @@ export default function ProductDetailPage() {
       {/* Main Editorial Grid: Left Image, Right Info */}
       <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 sm:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
-          {/* Left Column: Spacious Product Imagery */}
+          {/* Left Column: Spacious Adaptive Product Imagery */}
           <div className="lg:col-span-7">
-            <div className="relative aspect-[4/5] w-full border border-white/10 bg-white/[0.01] flex items-center justify-center overflow-hidden">
+            <div className="relative w-full border border-white/10 bg-white/[0.015] p-6 sm:p-12 lg:p-16 flex items-center justify-center min-h-[480px]">
               {hasImage ? (
                 <img
                   src={product.images[0]}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center"
+                  className="w-full h-auto max-h-[78vh] object-contain object-center transition-all duration-300"
+                  style={{
+                    aspectRatio: product.aspect_ratio ? `${product.aspect_ratio}` : 'auto',
+                  }}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center p-12 text-center space-y-4">
+                <div className="flex flex-col items-center justify-center p-12 text-center space-y-4 py-24">
                   <div className="w-16 h-[1px] bg-white/20" />
                   <span className="text-white/30 text-xs font-mono tracking-widest uppercase">
                     NO PRODUCT IMAGE ASSIGNED
@@ -175,10 +178,15 @@ export default function ProductDetailPage() {
               )}
 
               {/* Status Badge */}
-              <div className="absolute top-6 left-6">
+              <div className="absolute top-6 left-6 flex items-center space-x-2">
                 <span className="px-3 py-1 text-[10px] font-mono tracking-widest uppercase bg-black/90 border border-white/20 text-white">
                   {product.module}
                 </span>
+                {product.orientation && (
+                  <span className="hidden sm:inline-block px-2.5 py-1 text-[9px] font-mono tracking-widest uppercase bg-black/90 border border-white/10 text-white/40">
+                    {product.orientation} FORMAT
+                  </span>
+                )}
               </div>
 
               {!product.in_stock && (
@@ -255,11 +263,11 @@ export default function ProductDetailPage() {
                   </label>
                   {uploadedPhotoUrl ? (
                     <div className="space-y-3">
-                      <div className="relative aspect-video w-full border border-white/20 overflow-hidden bg-black">
+                      <div className="relative w-full min-h-[200px] max-h-[380px] border border-white/20 p-2 overflow-hidden bg-black flex items-center justify-center">
                         <img
                           src={uploadedPhotoUrl}
                           alt="Uploaded customer photo"
-                          className="w-full h-full object-contain"
+                          className="max-w-full max-h-[360px] object-contain"
                         />
                       </div>
                       <div className="flex items-center justify-between text-xs font-mono">

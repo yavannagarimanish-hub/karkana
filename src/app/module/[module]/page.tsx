@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getProducts } from '@/lib/db';
 import { ProductModule } from '@/types';
 import SectionHeader from '@/components/SectionHeader';
-import ProductCard from '@/components/ProductCard';
+import ProductGrid from '@/components/ProductGrid';
 import EmptyState from '@/components/EmptyState';
 import PersonalizedExperience from '@/components/PersonalizedExperience';
 
@@ -166,11 +166,7 @@ export default async function ModulePage({ params }: PageProps) {
         </div>
 
         {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <ProductGrid products={products} />
         ) : (
           <EmptyState
             title={`NO ${meta.title} PRODUCTS AVAILABLE`}

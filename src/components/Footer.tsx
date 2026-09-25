@@ -45,29 +45,13 @@ export default function Footer() {
 
           <div className="space-y-4">
             <div className="text-xs uppercase font-mono tracking-widest text-kred">
-              MANAGEMENT
+              FULFILLMENT ASSURANCE
             </div>
-            <ul className="space-y-3 text-sm font-mono">
-              <li>
-                <Link href="/admin" className="text-white/60 hover:text-white transition-colors">
-                  CONTROL CENTRE
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/products" className="text-white/60 hover:text-white transition-colors">
-                  PRODUCT CATALOGUE
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/ordering" className="text-white/60 hover:text-white transition-colors">
-                  DRAG & DROP ORDERING
-                </Link>
-              </li>
-              <li>
-                <Link href="/admin/orders" className="text-white/60 hover:text-white transition-colors">
-                  DISPATCH MANAGEMENT
-                </Link>
-              </li>
+            <ul className="space-y-3 text-sm font-mono text-white/60">
+              <li>CASH ON DELIVERY</li>
+              <li>DIRECT SIVAKASI DISPATCH</li>
+              <li>MANUAL VERIFICATION</li>
+              <li>SUPPORT: HELLO@KARKANA.COM</li>
             </ul>
           </div>
         </div>

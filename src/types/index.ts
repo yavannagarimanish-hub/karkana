@@ -33,6 +33,10 @@ export interface Product {
   safety_instructions?: string;
   notes?: string;
   search_keywords?: string;
+  image_width?: number;
+  image_height?: number;
+  aspect_ratio?: number;
+  orientation?: 'WIDE' | 'TALL' | 'SQUARE';
   created_at: string;
   updated_at: string;
 }
