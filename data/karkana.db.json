@@ -1,0 +1,46 @@
+{
+  "products": [],
+  "sections": [
+    {
+      "id": "sec-popular",
+      "key": "popular",
+      "title": "POPULAR CRACKERS",
+      "subtitle": "MOST DEMANDED FORMULATIONS OF THE SEASON",
+      "is_visible": true,
+      "display_position": 1
+    },
+    {
+      "id": "sec-featured",
+      "key": "featured",
+      "title": "FEATURED PRODUCTS",
+      "subtitle": "CURATED EDITIONS OF PYROTECHNIC ARTISTRY",
+      "is_visible": true,
+      "display_position": 2
+    },
+    {
+      "id": "sec-basic",
+      "key": "basic",
+      "title": "BASIC CATALOGUE",
+      "subtitle": "ESSENTIAL CELEBRATION CLASSICS",
+      "is_visible": true,
+      "display_position": 3
+    },
+    {
+      "id": "sec-customized",
+      "key": "customized",
+      "title": "CUSTOMIZED CATALOGUE",
+      "subtitle": "ICONIC THEMATIC PACKAGING EDITIONS",
+      "is_visible": true,
+      "display_position": 4
+    },
+    {
+      "id": "sec-personalized",
+      "key": "personalized",
+      "title": "PERSONALIZED CATALOGUE",
+      "subtitle": "BESPOKE BOXES FEATURING YOUR PHOTOGRAPHY",
+      "is_visible": true,
+      "display_position": 5
+    }
+  ],
+  "orders": []
+}

@@ -1,101 +1,267 @@
-import Image from "next/image";
+import React from 'react';
+import Link from 'next/link';
+import { getProducts, getSections } from '@/lib/db';
+import SectionHeader from '@/components/SectionHeader';
+import ProductCard from '@/components/ProductCard';
+import EmptyState from '@/components/EmptyState';
 
-export default function Home() {
+// Ensure fresh dynamic data from the database
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export default async function HomePage() {
+  const allProducts = getProducts({ is_visible: true });
+  const sections = getSections();
+
+  const popularProducts = allProducts.filter((p) => p.is_popular);
+  const featuredProducts = allProducts.filter((p) => p.is_featured);
+
+  const popularSection = sections.find((s) => s.key === 'popular');
+  const featuredSection = sections.find((s) => s.key === 'featured');
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="w-full bg-black min-h-screen">
+      {/* ================= HERO SECTION ================= */}
+      <section className="relative px-6 sm:px-12 pt-28 pb-36 sm:pt-40 sm:pb-48 max-w-7xl mx-auto flex flex-col items-start justify-center">
+        <div className="inline-flex items-center space-x-3 mb-8">
+          <span className="w-2 h-2 rounded-full bg-kred animate-ping" />
+          <span className="text-[11px] font-mono tracking-widest uppercase text-white/50">
+            SEASON MMXVI // EDITORIAL CATALOGUE
+          </span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        <h1 className="text-4xl sm:text-6xl md:text-8xl font-extrabold uppercase tracking-ultra text-white leading-[1.05] max-w-5xl mb-12">
+          THE ARCHITECTURE <br />
+          <span className="text-white/30">OF CELEBRATION.</span>
+        </h1>
+
+        <p className="text-white/50 text-sm sm:text-base font-mono max-w-2xl leading-relaxed uppercase tracking-wider mb-14">
+          Engineered precision in pyrotechnics. Three distinct operational modules tailored for
+          classical resonance, thematic iconography, and personalized commemoration.
+        </p>
+
+        <div className="flex flex-wrap items-center gap-6 text-xs font-mono tracking-widest">
+          <a
+            href="#modules"
+            className="px-8 py-4 bg-white text-black font-bold uppercase hover:bg-kred hover:text-white transition-all duration-300"
+          >
+            EXPLORE MODULES ↓
+          </a>
+          <span className="text-white/30 tracking-widest">
+            CONTROLLED VIA CENTRAL ADMIN
+          </span>
+        </div>
+      </section>
+
+      {/* ================= THE THREE PRIMARY MODULES ================= */}
+      <section id="modules" className="px-6 sm:px-12 py-24 sm:py-36 border-t border-b border-white/10 max-w-7xl mx-auto">
+        <SectionHeader
+          number="01"
+          title="PRIMARY DESTINATIONS"
+          subtitle="Select from three foundational pyrotechnic methodologies"
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
+          {/* MODULE 1: BASIC */}
+          <Link
+            href="/module/basic"
+            className="group relative block p-8 sm:p-12 border border-white/10 bg-white/[0.01] hover:border-white hover:bg-white/[0.03] transition-all duration-500"
+          >
+            <div className="flex justify-between items-start mb-20 sm:mb-28">
+              <span className="text-5xl sm:text-6xl font-extrabold font-mono text-white/20 group-hover:text-kred transition-colors duration-300">
+                01
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-widest border border-white/20 px-3 py-1 text-white/60">
+                ESSENTIAL
+              </span>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white group-hover:text-white">
+                BASIC
+              </h3>
+              <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
+                Pure, timeless celebration essentials. Master formulations constructed for pristine acoustic clarity and radiant illuminations.
+              </p>
+            </div>
+            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
+              <span>EXPLORE BASIC</span>
+              <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
+                →
+              </span>
+            </div>
+          </Link>
+
+          {/* MODULE 2: CUSTOMIZED */}
+          <Link
+            href="/module/customized"
+            className="group relative block p-8 sm:p-12 border border-white/10 bg-white/[0.01] hover:border-white hover:bg-white/[0.03] transition-all duration-500"
+          >
+            <div className="flex justify-between items-start mb-20 sm:mb-28">
+              <span className="text-5xl sm:text-6xl font-extrabold font-mono text-white/20 group-hover:text-kred transition-colors duration-300">
+                02
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-widest border border-white/20 px-3 py-1 text-white/60">
+                THEMATIC
+              </span>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white group-hover:text-white">
+                CUSTOMIZED
+              </h3>
+              <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
+                Curated themed designs including cinematic icons, political legends, and distinctive artistic concepts curated by Karkana.
+              </p>
+            </div>
+            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
+              <span>EXPLORE THEMES</span>
+              <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
+                →
+              </span>
+            </div>
+          </Link>
+
+          {/* MODULE 3: PERSONALIZED */}
+          <Link
+            href="/module/personalized"
+            className="group relative block p-8 sm:p-12 border border-kred/30 bg-kred/[0.02] hover:border-kred hover:bg-kred/[0.05] transition-all duration-500"
+          >
+            <div className="flex justify-between items-start mb-20 sm:mb-28">
+              <span className="text-5xl sm:text-6xl font-extrabold font-mono text-kred/40 group-hover:text-kred transition-colors duration-300">
+                03
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-widest border border-kred/50 text-kred px-3 py-1">
+                COMMISSION
+              </span>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white group-hover:text-white">
+                PERSONALIZED
+              </h3>
+              <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
+                Bespoke commemorative boxes. Direct customer upload of personal photographs and specific customization directives for packaging.
+              </p>
+            </div>
+            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
+              <span>BESPOKE UPLOAD</span>
+              <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
+                →
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* ================= STRUCTURAL SECTION: POPULAR CRACKERS ================= */}
+      {popularSection?.is_visible && (
+        <section className="px-6 sm:px-12 py-24 sm:py-36 max-w-7xl mx-auto">
+          <SectionHeader
+            number="02"
+            title={popularSection.title}
+            subtitle={popularSection.subtitle}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+
+          {popularProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {popularProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="NO PRODUCTS AVAILABLE YET"
+              message="No items have been assigned to Popular status in the Admin Portal."
+              actionText="OPEN CONTROL CENTRE"
+              actionHref="/admin/products"
+            />
+          )}
+        </section>
+      )}
+
+      {/* ================= STRUCTURAL SECTION: FEATURED PRODUCTS ================= */}
+      {featuredSection?.is_visible && (
+        <section className="px-6 sm:px-12 py-24 sm:py-36 border-t border-white/10 max-w-7xl mx-auto">
+          <SectionHeader
+            number="03"
+            title={featuredSection.title}
+            subtitle={featuredSection.subtitle}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+
+          {featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="NO PRODUCTS AVAILABLE YET"
+              message="No items have been tagged as Featured in the Admin Portal."
+              actionText="CURATE FEATURED ITEMS"
+              actionHref="/admin/products"
+            />
+          )}
+        </section>
+      )}
+
+      {/* ================= STRUCTURAL SECTION: COMPLETE CATALOGUE ================= */}
+      <section className="px-6 sm:px-12 py-24 sm:py-36 border-t border-white/10 max-w-7xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 sm:mb-20 space-y-4 sm:space-y-0">
+          <SectionHeader
+            number="04"
+            title="PRODUCT CATALOGUE"
+            subtitle="Dynamic overview of visible formulations across all modules"
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <span className="font-mono text-xs tracking-widest uppercase text-white/40">
+            TOTAL ACTIVE: {allProducts.length}
+          </span>
+        </div>
+
+        {allProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {allProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="NO PRODUCTS AVAILABLE YET"
+            message="The storefront is dynamically synchronized with the database. Real catalogue entries can be introduced at any time via the Control Centre."
+            actionText="ADD FIRST PRODUCT VIA ADMIN"
+            actionHref="/admin/products"
+          />
+        )}
+      </section>
+
+      {/* ================= ORDERING MANIFESTO BANNER ================= */}
+      <section className="px-6 sm:px-12 py-24 border-t border-white/10 max-w-7xl mx-auto">
+        <div className="p-12 sm:p-20 border border-white/10 bg-white/[0.01] flex flex-col md:flex-row items-start md:items-center justify-between gap-12">
+          <div className="space-y-4 max-w-xl">
+            <span className="text-kred font-mono text-xs tracking-widest uppercase">
+              FULFILLMENT ASSURANCE
+            </span>
+            <h3 className="text-2xl sm:text-4xl font-bold uppercase tracking-widest text-white">
+              CASH ON DELIVERY. ZERO ONLINE GATEWAYS.
+            </h3>
+            <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
+              Every commission is confirmed manually and fulfilled strictly with Cash on Delivery at your doorstep. Transparent, discrete, and direct.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 font-mono text-xs uppercase tracking-widest">
+            <Link
+              href="/cart"
+              className="px-8 py-4 border border-white/20 text-white hover:border-white transition-colors text-center"
+            >
+              VIEW CART
+            </Link>
+            <Link
+              href="/admin"
+              className="px-8 py-4 bg-kred text-white font-bold hover:bg-kred-hover transition-colors text-center"
+            >
+              ADMIN PORTAL
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
