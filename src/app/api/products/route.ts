@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get('search') || undefined;
     const category = searchParams.get('category') || undefined;
 
-    const products = getProducts({
+    const products = await getProducts({
       module: moduleParam || undefined,
       is_featured,
       is_popular,
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const product = createProduct({
+    const product = await createProduct({
       name: body.name.trim(),
       images: Array.isArray(body.images) ? body.images : body.images ? [body.images] : [],
       description: body.description || '',

@@ -3,8 +3,8 @@ import path from 'path';
 import { getProducts } from './db';
 import { CatalogueValidationReport, ValidationIssue } from '@/types';
 
-export function runCatalogueValidation(): CatalogueValidationReport {
-  const products = getProducts();
+export async function runCatalogueValidation(): Promise<CatalogueValidationReport> {
+  const products = await getProducts();
   const totalProducts = products.length;
 
   const duplicateIds: { id: string; count: number }[] = [];

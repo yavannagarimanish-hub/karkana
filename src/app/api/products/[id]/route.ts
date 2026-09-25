@@ -7,7 +7,7 @@ interface RouteContext {
 
 export async function GET(req: NextRequest, { params }: RouteContext) {
   try {
-    const product = getProductById(params.id);
+    const product = await getProductById(params.id);
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
 export async function PATCH(req: NextRequest, { params }: RouteContext) {
   try {
     const body = await req.json();
-    const updated = updateProduct(params.id, body);
+    const updated = await updateProduct(params.id, body);
 
     if (!updated) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
@@ -36,7 +36,7 @@ export async function PATCH(req: NextRequest, { params }: RouteContext) {
 
 export async function DELETE(req: NextRequest, { params }: RouteContext) {
   try {
-    const deleted = deleteProduct(params.id);
+    const deleted = await deleteProduct(params.id);
     if (!deleted) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }

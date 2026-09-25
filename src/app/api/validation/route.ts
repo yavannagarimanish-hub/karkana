@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const report = runCatalogueValidation();
+    const report = await runCatalogueValidation();
     return NextResponse.json({ success: true, report });
   } catch (error) {
     console.error('Validation engine error:', error);

@@ -1,6 +1,22 @@
 import fs from 'fs';
 import path from 'path';
 import { Product, StorefrontSection, Order, OrderStatus, AdminMetrics, ProductModule } from '@/types';
+import {
+  isPostgresConfigured,
+  pgGetProducts,
+  pgGetProductById,
+  pgCreateProduct,
+  pgUpdateProduct,
+  pgDeleteProduct,
+  pgReorderProducts,
+  pgGetSections,
+  pgUpdateSection,
+  pgGetOrders,
+  pgGetOrderById,
+  pgCreateOrder,
+  pgUpdateOrderStatus,
+  pgGetMetrics,
+} from './postgres';
 
 interface DatabaseSchema {
   products: Product[];
@@ -54,14 +70,20 @@ const DEFAULT_SECTIONS: StorefrontSection[] = [
   },
 ];
 
-function ensureDbFile(): void {
+function ensureDevDbFile(): void {
+  if (process.env.NODE_ENV === 'production' && !isPostgresConfigured()) {
+    throw new Error(
+      '[Karkana Production] Fatal Error: DATABASE_URL is not configured. Silently falling back to local JSON persistence is strictly prohibited in production.'
+    );
+  }
+
   if (!fs.existsSync(DB_DIR)) {
     fs.mkdirSync(DB_DIR, { recursive: true });
   }
 
   if (!fs.existsSync(DB_FILE)) {
     const initialData: DatabaseSchema = {
-      products: [], // STRICT: Zero demo products
+      products: [],
       sections: DEFAULT_SECTIONS,
       orders: [],
     };
@@ -69,8 +91,8 @@ function ensureDbFile(): void {
   }
 }
 
-function readDb(): DatabaseSchema {
-  ensureDbFile();
+function readDevDb(): DatabaseSchema {
+  ensureDevDbFile();
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf-8');
     if (!raw || !raw.trim()) {
@@ -84,7 +106,7 @@ function readDb(): DatabaseSchema {
     }
     return JSON.parse(raw);
   } catch (error) {
-    console.error('Failed reading database file, returning fallback:', error);
+    console.error('Failed reading dev database file:', error);
     return {
       products: [],
       sections: DEFAULT_SECTIONS,
@@ -93,24 +115,37 @@ function readDb(): DatabaseSchema {
   }
 }
 
-function writeDb(data: DatabaseSchema): void {
-  ensureDbFile();
+function writeDevDb(data: DatabaseSchema): void {
+  ensureDevDbFile();
   const tempFile = `${DB_FILE}.tmp.${Date.now()}`;
   fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf-8');
   fs.renameSync(tempFile, DB_FILE);
 }
 
+function assertNoProductionJsonFallback(): void {
+  if (process.env.NODE_ENV === 'production' && !isPostgresConfigured()) {
+    throw new Error(
+      '[Karkana Production] Fatal Error: DATABASE_URL is not configured. Silently falling back to local JSON persistence is strictly prohibited in production.'
+    );
+  }
+}
+
 // ======================== PRODUCT OPERATIONS ========================
 
-export function getProducts(filters?: {
+export async function getProducts(filters?: {
   module?: ProductModule;
   is_featured?: boolean;
   is_popular?: boolean;
   is_visible?: boolean;
   search?: string;
   category?: string;
-}): Product[] {
-  const db = readDb();
+}): Promise<Product[]> {
+  if (isPostgresConfigured()) {
+    return await pgGetProducts(filters);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   let list = [...db.products];
 
   if (filters) {
@@ -149,20 +184,29 @@ export function getProducts(filters?: {
   });
 }
 
-export function getProductById(id: string): Product | null {
-  const db = readDb();
+export async function getProductById(id: string): Promise<Product | null> {
+  if (isPostgresConfigured()) {
+    return await pgGetProductById(id);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   return db.products.find((p) => p.id === id) || null;
 }
 
-export function createProduct(
+export async function createProduct(
   data: Omit<Product, 'id' | 'created_at' | 'updated_at' | 'display_position'> & {
     display_position?: number;
   }
-): Product {
-  const db = readDb();
+): Promise<Product> {
+  if (isPostgresConfigured()) {
+    return await pgCreateProduct(data);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const now = new Date().toISOString();
   
-  // Calculate next position if not specified
   const maxPos = db.products.reduce((max, p) => Math.max(max, p.display_position || 0), 0);
   const position = data.display_position ?? (maxPos + 1);
 
@@ -175,12 +219,17 @@ export function createProduct(
   };
 
   db.products.push(newProduct);
-  writeDb(db);
+  writeDevDb(db);
   return newProduct;
 }
 
-export function updateProduct(id: string, updates: Partial<Product>): Product | null {
-  const db = readDb();
+export async function updateProduct(id: string, updates: Partial<Product>): Promise<Product | null> {
+  if (isPostgresConfigured()) {
+    return await pgUpdateProduct(id, updates);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const index = db.products.findIndex((p) => p.id === id);
   if (index === -1) return null;
 
@@ -188,32 +237,41 @@ export function updateProduct(id: string, updates: Partial<Product>): Product | 
   const updated: Product = {
     ...existing,
     ...updates,
-    id: existing.id, // Immutable
-    created_at: existing.created_at, // Immutable
+    id: existing.id,
+    created_at: existing.created_at,
     updated_at: new Date().toISOString(),
   };
 
   db.products[index] = updated;
-  writeDb(db);
+  writeDevDb(db);
   return updated;
 }
 
-export function deleteProduct(id: string): boolean {
-  const db = readDb();
+export async function deleteProduct(id: string): Promise<boolean> {
+  if (isPostgresConfigured()) {
+    return await pgDeleteProduct(id);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const initialLength = db.products.length;
   db.products = db.products.filter((p) => p.id !== id);
   if (db.products.length !== initialLength) {
-    writeDb(db);
+    writeDevDb(db);
     return true;
   }
   return false;
 }
 
-export function reorderProducts(orderedIds: string[]): Product[] {
-  const db = readDb();
+export async function reorderProducts(orderedIds: string[]): Promise<Product[]> {
+  if (isPostgresConfigured()) {
+    return await pgReorderProducts(orderedIds);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const productMap = new Map(db.products.map((p) => [p.id, p]));
 
-  // Update positions for the ordered slice
   orderedIds.forEach((id, idx) => {
     const prod = productMap.get(id);
     if (prod) {
@@ -222,19 +280,29 @@ export function reorderProducts(orderedIds: string[]): Product[] {
     }
   });
 
-  writeDb(db);
-  return getProducts();
+  writeDevDb(db);
+  return await getProducts();
 }
 
 // ======================== SECTIONS OPERATIONS ========================
 
-export function getSections(): StorefrontSection[] {
-  const db = readDb();
+export async function getSections(): Promise<StorefrontSection[]> {
+  if (isPostgresConfigured()) {
+    return await pgGetSections();
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   return [...db.sections].sort((a, b) => a.display_position - b.display_position);
 }
 
-export function updateSection(id: string, updates: Partial<StorefrontSection>): StorefrontSection | null {
-  const db = readDb();
+export async function updateSection(id: string, updates: Partial<StorefrontSection>): Promise<StorefrontSection | null> {
+  if (isPostgresConfigured()) {
+    return await pgUpdateSection(id, updates);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const index = db.sections.findIndex((s) => s.id === id);
   if (index === -1) return null;
 
@@ -243,36 +311,49 @@ export function updateSection(id: string, updates: Partial<StorefrontSection>): 
     ...updates,
     id: db.sections[index].id,
   };
-  writeDb(db);
+  writeDevDb(db);
   return db.sections[index];
 }
 
 // ======================== ORDER OPERATIONS ========================
 
-export function getOrders(filters?: { status?: OrderStatus }): Order[] {
-  const db = readDb();
+export async function getOrders(filters?: { status?: OrderStatus }): Promise<Order[]> {
+  if (isPostgresConfigured()) {
+    return await pgGetOrders(filters);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   let list = [...db.orders];
 
   if (filters?.status) {
     list = list.filter((o) => o.status === filters.status);
   }
 
-  // Newest orders first
   return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }
 
-export function getOrderById(id: string): Order | null {
-  const db = readDb();
+export async function getOrderById(id: string): Promise<Order | null> {
+  if (isPostgresConfigured()) {
+    return await pgGetOrderById(id);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   return db.orders.find((o) => o.id === id) || null;
 }
 
-export function createOrder(
+export async function createOrder(
   data: Omit<Order, 'id' | 'createdAt' | 'updatedAt' | 'paymentMethod' | 'status'>
-): Order {
-  const db = readDb();
+): Promise<Order> {
+  if (isPostgresConfigured()) {
+    return await pgCreateOrder(data);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const now = new Date().toISOString();
   
-  // Format readable order id: KK-YYYYMMDD-XXXX
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const rand = Math.floor(1000 + Math.random() * 9000);
   const orderId = `KK-${dateStr}-${rand}`;
@@ -291,25 +372,35 @@ export function createOrder(
   };
 
   db.orders.push(newOrder);
-  writeDb(db);
+  writeDevDb(db);
   return newOrder;
 }
 
-export function updateOrderStatus(id: string, status: OrderStatus): Order | null {
-  const db = readDb();
+export async function updateOrderStatus(id: string, status: OrderStatus): Promise<Order | null> {
+  if (isPostgresConfigured()) {
+    return await pgUpdateOrderStatus(id, status);
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const index = db.orders.findIndex((o) => o.id === id);
   if (index === -1) return null;
 
   db.orders[index].status = status;
   db.orders[index].updatedAt = new Date().toISOString();
-  writeDb(db);
+  writeDevDb(db);
   return db.orders[index];
 }
 
 // ======================== METRICS OPERATIONS ========================
 
-export function getMetrics(): AdminMetrics {
-  const db = readDb();
+export async function getMetrics(): Promise<AdminMetrics> {
+  if (isPostgresConfigured()) {
+    return await pgGetMetrics();
+  }
+  assertNoProductionJsonFallback();
+
+  const db = readDevDb();
   const products = db.products;
   const orders = db.orders;
 
@@ -326,3 +417,4 @@ export function getMetrics(): AdminMetrics {
     cancelledOrders: orders.filter((o) => o.status === 'CANCELLED').length,
   };
 }
+

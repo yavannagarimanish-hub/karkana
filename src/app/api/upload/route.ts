@@ -15,21 +15,28 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const subDir = type === 'personalization' ? 'personalizations' : 'products';
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', subDir);
-
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
     const ext = path.extname(file.name) || '.jpg';
     const cleanExt = ext.toLowerCase().match(/^\.(jpg|jpeg|png|webp|gif|svg)$/) ? ext : '.jpg';
     const filename = `${type}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}${cleanExt}`;
-    const filePath = path.join(uploadDir, filename);
 
+    if (type === 'personalization') {
+      const { uploadPersonalizationFile } = await import('@/lib/storage');
+      const result = await uploadPersonalizationFile(filename, buffer, file.type || 'image/jpeg');
+      return NextResponse.json({
+        success: true,
+        url: result.url,
+        filename,
+      });
+    }
+
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'products');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    const filePath = path.join(uploadDir, filename);
     fs.writeFileSync(filePath, buffer);
 
-    const publicUrl = `/uploads/${subDir}/${filename}`;
+    const publicUrl = `/uploads/products/${filename}`;
 
     return NextResponse.json({
       success: true,

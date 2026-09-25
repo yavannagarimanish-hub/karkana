@@ -12,6 +12,9 @@ export interface Product {
   id: string;
   name: string;
   images: string[];
+  image_2?: string;
+  image_3?: string;
+  video?: string;
   description: string;
   price: number;
   original_price?: number;

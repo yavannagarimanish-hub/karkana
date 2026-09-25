@@ -8,7 +8,7 @@ interface RouteContext {
 
 export async function GET(req: NextRequest, { params }: RouteContext) {
   try {
-    const order = getOrderById(params.id);
+    const order = await getOrderById(params.id);
     if (!order) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
@@ -40,7 +40,7 @@ export async function PATCH(req: NextRequest, { params }: RouteContext) {
       );
     }
 
-    const updated = updateOrderStatus(params.id, status);
+    const updated = await updateOrderStatus(params.id, status);
     if (!updated) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }

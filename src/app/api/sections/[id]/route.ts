@@ -8,7 +8,7 @@ interface RouteContext {
 export async function PATCH(req: NextRequest, { params }: RouteContext) {
   try {
     const body = await req.json();
-    const updated = updateSection(params.id, body);
+    const updated = await updateSection(params.id, body);
     if (!updated) {
       return NextResponse.json({ error: 'Section not found' }, { status: 404 });
     }

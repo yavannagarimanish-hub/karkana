@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status') as OrderStatus | null;
 
-    const orders = getOrders({ status: status || undefined });
+    const orders = await getOrders({ status: status || undefined });
     return NextResponse.json({ success: true, orders });
   } catch (error) {
     console.error('Failed to get orders:', error);
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const newOrder = createOrder({
+    const newOrder = await createOrder({
       customerName: body.customerName.trim(),
       mobile: body.mobile.trim(),
       address: {

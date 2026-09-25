@@ -11,7 +11,7 @@ interface PageProps {
 }
 
 export default async function OrderConfirmationPage({ params }: PageProps) {
-  const order = getOrderById(params.id);
+  const order = await getOrderById(params.id);
 
   if (!order) {
     notFound();

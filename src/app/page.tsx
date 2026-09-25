@@ -10,8 +10,8 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const allProducts = getProducts({ is_visible: true });
-  const sections = getSections();
+  const allProducts = await getProducts({ is_visible: true });
+  const sections = await getSections();
 
   const popularProducts = allProducts.filter((p) => p.is_popular);
   const featuredProducts = allProducts.filter((p) => p.is_featured);

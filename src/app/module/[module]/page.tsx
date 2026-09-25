@@ -60,7 +60,7 @@ export default async function ModulePage({ params }: PageProps) {
 
   // If Personalized: Render dedicated customer upload experience
   if (meta.moduleKey === 'PERSONALIZED') {
-    const allProducts = getProducts();
+    const allProducts = await getProducts();
     const referenceExamples = allProducts
       .filter((p) => {
         const num = parseInt(p.id.replace(/\D/g, ''), 10);
@@ -114,7 +114,7 @@ export default async function ModulePage({ params }: PageProps) {
   }
 
   // Basic (KRK001–KRK118) or Customized (KRK119–KRK138) Catalogue
-  const products = getProducts({
+  const products = await getProducts({
     module: meta.moduleKey,
     is_visible: true,
   });

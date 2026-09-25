@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const updatedList = reorderProducts(orderedIds);
+    const updatedList = await reorderProducts(orderedIds);
     return NextResponse.json({ success: true, products: updatedList });
   } catch (error) {
     console.error('Failed to reorder products:', error);

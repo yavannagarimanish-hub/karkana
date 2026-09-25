@@ -3,7 +3,7 @@ import { getSections } from '@/lib/db';
 
 export async function GET() {
   try {
-    const sections = getSections();
+    const sections = await getSections();
     return NextResponse.json({ success: true, sections });
   } catch (error) {
     console.error('Failed to get sections:', error);
