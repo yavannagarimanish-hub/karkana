@@ -2,7 +2,7 @@
   "name": "karkana",
   "version": "1.0.0",
   "private": true,
-  "description": "Karkana — pyrotechnic commerce platform (Next.js 16, App Router)",
+  "description": "Karkana \u2014 pyrotechnic commerce platform (Next.js 16, App Router)",
   "engines": {
     "node": ">=20.9.0"
   },
@@ -19,7 +19,8 @@
     "db:push": "drizzle-kit push",
     "db:seed": "tsx scripts/seed.ts",
     "smoke": "node scripts/smoke-test.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run build",
+    "images:compress": "node scripts/compress-images.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",
