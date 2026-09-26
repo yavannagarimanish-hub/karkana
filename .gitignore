@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -25,8 +23,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
+# local env files — never commit secrets (.env.example is the tracked template)
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -37,3 +37,10 @@ next-env.d.ts
 
 # backups
 data/*.backup.*.json
+
+# scratch database used by the smoke test (never the committed catalogue)
+/.smoke/
+
+# customer-uploaded personalization assets (dev only; prod goes to object storage)
+public/uploads/personalizations/
+public/uploads/tmp/

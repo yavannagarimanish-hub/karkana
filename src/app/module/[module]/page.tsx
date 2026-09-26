@@ -1,181 +1,158 @@
-import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getProducts } from '@/lib/db';
-import { ProductModule } from '@/types';
-import SectionHeader from '@/components/SectionHeader';
-import ProductGrid from '@/components/ProductGrid';
-import EmptyState from '@/components/EmptyState';
-import PersonalizedExperience from '@/components/PersonalizedExperience';
+import { getAppServices } from '@/infra/db';
+import { SITE } from '@/infra/config';
+import type { SortKey } from '@/core/domain/catalogue';
+import { isSortKey } from '@/core/domain/catalogue';
+import { formatINR } from '@/core/domain/money';
+import { pricePaise } from '@/core/domain/product';
+import type { Product } from '@/core/domain/product';
+import { EmptyState } from '@/ui/empty-state';
+import { ProductGrid } from '@/ui/product-grid';
+import { SectionHeader } from '@/ui/section-header';
+import { FilterBar } from '@/features/catalogue/filter-bar';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-interface PageProps {
-  params: { module: string };
+interface Props {
+  params: Promise<{ module: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const MODULE_META: Record<
-  string,
-  {
-    moduleKey: ProductModule;
-    number: string;
-    title: string;
-    tagline: string;
-    description: string;
-  }
-> = {
-  basic: {
-    moduleKey: 'BASIC',
-    number: '01',
-    title: 'BASIC',
-    tagline: 'ESSENTIAL CELEBRATION CLASSICS (KRK001–KRK118)',
-    description:
-      'Foundational cracker engineering. Pristine acoustic clarity, traditional sparklers, rockets, ground chakkars, and multi-shots crafted with exacting chemical purity.',
-  },
-  customized: {
-    moduleKey: 'CUSTOMIZED',
-    number: '02',
-    title: 'CUSTOMIZED',
-    tagline: 'THEMATIC & ICONIC EDITIONS (KRK119–KRK138)',
-    description:
-      'Curated editions featuring cultural icons, legendary cinematic artwork, political series, and bespoke aesthetic packaging created exclusively by Karkana.',
-  },
-  personalized: {
-    moduleKey: 'PERSONALIZED',
-    number: '03',
-    title: 'PERSONALIZED',
-    tagline: 'BESPOKE COMMEMORATIVE BOXES (₹499 COMMISSION)',
-    description:
-      'Custom fireworks crafted with your direct input. Select a commission, upload your personal high-resolution photograph, and submit customization directives for packaging.',
-  },
-};
+function firstString(value: string | string[] | undefined): string | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
 
-export default async function ModulePage({ params }: PageProps) {
-  const meta = MODULE_META[params.module.toLowerCase()];
+interface PriceBand {
+  id: string;
+  label: string;
+  min: number;
+  max: number | null;
+}
 
-  if (!meta) {
-    notFound();
-  }
+/** Quartile bands computed from the module's actual prices. */
+function buildPriceBands(products: readonly Product[]): PriceBand[] {
+  const prices = [...new Set(products.map((product) => pricePaise(product)).filter((p) => p > 0))].sort(
+    (a, b) => a - b,
+  );
+  if (prices.length < 4) return [];
 
-  // If Personalized: Render dedicated customer upload experience
-  if (meta.moduleKey === 'PERSONALIZED') {
-    const allProducts = await getProducts();
-    const referenceExamples = allProducts
-      .filter((p) => {
-        const num = parseInt(p.id.replace(/\D/g, ''), 10);
-        return num >= 133 && num <= 138;
-      })
-      .map((p) => ({
-        id: p.id,
-        name: p.name,
-        image: p.images && p.images.length > 0 ? p.images[0] : '',
-        category: p.category,
-      }));
+  const cuts = [
+    prices[Math.floor(prices.length * 0.25)]!,
+    prices[Math.floor(prices.length * 0.5)]!,
+    prices[Math.floor(prices.length * 0.75)]!,
+  ];
 
-    return (
-      <div className="w-full bg-black min-h-screen">
-        <section className="px-4 sm:px-12 pt-16 sm:pt-24 pb-12 sm:pb-20 max-w-7xl mx-auto border-b border-white/10">
-          <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-6 sm:mb-8">
-            <Link href="/" className="hover:text-white transition-colors">
-              HOME
-            </Link>
-            <span>/</span>
-            <span className="text-kred">MODULE</span>
-            <span>/</span>
-            <span className="text-white uppercase">PERSONALIZED</span>
-          </div>
+  return [
+    { id: `0-${cuts[0]}`, label: `Under ${formatINR(cuts[0]!)}`, min: 0, max: cuts[0] },
+    { id: `${cuts[0]}-${cuts[1]}`, label: `${formatINR(cuts[0]!)} – ${formatINR(cuts[1]!)}`, min: cuts[0]!, max: cuts[1] },
+    { id: `${cuts[1]}-${cuts[2]}`, label: `${formatINR(cuts[1]!)} – ${formatINR(cuts[2]!)}`, min: cuts[1]!, max: cuts[2] },
+    { id: `${cuts[2]}-`, label: `Over ${formatINR(cuts[2]!)}`, min: cuts[2]!, max: null },
+  ];
+}
 
-          <div className="max-w-4xl space-y-4 sm:space-y-6">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-kred font-mono text-sm tracking-widest">
-                [{meta.number}]
-              </span>
-              <span className="text-[10px] sm:text-xs font-mono tracking-wider sm:tracking-widest uppercase border border-white/20 px-2.5 sm:px-3 py-1 text-white/70">
-                {meta.tagline}
-              </span>
-            </div>
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { module: slug } = await params;
+  const label = slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
+  return {
+    title: `${label} catalogue`,
+    description: `${label} crackers from ${SITE.name} with cash on delivery.`,
+    alternates: { canonical: `/module/${slug}` },
+  };
+}
 
-            <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold uppercase tracking-wider sm:tracking-widest md:tracking-ultra text-white break-words">
-              {meta.title}
-            </h1>
+export default async function ModulePage({ params, searchParams }: Props) {
+  const { module: slug } = await params;
+  const sp = await searchParams;
 
-            <p className="text-white/50 text-xs sm:text-base font-mono leading-relaxed max-w-3xl">
-              {meta.description}
-            </p>
-          </div>
-        </section>
+  const services = await getAppServices();
 
-        <section className="px-4 sm:px-12 py-12 sm:py-24 max-w-7xl mx-auto">
-          <PersonalizedExperience examples={referenceExamples} />
-        </section>
-      </div>
-    );
-  }
+  const category = firstString(sp.category);
+  const sortParam = firstString(sp.sort);
+  const sort: SortKey | undefined = sortParam && isSortKey(sortParam) ? sortParam : undefined;
+  const inStockOnly = firstString(sp.inStockOnly) === 'true';
+  const page = Math.max(1, Number(firstString(sp.page) ?? '1') || 1);
 
-  // Basic (KRK001–KRK118) or Customized (KRK119–KRK138) Catalogue
-  const products = await getProducts({
-    module: meta.moduleKey,
-    is_visible: true,
-  });
+  const preview = await services.catalogue.modulePage(slug);
+  if (!preview) notFound();
+
+  // Filter facets are always derived from the whole module, never from the
+  // already-filtered result, so narrowing cannot hide the way back out.
+  const moduleProducts = preview.products;
+  const bands = buildPriceBands(moduleProducts);
+  const categories = [...new Set(moduleProducts.map((product) => product.category).filter(Boolean))].sort();
+  const selectedBand = bands.find((band) => band.id === firstString(sp.band));
+
+  const view = await services.catalogue.modulePage(
+    slug,
+    {
+      category: category ?? null,
+      sort,
+      inStockOnly,
+      minPricePaise: selectedBand?.min ?? null,
+      maxPricePaise: selectedBand ? selectedBand.max : null,
+    },
+    page,
+  );
+
+  if (!view) notFound();
+
+  const label = view.module.charAt(0) + view.module.slice(1).toLowerCase();
 
   return (
-    <div className="w-full bg-black min-h-screen">
-      {/* Header Banner */}
-      <section className="px-4 sm:px-12 pt-16 sm:pt-24 pb-12 sm:pb-20 max-w-7xl mx-auto border-b border-white/10">
-        <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-6 sm:mb-8">
-          <Link href="/" className="hover:text-white transition-colors">
-            HOME
-          </Link>
-          <span>/</span>
-          <span className="text-kred">MODULE</span>
-          <span>/</span>
-          <span className="text-white uppercase">{meta.title}</span>
-        </div>
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:px-12">
+      <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[11px] text-fg-dim">
+        <Link href="/" className="transition-colors hover:text-fg">
+          Home
+        </Link>
+        <span aria-hidden>/</span>
+        <span className="font-mono uppercase tracking-[0.14em] text-fg-muted">{label}</span>
+      </nav>
 
-        <div className="max-w-4xl space-y-4 sm:space-y-6">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-kred font-mono text-sm tracking-widest">
-              [{meta.number}]
-            </span>
-            <span className="text-[10px] sm:text-xs font-mono tracking-wider sm:tracking-widest uppercase border border-white/20 px-2.5 sm:px-3 py-1 text-white/70">
-              {meta.tagline}
-            </span>
-          </div>
+      <SectionHeader
+        as="h1"
+        index={view.module === 'BASIC' ? '01' : view.module === 'CUSTOMIZED' ? '02' : '03'}
+        title={`${label} catalogue`}
+        subtitle={`${view.counts.total} visible ${view.counts.total === 1 ? 'product' : 'products'}${
+          view.counts.idRange ? ` · ${view.counts.idRange.first} – ${view.counts.idRange.last}` : ''
+        }`}
+      />
 
-          <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold uppercase tracking-wider sm:tracking-widest md:tracking-ultra text-white break-words">
-            {meta.title}
-          </h1>
+      <FilterBar categories={categories} counts={{ total: view.counts.total }} priceBands={bands} />
 
-          <p className="text-white/50 text-xs sm:text-base font-mono leading-relaxed max-w-3xl">
-            {meta.description}
-          </p>
-        </div>
-      </section>
+      {view.products.length === 0 ? (
+        <EmptyState
+          title="Nothing matches those filters"
+          message="Try clearing the category or price filter, or browse another module."
+          actionLabel="Clear filters"
+          actionHref={`/module/${view.slug}`}
+        />
+      ) : (
+        <>
+          <ProductGrid products={view.page.items} priorityCount={4} />
 
-      {/* Product Grid */}
-      <section className="px-4 sm:px-12 py-12 sm:py-24 max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-16">
-          <SectionHeader
-            title={`${meta.title} COLLECTION`}
-            subtitle={`DISPENSING ${products.length} VERIFIED CATALOGUE FORMULATIONS`}
-          />
-          <div className="font-mono text-xs tracking-widest uppercase text-white/40 self-start sm:self-auto">
-            {products.length} PRODUCTS
-          </div>
-        </div>
+          {view.page.totalPages > 1 && (
+            <nav aria-label="Pagination" className="mt-12 flex items-center justify-center gap-2">
+              {Array.from({ length: view.page.totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                <Link
+                  key={pageNumber}
+                  href={`/module/${view.slug}?page=${pageNumber}${category ? `&category=${encodeURIComponent(category)}` : ''}${
+                    sort ? `&sort=${sort}` : ''
+                  }${inStockOnly ? '&inStockOnly=true' : ''}${selectedBand ? `&band=${encodeURIComponent(selectedBand.id)}` : ''}`}
+                  aria-current={pageNumber === view.page.page ? 'page' : undefined}
+                  className={
+                    pageNumber === view.page.page
+                      ? 'numeric grid size-10 place-items-center rounded-sm bg-ember text-fg'
+                      : 'numeric grid size-10 place-items-center rounded-sm text-fg-muted shadow-hairline-strong transition-colors hover:text-fg'
+                  }
+                >
+                  {pageNumber}
+                </Link>
+              ))}
+            </nav>
+          )}
+        </>
+      )}
 
-        {products.length > 0 ? (
-          <ProductGrid products={products} />
-        ) : (
-          <EmptyState
-            title={`NO ${meta.title} PRODUCTS AVAILABLE`}
-            message={`Products in the ${meta.title} collection will appear dynamically once configured.`}
-            actionText="MANAGE VIA ADMIN"
-            actionHref="/admin/products"
-          />
-        )}
-      </section>
     </div>
   );
 }
