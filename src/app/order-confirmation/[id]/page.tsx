@@ -18,14 +18,14 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
   }
 
   return (
-    <div className="w-full bg-black min-h-screen py-16 sm:py-24 px-6 sm:px-12 max-w-4xl mx-auto">
+    <div className="w-full bg-black min-h-screen py-12 sm:py-24 px-4 sm:px-12 max-w-4xl mx-auto">
       {/* Editorial Status Header */}
-      <div className="text-center space-y-4 mb-16">
-        <div className="inline-flex items-center space-x-2 border border-white/20 px-4 py-1.5 font-mono text-xs text-white/70 uppercase">
+      <div className="text-center space-y-4 mb-12 sm:mb-16">
+        <div className="inline-flex items-center space-x-2 border border-white/20 px-3 sm:px-4 py-1.5 font-mono text-xs text-white/70 uppercase">
           <span className="w-2 h-2 rounded-full bg-kred animate-ping" />
           <span>ORDER SECURELY REGISTERED</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-ultra text-white">
+        <h1 className="text-2xl sm:text-5xl font-bold uppercase tracking-wider sm:tracking-ultra text-white break-words">
           COMMISSION CONFIRMED
         </h1>
         <p className="text-white/40 text-xs sm:text-sm font-mono max-w-lg mx-auto leading-relaxed">
@@ -34,14 +34,14 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
       </div>
 
       {/* CRED-style Monolithic Ticket */}
-      <div className="border border-white/20 bg-white/[0.01] p-8 sm:p-14 space-y-12">
+      <div className="border border-white/20 bg-white/[0.01] p-5 sm:p-14 space-y-8 sm:space-y-12">
         {/* Ticket Top: Order ID & Status */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-8 border-b border-white/10 gap-4">
           <div className="space-y-1">
             <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">
               COMMISSION REFERENCE
             </span>
-            <div className="text-2xl sm:text-3xl font-mono font-bold text-white tracking-widest">
+            <div className="text-xl sm:text-3xl font-mono font-bold text-white tracking-wider sm:tracking-widest break-all">
               {order.id}
             </div>
             <div className="text-xs font-mono text-white/40">
@@ -72,7 +72,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
 
           <div className="space-y-4 divide-y divide-white/5">
             {order.items.map((item, idx) => (
-              <div key={idx} className="pt-4 first:pt-0 flex items-start justify-between gap-6">
+              <div key={idx} className="pt-4 first:pt-0 flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-6">
                 <div className="flex items-start space-x-4">
                   {item.personalizationImage ? (
                     <div className="w-14 h-14 border border-kred/50 p-0.5 overflow-hidden flex-shrink-0 bg-black flex items-center justify-center">
@@ -164,7 +164,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
             <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 block">
               TOTAL DUE
             </span>
-            <div className="text-3xl sm:text-4xl font-mono font-bold text-white tracking-widest">
+            <div className="text-2xl sm:text-4xl font-mono font-bold text-white tracking-wider sm:tracking-widest">
               ₹{order.totalAmount.toLocaleString('en-IN')}
             </div>
           </div>

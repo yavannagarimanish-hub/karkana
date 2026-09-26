@@ -75,8 +75,8 @@ export default async function ModulePage({ params }: PageProps) {
 
     return (
       <div className="w-full bg-black min-h-screen">
-        <section className="px-6 sm:px-12 pt-24 pb-20 max-w-7xl mx-auto border-b border-white/10">
-          <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-8">
+        <section className="px-4 sm:px-12 pt-16 sm:pt-24 pb-12 sm:pb-20 max-w-7xl mx-auto border-b border-white/10">
+          <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-6 sm:mb-8">
             <Link href="/" className="hover:text-white transition-colors">
               HOME
             </Link>
@@ -86,27 +86,27 @@ export default async function ModulePage({ params }: PageProps) {
             <span className="text-white uppercase">PERSONALIZED</span>
           </div>
 
-          <div className="max-w-4xl space-y-6">
-            <div className="flex items-center space-x-4">
+          <div className="max-w-4xl space-y-4 sm:space-y-6">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="text-kred font-mono text-sm tracking-widest">
                 [{meta.number}]
               </span>
-              <span className="text-xs font-mono tracking-widest uppercase border border-white/20 px-3 py-1 text-white/70">
+              <span className="text-[10px] sm:text-xs font-mono tracking-wider sm:tracking-widest uppercase border border-white/20 px-2.5 sm:px-3 py-1 text-white/70">
                 {meta.tagline}
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold uppercase tracking-ultra text-white">
+            <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold uppercase tracking-wider sm:tracking-widest md:tracking-ultra text-white break-words">
               {meta.title}
             </h1>
 
-            <p className="text-white/50 text-sm sm:text-base font-mono leading-relaxed max-w-3xl">
+            <p className="text-white/50 text-xs sm:text-base font-mono leading-relaxed max-w-3xl">
               {meta.description}
             </p>
           </div>
         </section>
 
-        <section className="px-6 sm:px-12 py-24 max-w-7xl mx-auto">
+        <section className="px-4 sm:px-12 py-12 sm:py-24 max-w-7xl mx-auto">
           <PersonalizedExperience examples={referenceExamples} />
         </section>
       </div>
@@ -122,8 +122,8 @@ export default async function ModulePage({ params }: PageProps) {
   return (
     <div className="w-full bg-black min-h-screen">
       {/* Header Banner */}
-      <section className="px-6 sm:px-12 pt-24 pb-20 max-w-7xl mx-auto border-b border-white/10">
-        <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-8">
+      <section className="px-4 sm:px-12 pt-16 sm:pt-24 pb-12 sm:pb-20 max-w-7xl mx-auto border-b border-white/10">
+        <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-6 sm:mb-8">
           <Link href="/" className="hover:text-white transition-colors">
             HOME
           </Link>
@@ -133,34 +133,34 @@ export default async function ModulePage({ params }: PageProps) {
           <span className="text-white uppercase">{meta.title}</span>
         </div>
 
-        <div className="max-w-4xl space-y-6">
-          <div className="flex items-center space-x-4">
+        <div className="max-w-4xl space-y-4 sm:space-y-6">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="text-kred font-mono text-sm tracking-widest">
               [{meta.number}]
             </span>
-            <span className="text-xs font-mono tracking-widest uppercase border border-white/20 px-3 py-1 text-white/70">
+            <span className="text-[10px] sm:text-xs font-mono tracking-wider sm:tracking-widest uppercase border border-white/20 px-2.5 sm:px-3 py-1 text-white/70">
               {meta.tagline}
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold uppercase tracking-ultra text-white">
+          <h1 className="text-3xl sm:text-6xl md:text-7xl font-bold uppercase tracking-wider sm:tracking-widest md:tracking-ultra text-white break-words">
             {meta.title}
           </h1>
 
-          <p className="text-white/50 text-sm sm:text-base font-mono leading-relaxed max-w-3xl">
+          <p className="text-white/50 text-xs sm:text-base font-mono leading-relaxed max-w-3xl">
             {meta.description}
           </p>
         </div>
       </section>
 
       {/* Product Grid */}
-      <section className="px-6 sm:px-12 py-24 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-16">
+      <section className="px-4 sm:px-12 py-12 sm:py-24 max-w-7xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-16">
           <SectionHeader
             title={`${meta.title} COLLECTION`}
             subtitle={`DISPENSING ${products.length} VERIFIED CATALOGUE FORMULATIONS`}
           />
-          <div className="font-mono text-xs tracking-widest uppercase text-white/40">
+          <div className="font-mono text-xs tracking-widest uppercase text-white/40 self-start sm:self-auto">
             {products.length} PRODUCTS
           </div>
         </div>

@@ -96,28 +96,28 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
   };
 
   return (
-    <div className="space-y-24">
+    <div className="space-y-12 sm:space-y-24">
       {/* 1. Header Banner & Fixed Price Spec */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-baseline pb-16 border-b border-white/10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-baseline pb-10 sm:pb-16 border-b border-white/10">
         <div className="lg:col-span-8 space-y-4">
           <div className="inline-flex items-center space-x-2 font-mono text-xs text-kred uppercase tracking-widest">
             <span className="w-2 h-2 rounded-full bg-kred animate-ping" />
             <span>BESPOKE PACKAGING WORKSHOP</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold uppercase tracking-ultra text-white">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider sm:tracking-widest md:tracking-ultra text-white break-words">
             COMMISSION YOUR BOX
           </h2>
-          <p className="text-white/50 text-sm font-mono leading-relaxed max-w-2xl">
+          <p className="text-white/50 text-xs sm:text-sm font-mono leading-relaxed max-w-2xl">
             Upload your personal photograph and customization directives. Our pyrotechnic artisans
             will imprint your image directly onto custom commemorative packaging boxes.
           </p>
         </div>
 
-        <div className="lg:col-span-4 p-8 border border-white/10 bg-white/[0.01] space-y-2 text-right">
+        <div className="lg:col-span-4 p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-2 text-left sm:text-right">
           <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 block">
             FLAT COMMISSION RATE
           </span>
-          <div className="text-4xl sm:text-5xl font-mono font-bold text-white tracking-widest">
+          <div className="text-3xl sm:text-5xl font-mono font-bold text-white tracking-widest">
             ₹{price}
           </div>
           <span className="text-[11px] font-mono text-kred uppercase tracking-widest block font-bold">
@@ -127,11 +127,11 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
       </div>
 
       {/* 2. Interactive Commissioning Workbench */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
         {/* Left Column: Photo Upload & Instructions */}
-        <div className="lg:col-span-7 space-y-8">
+        <div className="lg:col-span-7 space-y-6 sm:space-y-8">
           {/* Step 1: Photograph Upload */}
-          <div className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
+          <div className="p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
             <div className="flex justify-between items-center">
               <span className="text-xs font-mono uppercase tracking-widest text-kred">
                 STEP 01 // UPLOAD PHOTOGRAPH *
@@ -195,7 +195,7 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
           </div>
 
           {/* Step 2: Customization Instructions */}
-          <div className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
+          <div className="p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
             <span className="text-xs font-mono uppercase tracking-widest text-kred block">
               STEP 02 // CUSTOMIZATION DIRECTIVES
             </span>
@@ -222,7 +222,7 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
           </div>
 
           {/* Step 3: Quantity & Add to Cart */}
-          <div className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
+          <div className="p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
             <span className="text-xs font-mono uppercase tracking-widest text-kred block">
               STEP 03 // QUANTITY & COMMISSION
             </span>
@@ -251,7 +251,7 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="flex items-center justify-between sm:block text-left sm:text-right">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 block">
                   SUBTOTAL
                 </span>
@@ -269,7 +269,7 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
               {addedSuccess ? 'COMMISSION ADDED! REDIRECTING...' : `ADD TO CART — ₹${(price * quantity).toLocaleString('en-IN')}`}
             </button>
 
-            <div className="text-[11px] font-mono text-white/40 flex items-center space-x-2 justify-center">
+            <div className="text-[10px] sm:text-[11px] font-mono text-white/40 flex items-center space-x-2 justify-center text-center flex-wrap">
               <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
               <span>STRICT CASH ON DELIVERY // NO ADVANCE PAYMENT GATEWAYS</span>
             </div>
@@ -294,8 +294,8 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
 
           {/* Active Big Showcase */}
           {examples.length > 0 && (
-            <div className="border border-white/10 bg-white/[0.01] p-6 space-y-4">
-              <div className="relative w-full min-h-[360px] max-h-[500px] border border-white/10 bg-black/40 p-6 flex items-center justify-center overflow-hidden">
+            <div className="border border-white/10 bg-white/[0.01] p-4 sm:p-6 space-y-4">
+              <div className="relative w-full min-h-[260px] sm:min-h-[360px] max-h-[500px] border border-white/10 bg-black/40 p-4 sm:p-6 flex items-center justify-center overflow-hidden">
                 <img
                   src={examples[activeExampleIndex]?.image || examples[0]?.image}
                   alt={examples[activeExampleIndex]?.name || 'Example Box'}
@@ -317,14 +317,14 @@ export default function PersonalizedExperience({ examples }: PersonalizedExperie
             </div>
           )}
 
-          {/* Thumbnail Strip */}
-          <div className="grid grid-cols-6 gap-2 pt-2">
+          {/* Thumbnail Strip: 3 cols on mobile, 6 cols on sm+ */}
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 pt-2">
             {examples.map((ex, idx) => (
               <button
                 key={ex.id}
                 type="button"
                 onClick={() => setActiveExampleIndex(idx)}
-                className={`relative aspect-square border p-1 bg-black/40 flex items-center justify-center overflow-hidden transition-all ${
+                className={`relative aspect-square border p-1 bg-black/40 flex items-center justify-center overflow-hidden transition-all min-h-[50px] ${
                   activeExampleIndex === idx ? 'border-kred scale-105' : 'border-white/10 opacity-60 hover:opacity-100'
                 }`}
               >

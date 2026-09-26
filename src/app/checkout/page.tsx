@@ -123,7 +123,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="w-full bg-black min-h-screen py-16 sm:py-24 px-6 sm:px-12 max-w-7xl mx-auto">
+    <div className="w-full bg-black min-h-screen py-12 sm:py-24 px-4 sm:px-12 max-w-7xl mx-auto">
       <SectionHeader
         number="04"
         title="CHECKOUT & DISPATCH"
@@ -131,11 +131,11 @@ export default function CheckoutPage() {
       />
 
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* Left Column: Delivery Form */}
-          <div className="lg:col-span-7 space-y-10">
+          <div className="lg:col-span-7 space-y-8 sm:space-y-10">
             {/* Customer Identification */}
-            <div className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
+            <div className="p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
               <div className="text-xs font-mono uppercase tracking-widest text-kred">
                 1. RECIPIENT INFORMATION
               </div>
@@ -174,7 +174,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Delivery Address */}
-            <div className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
+            <div className="p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
               <div className="text-xs font-mono uppercase tracking-widest text-kred">
                 2. PHYSICAL DISPATCH ADDRESS
               </div>
@@ -192,7 +192,7 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       required
                       placeholder="e.g. Villa 42, Floor 3"
-                      className="w-full bg-black border border-white/20 p-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
+                      className="w-full bg-black border border-white/20 p-3 text-sm sm:text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
                     />
                   </div>
 
@@ -207,7 +207,7 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       required
                       placeholder="e.g. Jubilee Hills Road No. 36"
-                      className="w-full bg-black border border-white/20 p-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
+                      className="w-full bg-black border border-white/20 p-3 text-sm sm:text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
                     />
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       required
                       placeholder="e.g. Hyderabad"
-                      className="w-full bg-black border border-white/20 p-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
+                      className="w-full bg-black border border-white/20 p-3 text-sm sm:text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
                     />
                   </div>
 
@@ -239,7 +239,7 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       required
                       placeholder="e.g. Telangana"
-                      className="w-full bg-black border border-white/20 p-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
+                      className="w-full bg-black border border-white/20 p-3 text-sm sm:text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
                     />
                   </div>
 
@@ -254,7 +254,7 @@ export default function CheckoutPage() {
                       onChange={handleChange}
                       required
                       placeholder="e.g. 500033"
-                      className="w-full bg-black border border-white/20 p-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
+                      className="w-full bg-black border border-white/20 p-3 text-sm sm:text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
                     />
                   </div>
                 </div>
@@ -269,7 +269,7 @@ export default function CheckoutPage() {
                     value={formData.instructions}
                     onChange={handleChange}
                     placeholder="e.g. Gate code, deliver after 6 PM, leave with reception"
-                    className="w-full bg-black border border-white/20 p-3 text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
+                    className="w-full bg-black border border-white/20 p-3 text-sm sm:text-xs font-mono text-white placeholder-white/30 focus:outline-none focus:border-white transition-colors"
                   />
                 </div>
               </div>
@@ -284,8 +284,8 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right Column: Order Review & COD Confirmation */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
+          <div className="lg:col-span-5 space-y-6 sm:space-y-8">
+            <div className="p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
               <div className="text-xs font-mono uppercase tracking-widest text-kred">
                 COMMISSION REVIEW ({totalCount} ITEMS)
               </div>
@@ -332,11 +332,11 @@ export default function CheckoutPage() {
               </div>
 
               {/* Total Due */}
-              <div className="flex justify-between items-baseline pt-2">
+              <div className="flex flex-wrap justify-between items-baseline gap-2 pt-2">
                 <span className="text-xs font-mono tracking-widest uppercase text-white/50">
                   TOTAL COD AMOUNT
                 </span>
-                <span className="text-3xl font-mono font-bold text-white tracking-wider">
+                <span className="text-2xl sm:text-3xl font-mono font-bold text-white tracking-wider">
                   ₹{subtotal.toLocaleString('en-IN')}
                 </span>
               </div>
@@ -356,7 +356,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-5 bg-white text-black font-bold uppercase tracking-widest text-xs font-mono hover:bg-kred hover:text-white transition-all duration-300 disabled:opacity-50"
+                className="w-full py-4 sm:py-5 bg-white text-black font-bold uppercase tracking-wider sm:tracking-widest text-xs font-mono hover:bg-kred hover:text-white transition-all duration-300 disabled:opacity-50 min-h-[48px]"
               >
                 {isSubmitting ? 'PROCESSING COMMISSION...' : 'PLACE CASH ON DELIVERY ORDER →'}
               </button>

@@ -29,16 +29,16 @@ export default function CartPage() {
   }
 
   return (
-    <div className="w-full bg-black min-h-screen py-16 sm:py-24 px-6 sm:px-12 max-w-7xl mx-auto">
+    <div className="w-full bg-black min-h-screen py-12 sm:py-24 px-4 sm:px-12 max-w-7xl mx-auto">
       <SectionHeader
         number="CART"
         title="COMMISSION SUMMARY"
         subtitle={`RETAINING ${totalCount} ITEM${totalCount > 1 ? 'S' : ''} IN ACTIVE SELECTION`}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
         {/* Left Column: Items List */}
-        <div className="lg:col-span-8 space-y-8">
+        <div className="lg:col-span-8 space-y-6 sm:space-y-8">
           {items.map((item, index) => {
             const hasProdImage =
               item.product.images && item.product.images.length > 0 && item.product.images[0];
@@ -46,12 +46,12 @@ export default function CartPage() {
             return (
               <div
                 key={`${item.productId}-${index}`}
-                className="p-6 sm:p-8 border border-white/10 bg-white/[0.01] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+                className="p-4 sm:p-8 border border-white/10 bg-white/[0.01] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
               >
                 {/* Product & Personalization Previews */}
-                <div className="flex items-center space-x-6">
+                <div className="flex items-start sm:items-center space-x-3 sm:space-x-6">
                   {/* Product Thumbnail */}
-                  <div className="relative w-24 h-24 bg-white/[0.02] border border-white/10 flex-shrink-0 flex items-center justify-center p-2">
+                  <div className="relative w-16 h-16 sm:w-24 sm:h-24 bg-white/[0.02] border border-white/10 flex-shrink-0 flex items-center justify-center p-2">
                     {hasProdImage ? (
                       <img
                         src={item.product.images[0]}
@@ -153,7 +153,7 @@ export default function CartPage() {
             );
           })}
 
-          <div className="flex justify-between items-center pt-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4">
             <button
               type="button"
               onClick={clearCart}
@@ -171,7 +171,7 @@ export default function CartPage() {
         </div>
 
         {/* Right Column: Order Summary & Checkout Trigger */}
-        <div className="lg:col-span-4 p-8 border border-white/10 bg-white/[0.01] space-y-6">
+        <div className="lg:col-span-4 p-5 sm:p-8 border border-white/10 bg-white/[0.01] space-y-6">
           <div className="text-xs font-mono uppercase tracking-widest text-kred">
             PAYMENT BREAKDOWN
           </div>

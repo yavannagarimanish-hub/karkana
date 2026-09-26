@@ -21,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         - Generous inner breathing room (p-6)
         - Adapts to Tall, Wide, or Square product packaging naturally
       */}
-      <div className="relative w-full bg-white/[0.015] border-b border-white/5 flex items-center justify-center p-6 sm:p-8">
+      <div className="relative w-full bg-white/[0.015] border-b border-white/5 flex items-center justify-center p-4 sm:p-8">
         {hasImage ? (
           <img
             src={product.images[0]}
@@ -61,7 +61,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Minimal Supporting Information: Product Name & Price */}
-      <div className="p-6 space-y-2">
+      <div className="p-4 sm:p-6 space-y-2">
         <h3 className="text-sm uppercase tracking-widest font-bold text-white group-hover:text-kred transition-colors line-clamp-2">
           {product.name}
         </h3>

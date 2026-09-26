@@ -133,7 +133,7 @@ export default function ProductDetailPage() {
   return (
     <div className="w-full bg-black min-h-screen">
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 pt-12 pb-6 border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-12 pt-8 sm:pt-12 pb-4 sm:pb-6 border-b border-white/10">
         <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50">
           <Link href="/" className="hover:text-white transition-colors">
             HOME
@@ -146,16 +146,16 @@ export default function ProductDetailPage() {
             {product.module}
           </Link>
           <span>/</span>
-          <span className="text-white uppercase truncate max-w-xs">{product.name}</span>
+          <span className="text-white uppercase truncate max-w-[140px] sm:max-w-xs">{product.name}</span>
         </div>
       </div>
 
       {/* Main Editorial Grid: Left Image, Right Info */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 py-16 sm:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-12 py-10 sm:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-start">
           {/* Left Column: Spacious Adaptive Product Imagery */}
           <div className="lg:col-span-7">
-            <div className="relative w-full border border-white/10 bg-white/[0.015] p-6 sm:p-12 lg:p-16 flex items-center justify-center min-h-[480px]">
+            <div className="relative w-full border border-white/10 bg-white/[0.015] p-4 sm:p-12 lg:p-16 flex items-center justify-center min-h-[280px] sm:min-h-[480px]">
               {hasImage ? (
                 <img
                   src={product.images[0]}
@@ -166,7 +166,7 @@ export default function ProductDetailPage() {
                   }}
                 />
               ) : (
-                <div className="flex flex-col items-center justify-center p-12 text-center space-y-4 py-24">
+                <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center space-y-4 py-16 sm:py-24">
                   <div className="w-16 h-[1px] bg-white/20" />
                   <span className="text-white/30 text-xs font-mono tracking-widest uppercase">
                     NO PRODUCT IMAGE ASSIGNED
@@ -178,8 +178,8 @@ export default function ProductDetailPage() {
               )}
 
               {/* Status Badge */}
-              <div className="absolute top-6 left-6 flex items-center space-x-2">
-                <span className="px-3 py-1 text-[10px] font-mono tracking-widest uppercase bg-black/90 border border-white/20 text-white">
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center space-x-2">
+                <span className="px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-mono tracking-widest uppercase bg-black/90 border border-white/20 text-white">
                   {product.module}
                 </span>
                 {product.orientation && (
@@ -200,7 +200,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Right Column: Editorial Information */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-6 sm:space-y-8">
             <div className="space-y-4">
               <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-kred uppercase">
                 <span>{product.category || 'COMMEMORATIVE'}</span>
@@ -210,17 +210,17 @@ export default function ProductDetailPage() {
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-widest text-white leading-tight">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider sm:tracking-widest text-white leading-tight break-words">
                 {product.name}
               </h1>
 
               {/* Pricing */}
-              <div className="flex items-baseline space-x-4 pt-2">
-                <span className="text-3xl font-mono font-bold text-white tracking-wider">
+              <div className="flex flex-wrap items-baseline gap-3 sm:space-x-4 pt-2">
+                <span className="text-2xl sm:text-3xl font-mono font-bold text-white tracking-wider">
                   ₹{product.price.toLocaleString('en-IN')}
                 </span>
                 {product.original_price && product.original_price > product.price && (
-                  <span className="text-white/40 line-through text-lg font-mono">
+                  <span className="text-white/40 line-through text-base sm:text-lg font-mono">
                     ₹{product.original_price.toLocaleString('en-IN')}
                   </span>
                 )}

@@ -17,7 +17,7 @@ export default function SectionHeader({ number, title, subtitle }: SectionHeader
         )}
         <div className="h-[1px] w-12 bg-white/20"></div>
       </div>
-      <h2 className="text-2xl sm:text-4xl font-bold tracking-ultra uppercase text-white">
+      <h2 className="text-xl sm:text-4xl font-bold tracking-wider sm:tracking-ultra uppercase text-white break-words">
         {title}
       </h2>
       {subtitle && (

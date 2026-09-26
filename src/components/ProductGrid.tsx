@@ -12,9 +12,9 @@ export default function ProductGrid({ products }: ProductGridProps) {
   }
 
   return (
-    <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8 [column-fill:_balance]">
+    <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 sm:gap-8 [column-fill:_balance]">
       {products.map((product) => (
-        <div key={product.id} className="break-inside-avoid mb-8">
+        <div key={product.id} className="break-inside-avoid mb-4 sm:mb-8">
           <ProductCard product={product} />
         </div>
       ))}

@@ -6,7 +6,24 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get('host') || '';
 
-  // 1. Session token verification
+  // 1. Subdomain routing for admin.karkana.com (or admin.localhost during dev)
+  const isAdminSubdomain =
+    host.startsWith('admin.karkana.com') ||
+    host.startsWith('admin.localhost');
+
+  if (isAdminSubdomain) {
+    // If accessing root of admin subdomain, rewrite/redirect to /admin
+    if (pathname === '/') {
+      const url = request.nextUrl.clone();
+      url.pathname = '/admin';
+      return NextResponse.rewrite(url);
+    }
+  }
+
+  // 2. Protected admin routes check
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isLoginPage = pathname === '/admin/login';
+
   const sessionCookie = request.cookies.get('karkana_admin_session');
   let isAuthenticated = false;
 
@@ -16,27 +33,6 @@ export async function middleware(request: NextRequest) {
       isAuthenticated = true;
     }
   }
-
-  // 2. Subdomain routing for admin.karkana.com (or admin.localhost during dev)
-  const isAdminSubdomain =
-    host.startsWith('admin.karkana.com') ||
-    host.startsWith('admin.localhost');
-
-  if (isAdminSubdomain) {
-    // If accessing root of admin subdomain, redirect unauthenticated to /admin/login, authenticated to /admin
-    if (pathname === '/') {
-      if (!isAuthenticated) {
-        const loginUrl = new URL('/admin/login', request.url);
-        return NextResponse.redirect(loginUrl);
-      }
-      const adminUrl = new URL('/admin', request.url);
-      return NextResponse.redirect(adminUrl);
-    }
-  }
-
-  // 3. Protected admin routes check
-  const isAdminRoute = pathname.startsWith('/admin');
-  const isLoginPage = pathname === '/admin/login';
 
   // If trying to access admin pages (except /admin/login) without auth: redirect to /admin/login
   if (isAdminRoute && !isLoginPage) {
@@ -52,7 +48,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(adminUrl);
   }
 
-  // 4. Protected admin API routes check
+  // 3. Protected admin API routes check
   const isProtectedAdminApi =
     pathname.startsWith('/api/validation') ||
     pathname.startsWith('/api/products/reorder') ||
@@ -73,13 +69,13 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match root and all request paths except:
+     * Match all request paths except:
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - uploads/ (public product images)
      */
-    '/',
     '/((?!_next/static|_next/image|favicon.ico|uploads/).*)',
   ],
 };
+
