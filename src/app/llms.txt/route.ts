@@ -22,7 +22,7 @@ export async function GET(): Promise<Response> {
 
   const body = `# ${SITE.name}
 
-> ${SITE.name} is an independent ${SITE.city}-based retailer of crackers and pyrotechnic
+> ${SITE.name} is an independent retailer of crackers and pyrotechnic
 > products. ${counts.total} products are sold across three collections, dispatched direct
 > from the workshop, and paid for cash on delivery. Online card and UPI payment are not
 > accepted.

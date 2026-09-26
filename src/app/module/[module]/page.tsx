@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
   return {
     title: `${label} catalogue`,
-    description: `${label} crackers from ${SITE.name}, dispatched from ${SITE.city} with cash on delivery.`,
+    description: `${label} crackers from ${SITE.name} with cash on delivery.`,
     alternates: { canonical: `/module/${slug}` },
   };
 }

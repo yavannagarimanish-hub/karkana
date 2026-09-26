@@ -6,7 +6,7 @@ export const SITE = {
   /** Absolute origin, from env. Used for canonicals, sitemap, robots and OG tags. */
   url: env.KARKANA_SITE_URL,
   tagline: 'Pyrotechnic atelier',
-  city: process.env.KARKANA_CITY ?? 'Sivakasi',
+  city: process.env.KARKANA_CITY ?? 'Hyderabad',
   supportPhone: process.env.KARKANA_SUPPORT_PHONE ?? '7207294554',
   supportEmail: process.env.KARKANA_SUPPORT_EMAIL ?? 'hello@karkana.com',
   /** Admin host used for the subdomain rewrite in `src/proxy.ts`. */

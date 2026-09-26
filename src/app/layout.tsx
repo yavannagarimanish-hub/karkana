@@ -27,12 +27,12 @@ export const metadata: Metadata = {
     default: `${SITE.name} | ${SITE.tagline}`,
     template: `%s | ${SITE.name}`,
   },
-  description: `Buy crackers online from ${SITE.name}, a ${SITE.city} pyrotechnic workshop. Basic, customized and personalized fireworks with cash on delivery across India.`,
+  description: `Buy crackers online from ${SITE.name}, an independent pyrotechnic workshop. Basic, customized and personalized fireworks with cash on delivery across India.`,
   applicationName: SITE.name,
   keywords: [
     'crackers online',
     'buy fireworks India',
-    'Sivakasi crackers',
+    'Hyderabad crackers',
     'personalized crackers',
     'Diwali crackers online',
     'cash on delivery fireworks',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   // and category page back at the homepage and collapse them in search.
   openGraph: {
     title: `${SITE.name} | ${SITE.tagline}`,
-    description: `Basic, customized and personalized crackers from ${SITE.city}, dispatched direct from the workshop with cash on delivery.`,
+    description: `Basic, customized and personalized crackers dispatched direct from the workshop with cash on delivery.`,
     url: SITE.url,
     siteName: SITE.name,
     locale: 'en_IN',
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `${SITE.name} | ${SITE.tagline}`,
-    description: `Basic, customized and personalized crackers from ${SITE.city}, with cash on delivery.`,
+    description: `Basic, customized and personalized crackers with cash on delivery.`,
     images: ['/og.png'],
   },
   robots: {

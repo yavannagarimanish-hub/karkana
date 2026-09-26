@@ -10,7 +10,7 @@ import { SectionHeader } from '@/ui/section-header';
 
 export const metadata: Metadata = {
   title: 'Buy Crackers Online',
-  description: `Browse the ${SITE.name} catalogue: basic, customized and personalized crackers dispatched from ${SITE.city} with cash on delivery across India.`,
+  description: `Browse the ${SITE.name} catalogue: basic, customized and personalized crackers with cash on delivery across India.`,
   alternates: { canonical: '/' },
 };
 
@@ -44,7 +44,7 @@ export default async function HomePage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="border-b border-hairline">
         <div className="mx-auto max-w-7xl px-4 pt-14 pb-16 sm:px-8 sm:pt-24 sm:pb-24 lg:px-12">
-          <p className="live-dot label">Season catalogue · {SITE.city}</p>
+          <p className="live-dot label">Season catalogue</p>
 
           <h1 className="mt-6 max-w-4xl text-[2.5rem] leading-[1.02] font-extrabold tracking-[-0.02em] uppercase sm:text-6xl lg:text-7xl">
             Karkana
