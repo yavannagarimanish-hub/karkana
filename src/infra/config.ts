@@ -8,9 +8,9 @@ export const SITE = {
   tagline: 'Pyrotechnic atelier',
   city: process.env.KARKANA_CITY ?? 'Hyderabad',
   supportPhone: process.env.KARKANA_SUPPORT_PHONE ?? '7207294554',
-  supportEmail: process.env.KARKANA_SUPPORT_EMAIL ?? 'hello@karkana.com',
+  supportEmail: process.env.KARKANA_SUPPORT_EMAIL ?? 'info@setacore.com',
   /** Admin host used for the subdomain rewrite in `src/proxy.ts`. */
-  adminHost: process.env.KARKANA_ADMIN_HOST ?? 'admin.karkana.com',
+  adminHost: process.env.KARKANA_ADMIN_HOST ?? 'karkana.setacore.com',
 } as const;
 
 export const isStorageConfigured = () => Boolean(env.R2_BUCKET && env.R2_ACCESS_KEY_ID);

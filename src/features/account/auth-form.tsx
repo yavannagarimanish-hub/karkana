@@ -24,6 +24,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
+  const [consent, setConsent] = React.useState(false);
 
   const isRegister = mode === 'register';
 
@@ -35,6 +36,12 @@ export function AuthForm({ mode }: AuthFormProps) {
     event.preventDefault();
     setError(null);
     setFieldErrors({});
+
+    if (isRegister && !consent) {
+      setError('Please accept the Terms & Conditions and Privacy Policy to create an account.');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -137,6 +144,41 @@ export function AuthForm({ mode }: AuthFormProps) {
             required
           />
         </Field>
+
+        {isRegister && (
+          <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-fg-muted">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(event) => {
+                setConsent(event.target.checked);
+                if (event.target.checked) setError(null);
+              }}
+              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[var(--color-ember)]"
+              aria-label="I agree to the Terms and Conditions and Privacy Policy"
+            />
+            <span>
+              I agree to the{' '}
+              <Link
+                href="/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-fg underline underline-offset-4 hover:text-ember"
+              >
+                Terms &amp; Conditions
+              </Link>{' '}
+              and{' '}
+              <Link
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-fg underline underline-offset-4 hover:text-ember"
+              >
+                Privacy Policy
+              </Link>.
+            </span>
+          </label>
+        )}
 
         <Button type="submit" block size="lg" disabled={submitting}>
           {submitting ? 'Please wait…' : isRegister ? 'Create account' : 'Sign in'}

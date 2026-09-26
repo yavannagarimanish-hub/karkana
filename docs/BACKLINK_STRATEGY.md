@@ -1,6 +1,7 @@
 # Backlink and Authority Strategy
 
-For karkana.com — pyrotechnic atelier, Sivakasi, Tamil Nadu.
+For karkana.setacore.com — pyrotechnic atelier, Hyderabad, Telangana.
+Contact: info@setacore.com.
 Companion to `docs/SECURITY_AUDIT.md` and the SEO work already shipped.
 
 This is a plan, not a claim of results. Nothing here has been executed yet.
@@ -19,7 +20,7 @@ four genuinely linkable assets, and they should be used deliberately:
 | The live catalogue | `/module/basic`, `/module/customized`, `/module/personalized` | 138 real SKUs with prices. Aggregators and comparison sites link to structured product data. |
 | Machine-readable catalogue | `/llms.txt` | Rare in this vertical. AI-answer engines and tool authors cite sites that publish it. |
 | DPDP Act privacy policy | `/privacy-policy` | A correct, current Indian privacy policy is quotable by legal and compliance writers. |
-| Sivakasi provenance | homepage, footer | Sivakasi produces the large majority of India's fireworks. Origin stories are locally newsworthy. |
+| Sivakasi sourcing, Hyderabad service | homepage, footer | The catalogue is sourced from Sivakasi, which produces the large majority of India's fireworks, and sold from Hyderabad. An origin-plus-local-delivery story is newsworthy in both regions. |
 
 Before chasing links, publish the two things most likely to attract them
 naturally, because neither exists yet:
@@ -42,7 +43,7 @@ These are not filler. They are the assets that make everything below work.
 Consistent Name-Address-Phone across these is worth more than any single
 backlink, because it establishes the business as real.
 
-- **Google Business Profile** — Sivakasi address, category "Fireworks
+- **Google Business Profile** — Hyderabad address, category "Fireworks
   supplier", opening hours, photos of the workshop. This is the highest value
   listing available and it is free.
 - **Justdial, Sulekha, IndiaMART, TradeIndia, ExportersIndia** — the directories
@@ -51,7 +52,8 @@ backlink, because it establishes the business as real.
   listing is authoritative and government-sourced.
 - **GST registration details** on the site footer or a `/terms` annexure.
   Business-verification sites scrape this.
-- **Local Sivakasi and Virudhunagar district chambers of commerce.**
+- **Local Hyderabad and Telangana chambers of commerce** — and the Sivakasi /
+  Virudhunagar bodies in Tamil Nadu if the sourcing relationship is formal.
 - **Industry bodies** — The Fireworks Manufacturers Association of India and
   similar trade groups list members.
 
@@ -62,14 +64,16 @@ are the trust floor. Do not skip them in pursuit of better links.
 
 ## 3. Tier 2 — local and regional press (medium effort, high value)
 
-Sivakasi is a genuine news subject every year. Reporters need sources.
+Hyderabad's Diwali market — and the Sivakasi supply line behind it — is a
+genuine news subject every year. Reporters need sources.
 
 **Who to approach:**
-- `The Hindu`, `Times of India`, `Deccan Chronicle` — Tamil Nadu editions.
-- `Dinamalar`, `Dinakaran`, `Hindu Tamil Thisai` — Tamil dailies with very
-  strong Sivakasi coverage and real regional authority.
+- `The Hindu`, `Times of India`, `Deccan Chronicle` — Hyderabad / Telangana
+  editions.
+- `Telangana Today`, `The Hans India`, `Siasat`, `Namasthe Telangana` —
+  Telangana dailies with strong Hyderabad city and festive-market coverage.
 - `The News Minute`, `India Today`, `Scroll.in` — national digital, all cover
-  Diwali manufacturing season.
+  the Diwali season and the Sivakasi manufacturing belt.
 
 **What to offer, in order of likely pickup:**
 1. **Safety expertise.** A named spokesperson for the annual Diwali safety
@@ -79,7 +83,8 @@ Sivakasi is a genuine news subject every year. Reporters need sources.
 3. **Seasonal data.** Anonymous, aggregate order trends — which products sell
    when, how far in advance buyers order. Journalists need numbers and rarely
    have them.
-4. **Employment.** Seasonal hiring in Sivakasi is a recurring regional story.
+4. **Employment.** Seasonal hiring for the Diwali rush — in Hyderabad and
+   across the Sivakasi supply chain — is a recurring regional story.
 
 Approach reporters directly by email two to three weeks before Diwali, not
 during, when they are already saturated.
@@ -105,8 +110,8 @@ during, when they are already saturated.
 
 Only worth attempting once tiers 1 to 3 are done.
 
-- **Original data.** Publish an annual "State of Sivakasi" report from
-  anonymised order data: order volumes by week, average basket, how early
+- **Original data.** Publish an annual "How Hyderabad buys crackers" report
+  from anonymised order data: order volumes by week, average basket, how early
   people order, regional spread. Original data earns links from national press
   in a way that no press release does.
 - **Interactive tools.** A budget planner ("what can I buy for ₹2,000") is
@@ -206,8 +211,8 @@ Track monthly, and do not chase raw link counts:
   third-party index. Referring domains is the metric that moves rankings.
 - **Non-branded organic impressions and clicks** for the guide pages.
 - **Ranking position** for a fixed set of intent queries (for example "buy
-  crackers online Sivakasi", "diwali crackers delivery", "personalized
-  fireworks").
+  crackers online Hyderabad", "diwali crackers delivery Hyderabad",
+  "personalized fireworks").
 - **Direct traffic and phone calls**, which are the actual business outcome and
   often move before rankings do.
 
