@@ -23,6 +23,14 @@ export function AddressManager({ addresses }: { addresses: CustomerAddress[] }) 
   const [form, setForm] = React.useState(EMPTY);
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [notice, setNotice] = React.useState<string | null>(null);
+  const noticeTimer = React.useRef<number | undefined>(undefined);
+
+  const flash = (message: string) => {
+    setNotice(message);
+    window.clearTimeout(noticeTimer.current);
+    noticeTimer.current = window.setTimeout(() => setNotice(null), 4000);
+  };
 
   const update =
     (name: keyof typeof EMPTY) =>
@@ -45,6 +53,7 @@ export function AddressManager({ addresses }: { addresses: CustomerAddress[] }) 
 
       setForm(EMPTY);
       setOpen(false);
+      flash('Address saved. It will be offered at checkout.');
       router.refresh();
     } catch (saveError) {
       setError((saveError as Error).message);
@@ -59,11 +68,13 @@ export function AddressManager({ addresses }: { addresses: CustomerAddress[] }) 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ isDefault: true }),
     });
+    flash('Default address updated.');
     router.refresh();
   };
 
   const removeAddress = async (id: string) => {
     await fetch(`/api/v1/addresses/${id}`, { method: 'DELETE' });
+    flash('Address removed.');
     router.refresh();
   };
 
@@ -79,6 +90,16 @@ export function AddressManager({ addresses }: { addresses: CustomerAddress[] }) 
           </Button>
         )}
       </div>
+
+      {notice && (
+        <p
+          role="status"
+          aria-live="polite"
+          className="rounded-sm border border-status-ok/50 bg-status-ok/10 p-3 text-sm text-status-ok"
+        >
+          {notice}
+        </p>
+      )}
 
       {addresses.length > 0 && (
         <ul className="grid gap-4 sm:grid-cols-2">
