@@ -32,6 +32,11 @@ const envSchema = z.object({
   KARKANA_PERSONALIZATION_FEE: z.coerce.number().int().min(0).default(0),
   KARKANA_SHIPPING_FEE: z.coerce.number().int().min(0).default(0),
   KARKANA_FREE_SHIPPING_OVER: z.coerce.number().int().min(0).optional(),
+  /**
+   * Minimum merchandise value in whole rupees before an order can be placed.
+   * Enforced server-side; the cart and checkout show the shortfall. 0 disables.
+   */
+  KARKANA_MIN_ORDER: z.coerce.number().int().min(0).default(530),
 });
 
 export const env = envSchema.parse(process.env);
@@ -80,6 +85,7 @@ export function pricingPolicyFromEnv(): PricingPolicy {
       env.KARKANA_FREE_SHIPPING_OVER === undefined
         ? null
         : rupeesToPaise(env.KARKANA_FREE_SHIPPING_OVER),
+    minOrderPaise: rupeesToPaise(env.KARKANA_MIN_ORDER),
   };
 }
 

@@ -160,6 +160,11 @@ async function main() {
   console.log('\nPricing');
 
   const sample = list.json?.page?.items?.[0];
+  // Orders have a server-enforced minimum value (KARKANA_MIN_ORDER, default
+  // 530 rupees). Pick a quantity for the sample product that clears it so the
+  // placement assertions exercise a legal order rather than a 422.
+  const sampleUnitPaise = sample ? Math.round(sample.price * 100) : 0;
+  const minOrderQty = sample ? Math.max(2, Math.ceil(53000 / Math.max(1, sampleUnitPaise))) : 2;
   if (!sample) {
     check('a product exists to price', false, 'catalogue is empty');
   } else {
@@ -195,7 +200,7 @@ async function main() {
           pincode: '500001',
         },
         // Deliberately attempts to smuggle a client-side total.
-        items: [{ productId: sample.id, quantity: 2 }],
+        items: [{ productId: sample.id, quantity: minOrderQty }],
         totalAmount: 1,
         paymentMethod: 'COD',
       },
@@ -205,8 +210,31 @@ async function main() {
     check('order id has the KRK- shape', /^KRK-[A-Z0-9]{6}$/.test(order.json?.order?.id ?? ''), order.json?.order?.id);
     check(
       'server recomputes the total and ignores `totalAmount`',
-      order.json?.order?.totalPaise === Math.round(sample.price * 100) * 2,
-      `${order.json?.order?.totalPaise} vs ${Math.round(sample.price * 100) * 2}`,
+      order.json?.order?.totalPaise === sampleUnitPaise * minOrderQty,
+      `${order.json?.order?.totalPaise} vs ${sampleUnitPaise * minOrderQty}`,
+    );
+
+    // The same payload below the minimum must be refused, proving the rule is
+    // enforced server-side and not just hidden in the UI.
+    const belowMin = await req('POST', '/api/v1/orders', {
+      body: {
+        customerName: 'Smoke Test',
+        mobile: '9876543210',
+        address: {
+          houseFlat: '12-3-456',
+          streetLocality: 'Test Street',
+          city: 'Hyderabad',
+          state: 'Telangana',
+          pincode: '500001',
+        },
+        items: [{ productId: sample.id, quantity: 1 }],
+        paymentMethod: 'COD',
+      },
+    });
+    check(
+      'below-minimum order is refused with MIN_ORDER',
+      belowMin.status === 422 && belowMin.json?.code === 'MIN_ORDER',
+      `got ${belowMin.status} ${belowMin.json?.code}`,
     );
     check('mobile number is normalised to 10 digits', order.json?.order?.mobile === '9876543210', order.json?.order?.mobile);
 
@@ -411,7 +439,7 @@ async function main() {
             state: 'Telangana',
             pincode: '500001',
           },
-          items: [{ productId: sample.id, quantity: 1 }],
+          items: [{ productId: sample.id, quantity: minOrderQty }],
           paymentMethod: 'COD',
         },
       });

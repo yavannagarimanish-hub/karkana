@@ -72,13 +72,34 @@ export interface PricingPolicy {
   shippingPaise: number;
   /** Subtotal at or above which shipping is waived. `null` = never waived. */
   freeShippingOverPaise: number | null;
+  /**
+   * Minimum merchandise value (product subtotal, before fees and shipping) an
+   * order must reach before it can be placed. `0` or absent = no minimum.
+   * Enforced server-side in `createCheckoutService().placeOrder`, surfaced to
+   * the cart and checkout UI through the quote so the CTA can be gated.
+   */
+  minOrderPaise?: number;
 }
 
 export const DEFAULT_PRICING_POLICY: PricingPolicy = {
   personalizationFeePaise: 0,
   shippingPaise: 0,
   freeShippingOverPaise: null,
+  minOrderPaise: 0,
 };
+
+/**
+ * How far a cart's merchandise subtotal falls short of the policy minimum, in
+ * paise. `0` means the order may be placed. Compared against the subtotal only
+ * (not fees or shipping), which is what "minimum order value" means to a buyer.
+ */
+export function minimumOrderShortfallPaise(
+  subtotalPaise: number,
+  policy: PricingPolicy,
+): number {
+  const minimum = policy.minOrderPaise ?? 0;
+  return Math.max(0, minimum - subtotalPaise);
+}
 
 function lineKey(line: CartLineInput): string {
   return `${line.productId}::${line.personalizationImage ?? ''}::${line.customizationNotes ?? ''}`;

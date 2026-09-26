@@ -36,6 +36,8 @@ export async function POST(request: Request) {
         itemCount: quote.totals.itemCount,
       },
       unavailable: quote.unavailable,
+      minimumPaise: quote.minimumPaise,
+      shortfallPaise: quote.shortfallPaise,
     });
   } catch (error) {
     return toErrorResponse(error);

@@ -33,6 +33,8 @@ interface Quote {
     itemCount: number;
   };
   unavailable: { productId: string; reason: string }[];
+  minimumPaise?: number;
+  shortfallPaise?: number;
 }
 
 const REASON_LABEL: Record<string, string> = {
@@ -111,8 +113,17 @@ export function CartView() {
     lines: [],
     totals: { subtotalPaise: 0, feesPaise: 0, shippingPaise: 0, totalPaise: 0, itemCount: 0 },
     unavailable: [],
+    minimumPaise: 0,
+    shortfallPaise: 0,
   };
   const view: Quote = emptyCart ? EMPTY : (quote ?? EMPTY);
+
+  /*
+   * The minimum order value is server-authoritative; the quote reports how far
+   * the merchandise subtotal falls short so the CTA can be gated client-side.
+   */
+  const shortfallPaise = view.shortfallPaise ?? 0;
+  const belowMinimum = shortfallPaise > 0 && view.totals.itemCount > 0;
 
 
   const lineFor = (line: CartLine) =>
@@ -297,14 +308,26 @@ export function CartView() {
               </div>
             </dl>
 
+            {belowMinimum && (
+              <p
+                role="status"
+                aria-live="polite"
+                className="mt-4 rounded-sm border border-status-warn/40 bg-status-warn/10 p-3 text-xs leading-relaxed text-status-warn"
+              >
+                Orders start at <strong className="numeric">{formatINR(view.minimumPaise ?? 0)}</strong>.
+                Add <strong className="numeric">{formatINR(shortfallPaise)}</strong> more to unlock
+                checkout.
+              </p>
+            )}
+
             <Button
-              href={quote && quote.totals.itemCount > 0 ? '/checkout' : undefined}
+              href={quote && quote.totals.itemCount > 0 && !belowMinimum ? '/checkout' : undefined}
               block
               size="lg"
               className="mt-6"
-              disabled={!quote || quote.totals.itemCount === 0}
+              disabled={!quote || quote.totals.itemCount === 0 || belowMinimum}
             >
-              {loading ? 'Re-pricing…' : 'Checkout'}
+              {loading ? 'Re-pricing…' : belowMinimum ? 'Minimum not met' : 'Checkout'}
             </Button>
 
             <p className="mt-4 text-[11px] text-fg-dim">

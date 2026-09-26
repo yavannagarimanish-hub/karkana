@@ -41,6 +41,9 @@ export function toErrorResponse(error: unknown): NextResponse {
   switch (named?.name) {
     case 'PricingError':
       return fail(named.message ?? 'The cart could not be priced.', 422, named.code ?? 'PRICING');
+    case 'CheckoutError':
+      // MIN_ORDER and friends are client-fixable, so 422 rather than 500.
+      return fail(named.message ?? 'The order could not be placed.', 422, named.code ?? 'CHECKOUT');
     case 'OrderError':
       return fail(named.message ?? 'Order error.', named.code === 'NOT_FOUND' ? 404 : named.code === 'FORBIDDEN' ? 403 : 409, named.code ?? 'ORDER');
     case 'AccountError':

@@ -24,6 +24,8 @@ interface Quote {
     itemCount: number;
   };
   unavailable: { productId: string; reason: string }[];
+  minimumPaise?: number;
+  shortfallPaise?: number;
 }
 
 const INDIAN_STATES = [
@@ -83,6 +85,10 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
   const emptyCart = lines.length === 0;
   const quote: Quote | null = emptyCart ? null : quoted;
 
+  // Server-authoritative minimum; the CTA is gated on the shortfall it reports.
+  const shortfallPaise = quote?.shortfallPaise ?? 0;
+  const belowMinimum = shortfallPaise > 0;
+
   /* Re-quote whenever the cart changes. */
   React.useEffect(() => {
     if (!hydrated || emptyCart) return;
@@ -139,6 +145,18 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
 
     if (!quote || quote.totals.itemCount === 0) {
       setError('Your cart is empty.');
+      return;
+    }
+
+    /*
+     * The server enforces this too and returns a MIN_ORDER error, but gating
+     * here keeps a below-minimum order from ever being submitted.
+     */
+    if ((quote.shortfallPaise ?? 0) > 0) {
+      setError(
+        `Orders start at ${formatINR(quote.minimumPaise ?? 0)}. ` +
+          `Add ${formatINR(quote.shortfallPaise ?? 0)} more to place this order.`,
+      );
       return;
     }
 
@@ -228,7 +246,7 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
                     <option value="">Enter a new address</option>
                     {addresses.map((address) => (
                       <option key={address.id} value={address.id}>
-                        {address.label}, {address.houseFlat}, {address.city} {address.pincode}
+                        {address.label} — {address.houseFlat}, {address.city} {address.pincode}
                       </option>
                     ))}
                   </Select>
@@ -415,8 +433,30 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
               </div>
             </dl>
 
-            <Button type="submit" block size="lg" className="mt-6" disabled={placing || !quote}>
-              {placing ? 'Placing order…' : 'Place order · COD'}
+            {belowMinimum && (
+              <p
+                role="status"
+                aria-live="polite"
+                className="mt-4 rounded-sm border border-status-warn/40 bg-status-warn/10 p-3 text-xs leading-relaxed text-status-warn"
+              >
+                Orders start at <strong className="numeric">{formatINR(quote?.minimumPaise ?? 0)}</strong>.
+                Add <strong className="numeric">{formatINR(shortfallPaise)}</strong> more to place
+                this order.
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              block
+              size="lg"
+              className="mt-6"
+              disabled={placing || !quote || belowMinimum}
+            >
+              {placing
+                ? 'Placing order…'
+                : belowMinimum
+                  ? 'Minimum not met'
+                  : 'Place order · COD'}
             </Button>
 
             <p className="mt-3 text-[11px] text-fg-dim">

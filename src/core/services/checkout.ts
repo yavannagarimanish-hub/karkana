@@ -1,6 +1,8 @@
 import { createOrder, type Order } from '../domain/order';
+import { formatINR } from '../domain/money';
 import {
   DEFAULT_PRICING_POLICY,
+  minimumOrderShortfallPaise,
   priceOrder,
   quoteCart,
   type CartLineInput,
@@ -14,6 +16,10 @@ export interface CartQuote {
   totals: OrderTotals;
   /** Cart lines the server will not accept, with a machine-readable reason. */
   unavailable: { productId: string; reason: string }[];
+  /** The configured minimum merchandise value, in paise (0 = none). */
+  minimumPaise: number;
+  /** How far the current subtotal falls short of the minimum, in paise. */
+  shortfallPaise: number;
 }
 
 export interface PlaceOrderContext {
@@ -52,11 +58,18 @@ export function createCheckoutService(
           itemCount: 0,
         },
         unavailable: [],
+        minimumPaise: policy.minOrderPaise ?? 0,
+        shortfallPaise: policy.minOrderPaise ?? 0,
       };
     }
 
     const products = await repos.products.findByIds(ids);
-    return quoteCart(products, lines, policy);
+    const cartQuote = quoteCart(products, lines, policy);
+    return {
+      ...cartQuote,
+      minimumPaise: policy.minOrderPaise ?? 0,
+      shortfallPaise: minimumOrderShortfallPaise(cartQuote.totals.subtotalPaise, policy),
+    };
   }
 
   async function placeOrder(input: PlaceOrderInput, context: PlaceOrderContext): Promise<Order> {
@@ -65,6 +78,21 @@ export function createCheckoutService(
 
     // Throws PricingError with a machine-readable code on any problem.
     const totals = priceOrder(products, input.items, policy);
+
+    /*
+     * The minimum order value is enforced here, on the server-recomputed
+     * subtotal, so a client can never place an order below it by tampering with
+     * the request. The UI gates the CTA on the same rule, but this is the
+     * authoritative check.
+     */
+    const shortfall = minimumOrderShortfallPaise(totals.subtotalPaise, policy);
+    if (shortfall > 0) {
+      throw new CheckoutError(
+        'MIN_ORDER',
+        `Orders start at ${formatINR(policy.minOrderPaise ?? 0)}. ` +
+          `Add ${formatINR(shortfall)} more to place this order.`,
+      );
+    }
 
     const order = createOrder({
       id: repos.ids.order(),

@@ -185,3 +185,77 @@ describe('checkout service', () => {
     ).rejects.toThrow();
   });
 });
+
+
+describe('minimum order value', () => {
+  // 530 rupees, mirroring the shipped default. Product price is 109 rupees.
+  const MIN = 53000;
+  const policy = {
+    personalizationFeePaise: 0,
+    shippingPaise: 0,
+    freeShippingOverPaise: null,
+    minOrderPaise: MIN,
+  };
+
+  const input = (quantity: number) => ({
+    customerName: 'Meena',
+    mobile: '9876543210',
+    address: {
+      houseFlat: '12-3',
+      streetLocality: 'MG Road',
+      city: 'Hyderabad',
+      state: 'Telangana',
+      pincode: '500001',
+      instructions: '',
+    },
+    items: [{ productId: 'KRK001', quantity }],
+    paymentMethod: 'COD' as const,
+  });
+
+  it('reports the shortfall on a below-minimum quote', async () => {
+    const repos = makeRepos([product()]);
+    const checkout = createCheckoutService(repos, policy);
+
+    const quote = await checkout.quote([{ productId: 'KRK001', quantity: 2 }]);
+
+    expect(quote.totals.subtotalPaise).toBe(21800);
+    expect(quote.minimumPaise).toBe(MIN);
+    expect(quote.shortfallPaise).toBe(MIN - 21800);
+  });
+
+  it('refuses to place a below-minimum order with MIN_ORDER', async () => {
+    const saved: Order[] = [];
+    const repos = makeRepos([product()], saved);
+    const checkout = createCheckoutService(repos, policy);
+
+    await expect(checkout.placeOrder(input(2), { customerId: null })).rejects.toMatchObject({
+      code: 'MIN_ORDER',
+    });
+    expect(saved).toHaveLength(0);
+  });
+
+  it('places an order once the subtotal meets the minimum', async () => {
+    const saved: Order[] = [];
+    const repos = makeRepos([product()], saved);
+    const checkout = createCheckoutService(repos, policy);
+
+    // 5 x 10900 = 54500 >= 53000
+    const order = await checkout.placeOrder(input(5), { customerId: null });
+
+    expect(order.totalPaise).toBe(54500);
+    expect(saved).toHaveLength(1);
+  });
+
+  it('enforces no minimum when the policy does not set one', async () => {
+    const repos = makeRepos([product()]);
+    const checkout = createCheckoutService(repos);
+
+    const quote = await checkout.quote([{ productId: 'KRK001', quantity: 1 }]);
+
+    expect(quote.minimumPaise).toBe(0);
+    expect(quote.shortfallPaise).toBe(0);
+    await expect(checkout.placeOrder(input(1), { customerId: null })).resolves.toMatchObject({
+      status: 'NEW',
+    });
+  });
+});
