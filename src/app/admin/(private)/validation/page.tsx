@@ -72,7 +72,7 @@ export default async function AdminValidationPage() {
 
         {report.issues.length === 0 ? (
           <p className="px-5 py-8 text-center text-sm text-fg-muted">
-            The catalogue is clean — no errors, warnings or optional gaps.
+            The catalogue is clean: no errors, warnings or optional gaps.
           </p>
         ) : (
           <Table>

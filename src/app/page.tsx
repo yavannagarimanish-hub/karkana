@@ -52,7 +52,7 @@ export default async function HomePage() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-sm leading-relaxed text-fg-muted sm:text-base">
-            Engineered pyrotechnics in three modules — classical formulations, themed editions,
+            Engineered pyrotechnics in three modules: classical formulations, themed editions,
             and boxes built around your own photograph. Cash on delivery, dispatched direct from
             the workshop.
           </p>

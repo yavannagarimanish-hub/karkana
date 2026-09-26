@@ -228,7 +228,7 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
                     <option value="">Enter a new address</option>
                     {addresses.map((address) => (
                       <option key={address.id} value={address.id}>
-                        {address.label} — {address.houseFlat}, {address.city} {address.pincode}
+                        {address.label}, {address.houseFlat}, {address.city} {address.pincode}
                       </option>
                     ))}
                   </Select>

@@ -112,7 +112,7 @@ export function SectionEditor({ sections }: { sections: CatalogueSection[] }) {
 
           {section.key === 'popular' || section.key === 'featured' ? (
             <p className="mt-3 text-[11px] text-fg-dim">
-              This section only renders when at least one product carries the matching flag — it is
+              This section only renders when at least one product carries the matching flag. It is
               hidden automatically otherwise.
             </p>
           ) : null}
