@@ -1,33 +1,52 @@
 {
   "name": "karkana",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Karkana — pyrotechnic commerce platform (Next.js 16, App Router)",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start -H 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx scripts/seed.ts",
+    "smoke": "node scripts/smoke-test.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1140.0",
+    "@aws-sdk/client-s3": "^3.1141.0",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.3",
     "lucide-react": "^1.48.0",
-    "next": "14.2.15",
+    "next": "^16.3.6",
     "pg": "^8.23.0",
-    "react": "^18",
-    "react-dom": "^18",
-    "tailwind-merge": "^3.7.0"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@eslint/eslintrc": "^3.3.7",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "22.20.4",
     "@types/pg": "^8.23.1",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.15",
-    "postcss": "^8",
-    "puppeteer-core": "^25.12.0",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "@types/react": "19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.6",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "^5.0.2"
   }
 }

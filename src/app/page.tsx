@@ -1,259 +1,224 @@
-import React from 'react';
 import Link from 'next/link';
-import { getProducts, getSections } from '@/lib/db';
-import SectionHeader from '@/components/SectionHeader';
-import ProductGrid from '@/components/ProductGrid';
-import EmptyState from '@/components/EmptyState';
+import type { Metadata } from 'next';
+import { getAppServices } from '@/infra/db';
+import { SITE } from '@/infra/config';
+import { formatINR } from '@/core/domain/money';
+import { Badge } from '@/ui/badge';
+import { EmptyState } from '@/ui/empty-state';
+import { ProductGrid } from '@/ui/product-grid';
+import { SectionHeader } from '@/ui/section-header';
 
-// Ensure fresh dynamic data from the database
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const metadata: Metadata = {
+  title: 'Buy Crackers Online',
+  description: `Browse the ${SITE.name} catalogue: basic, customized and personalized crackers dispatched from ${SITE.city} with cash on delivery across India.`,
+  alternates: { canonical: '/' },
+};
+
+const MODULE_COPY: Record<string, { blurb: string; tone: 'neutral' | 'ember' }> = {
+  BASIC: {
+    blurb:
+      'The classics: sparklers, chakkars, flower pots and ground spinners, built for clean sound and bright burn.',
+    tone: 'neutral',
+  },
+  CUSTOMIZED: {
+    blurb:
+      'Themed packaging editions: cinematic, commemorative and seasonal designs curated in the workshop.',
+    tone: 'neutral',
+  },
+  PERSONALIZED: {
+    blurb:
+      'Your photograph printed on the box. Upload an image, add instructions, and we build the packaging around it.',
+    tone: 'ember',
+  },
+};
 
 export default async function HomePage() {
-  const allProducts = await getProducts({ is_visible: true });
-  const sections = await getSections();
+  const services = await getAppServices();
+  const home = await services.catalogue.home();
 
-  const popularProducts = allProducts.filter((p) => p.is_popular);
-  const featuredProducts = allProducts.filter((p) => p.is_featured);
-
-  const popularSection = sections.find((s) => s.key === 'popular');
-  const featuredSection = sections.find((s) => s.key === 'featured');
+  // Modules with no visible products are not advertised at all.
+  const liveModules = home.moduleCards.filter((card) => card.count > 0);
 
   return (
-    <div className="w-full bg-black min-h-screen">
-      {/* ================= HERO SECTION ================= */}
-      <section className="relative px-4 sm:px-12 pt-16 sm:pt-40 pb-20 sm:pb-48 max-w-7xl mx-auto flex flex-col items-start justify-center">
-        <div className="inline-flex items-center space-x-3 mb-8">
-          <span className="w-2 h-2 rounded-full bg-kred animate-ping" />
-          <span className="text-[10px] sm:text-[11px] font-mono tracking-widest uppercase text-white/50">
-            SEASON MMXVI // EDITORIAL CATALOGUE
-          </span>
-        </div>
+    <>
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="border-b border-hairline">
+        <div className="mx-auto max-w-7xl px-4 pt-14 pb-16 sm:px-8 sm:pt-24 sm:pb-24 lg:px-12">
+          <p className="live-dot label">Season catalogue · {SITE.city}</p>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold uppercase tracking-wider sm:tracking-widest xl:tracking-ultra text-white leading-[1.05] max-w-5xl mb-8 sm:mb-12">
-          KARKANA <br />
-          <span className="text-white/30">CRACKERS</span>
-        </h1>
+          <h1 className="mt-6 max-w-4xl text-[2.5rem] leading-[1.02] font-extrabold tracking-[-0.02em] uppercase sm:text-6xl lg:text-7xl">
+            Karkana
+            <span className="block text-fg-ghost">Crackers</span>
+          </h1>
 
-        <p className="text-white/50 text-xs sm:text-base font-mono max-w-2xl leading-relaxed uppercase tracking-wider mb-10 sm:mb-14">
-          Engineered precision in pyrotechnics. Three distinct operational modules tailored for
-          classical resonance, thematic iconography, and personalized commemoration.
-        </p>
+          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-fg-muted sm:text-base">
+            Engineered pyrotechnics in three modules — classical formulations, themed editions,
+            and boxes built around your own photograph. Cash on delivery, dispatched direct from
+            the workshop.
+          </p>
 
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-mono tracking-widest">
-          <a
-            href="#modules"
-            className="w-full sm:w-auto text-center px-6 sm:px-8 py-4 bg-white text-black font-bold uppercase hover:bg-kred hover:text-white transition-all duration-300"
-          >
-            EXPLORE MODULES ↓
-          </a>
-          <span className="text-white/30 tracking-widest text-[11px] sm:text-xs">
-            DIRECT SIVAKASI ATELIER
-          </span>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link
+              href="#modules"
+              className="inline-flex h-11 items-center rounded-sm bg-fg px-5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-void transition-colors hover:bg-ember hover:text-fg"
+            >
+              Explore modules
+            </Link>
+            <Link
+              href="/search"
+              className="inline-flex h-11 items-center rounded-sm px-5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-fg shadow-hairline-strong transition-colors hover:text-ember"
+            >
+              Search {home.counts.total} products
+            </Link>
+          </div>
+
+          <dl className="mt-12 grid grid-cols-2 gap-px border-t border-hairline sm:grid-cols-4">
+            {[
+              { label: 'Products', value: home.counts.total },
+              { label: 'Categories', value: home.counts.categories.length },
+              { label: 'Modules live', value: liveModules.length },
+              {
+                label: 'From',
+                value:
+                  liveModules.length > 0
+                    ? formatINR(
+                        Math.min(
+                          ...liveModules
+                            .map((card) => card.fromPricePaise)
+                            .filter((price): price is number => price !== null),
+                        ) || 0,
+                      )
+                    : 'n/a',
+              },
+            ].map((stat) => (
+              <div key={stat.label} className="pt-5">
+                <dt className="label">{stat.label}</dt>
+                <dd className="numeric mt-1 text-xl font-bold text-fg sm:text-2xl">{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
-      {/* ================= THE THREE PRIMARY MODULES ================= */}
-      <section id="modules" className="px-4 sm:px-12 py-16 sm:py-36 border-t border-b border-white/10 max-w-7xl mx-auto">
+      {/* ── Modules (generated from the live catalogue) ──────────────────── */}
+      <section id="modules" className="mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24 lg:px-12">
         <SectionHeader
-          number="01"
-          title="PRIMARY DESTINATIONS"
-          subtitle="Select from three foundational pyrotechnic methodologies"
+          index="01"
+          title="Modules"
+          subtitle="Three ways to buy. Counts below are the live catalogue, not marketing copy."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12">
-          {/* MODULE 1: BASIC */}
-          <Link
-            href="/module/basic"
-            className="group relative block p-6 sm:p-12 border border-white/10 bg-white/[0.01] hover:border-white hover:bg-white/[0.03] transition-all duration-500"
-          >
-            <div className="flex justify-between items-start mb-12 sm:mb-28">
-              <span className="text-4xl sm:text-6xl font-extrabold font-mono text-white/20 group-hover:text-kred transition-colors duration-300">
-                01
-              </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest border border-white/20 px-3 py-1 text-white/60">
-                ESSENTIAL
-              </span>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white group-hover:text-white">
-                BASIC
-              </h3>
-              <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
-                Pure, timeless celebration essentials. Master formulations constructed for acoustic clarity and radiant illuminations.
-              </p>
-              <div className="text-[11px] font-mono text-white/50 tracking-wider">
-                KRK001 – KRK118 // 118 PRODUCTS
-              </div>
-            </div>
-            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
-              <span>OPEN BASIC (118 ITEMS)</span>
-              <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
-                →
-              </span>
-            </div>
-          </Link>
-
-          {/* MODULE 2: CUSTOMIZED */}
-          <Link
-            href="/module/customized"
-            className="group relative block p-6 sm:p-12 border border-white/10 bg-white/[0.01] hover:border-white hover:bg-white/[0.03] transition-all duration-500"
-          >
-            <div className="flex justify-between items-start mb-12 sm:mb-28">
-              <span className="text-4xl sm:text-6xl font-extrabold font-mono text-white/20 group-hover:text-kred transition-colors duration-300">
-                02
-              </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest border border-white/20 px-3 py-1 text-white/60">
-                THEMATIC
-              </span>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white group-hover:text-white">
-                CUSTOMIZED
-              </h3>
-              <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
-                Curated themed designs including cinematic icons, political series, and distinctive artistic concepts curated by Karkana.
-              </p>
-              <div className="text-[11px] font-mono text-white/50 tracking-wider">
-                KRK119 – KRK138 // 20 PRODUCTS
-              </div>
-            </div>
-            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
-              <span>OPEN CUSTOMIZED (20 ITEMS)</span>
-              <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
-                →
-              </span>
-            </div>
-          </Link>
-
-          {/* MODULE 3: PERSONALIZED */}
-          <Link
-            href="/module/personalized"
-            className="group relative block p-6 sm:p-12 border border-kred/30 bg-kred/[0.02] hover:border-kred hover:bg-kred/[0.05] transition-all duration-500"
-          >
-            <div className="flex justify-between items-start mb-12 sm:mb-28">
-              <span className="text-4xl sm:text-6xl font-extrabold font-mono text-kred/40 group-hover:text-kred transition-colors duration-300">
-                03
-              </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest border border-kred/50 text-kred px-3 py-1 font-bold">
-                ₹499 COMMISSION
-              </span>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-2xl sm:text-3xl font-bold uppercase tracking-widest text-white group-hover:text-white">
-                PERSONALIZED
-              </h3>
-              <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
-                Bespoke commemorative boxes. Direct customer upload of personal photographs and specific customization directives for packaging.
-              </p>
-              <div className="text-[11px] font-mono text-kred/70 tracking-wider">
-                INCLUDES 6 REFERENCE EXAMPLES (KRK133–KRK138)
-              </div>
-            </div>
-            <div className="mt-12 pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono uppercase tracking-widest text-white/60 group-hover:text-white">
-              <span>COMMISSION BOX (₹499)</span>
-              <span className="transform group-hover:translate-x-2 transition-transform duration-300 text-kred">
-                →
-              </span>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* ================= STRUCTURAL SECTION: POPULAR CRACKERS ================= */}
-      {popularSection?.is_visible && (
-        <section className="px-4 sm:px-12 py-16 sm:py-36 max-w-7xl mx-auto">
-          <SectionHeader
-            number="02"
-            title={popularSection.title}
-            subtitle={popularSection.subtitle}
-          />
-
-          {popularProducts.length > 0 ? (
-            <ProductGrid products={popularProducts} />
-          ) : (
-            <EmptyState
-              title="NO PRODUCTS AVAILABLE YET"
-              message="Curated popular selections will appear here once allocated."
-            />
-          )}
-        </section>
-      )}
-
-      {/* ================= STRUCTURAL SECTION: FEATURED PRODUCTS ================= */}
-      {featuredSection?.is_visible && (
-        <section className="px-4 sm:px-12 py-16 sm:py-36 border-t border-white/10 max-w-7xl mx-auto">
-          <SectionHeader
-            number="03"
-            title={featuredSection.title}
-            subtitle={featuredSection.subtitle}
-          />
-
-          {featuredProducts.length > 0 ? (
-            <ProductGrid products={featuredProducts} />
-          ) : (
-            <EmptyState
-              title="NO PRODUCTS AVAILABLE YET"
-              message="Curated featured formulations will appear here once allocated."
-            />
-          )}
-        </section>
-      )}
-
-      {/* ================= STRUCTURAL SECTION: COMPLETE CATALOGUE ================= */}
-      <section className="px-4 sm:px-12 py-16 sm:py-36 border-t border-white/10 max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-20 space-y-4 sm:space-y-0">
-          <SectionHeader
-            number="04"
-            title="PRODUCT CATALOGUE"
-            subtitle="Dynamic overview of visible formulations across all modules"
-          />
-          <span className="font-mono text-xs tracking-widest uppercase text-white/40">
-            TOTAL ACTIVE: {allProducts.length}
-          </span>
-        </div>
-
-        {allProducts.length > 0 ? (
-          <ProductGrid products={allProducts} />
-        ) : (
+        {liveModules.length === 0 ? (
           <EmptyState
-            title="NO PRODUCTS AVAILABLE YET"
-            message="No products are currently visible in the active catalogue."
+            title="The catalogue is empty"
+            message="No products are visible yet. Add and publish products from the control centre."
+            actionLabel="Open control centre"
+            actionHref="/admin"
           />
+        ) : (
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+            {liveModules.map((card, index) => {
+              const copy = MODULE_COPY[card.module] ?? MODULE_COPY.BASIC!;
+              const label = card.module.charAt(0) + card.module.slice(1).toLowerCase();
+
+              return (
+                <Link
+                  key={card.module}
+                  href={`/module/${card.slug}`}
+                  className={`group surface flex flex-col rounded-sm p-6 transition-[box-shadow,background-color] duration-200 hover:bg-panel-raised sm:p-8 ${
+                    copy.tone === 'ember'
+                      ? 'shadow-[inset_0_0_0_1px_rgba(255,0,51,0.35)] hover:shadow-[inset_0_0_0_1px_var(--color-ember)]'
+                      : 'hover:shadow-hairline-strong'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="numeric text-4xl font-extrabold text-fg-ghost transition-colors group-hover:text-ember sm:text-5xl">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <Badge tone={copy.tone}>
+                      {card.count} {card.count === 1 ? 'item' : 'items'}
+                    </Badge>
+                  </div>
+
+                  <h2 className="mt-10 text-xl font-bold uppercase tracking-[0.08em] text-fg sm:text-2xl">
+                    {label}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-fg-muted">{copy.blurb}</p>
+
+                  {card.idRange && (
+                    <p className="numeric mt-4 text-[11px] text-fg-dim">
+                      {card.idRange.first} – {card.idRange.last}
+                    </p>
+                  )}
+
+                  {card.topCategories.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {card.topCategories.map((category) => (
+                        <Badge key={category} tone="outline">
+                          {category}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mt-8 flex items-center justify-between border-t border-hairline pt-5">
+                    <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg-muted group-hover:text-fg">
+                      {card.fromPricePaise !== null
+                        ? `From ${formatINR(card.fromPricePaise)}`
+                        : 'Open module'}
+                    </span>
+                    <span aria-hidden className="text-ember transition-transform duration-200 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         )}
       </section>
 
-      {/* ================= ORDERING MANIFESTO BANNER ================= */}
-      <section className="px-4 sm:px-12 py-16 sm:py-24 border-t border-white/10 max-w-7xl mx-auto">
-        <div className="p-6 sm:p-12 md:p-20 border border-white/10 bg-white/[0.01] flex flex-col md:flex-row items-start md:items-center justify-between gap-8 md:gap-12">
-          <div className="space-y-4 max-w-xl">
-            <span className="text-kred font-mono text-xs tracking-widest uppercase">
-              FULFILLMENT ASSURANCE
-            </span>
-            <h3 className="text-xl sm:text-4xl font-bold uppercase tracking-wider sm:tracking-widest text-white">
-              CASH ON DELIVERY. ZERO ONLINE GATEWAYS.
-            </h3>
-            <p className="text-white/40 text-xs sm:text-sm font-mono leading-relaxed">
-              Every commission is confirmed manually and fulfilled strictly with Cash on Delivery at your doorstep. Transparent, discrete, and direct.
+      {/* ── Catalogue sections (only the ones with products) ─────────────── */}
+      {home.sections.map((entry, index) => (
+        <section
+          key={entry.section.id}
+          className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 sm:py-24 lg:px-12"
+        >
+          <SectionHeader
+            index={String(index + 2).padStart(2, '0')}
+            title={entry.section.title}
+            subtitle={entry.section.subtitle || undefined}
+            href={
+              entry.section.key === 'popular' || entry.section.key === 'featured'
+                ? undefined
+                : `/module/${entry.section.key}`
+            }
+            linkLabel="View all"
+          />
+          <ProductGrid products={entry.products} />
+        </section>
+      ))}
+
+      {/* ── Support strip ────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 lg:px-12">
+        <div className="surface flex flex-col gap-6 rounded-sm p-6 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+          <div>
+            <h2 className="text-lg font-bold uppercase tracking-[0.08em] text-fg sm:text-xl">
+              Ordering for an event?
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-fg-muted">
+              Call the workshop and we will assemble a mixed box for your date. Cash on delivery,
+              verified before dispatch.
             </p>
           </div>
-          <div className="w-full md:w-auto flex flex-col sm:flex-row gap-4 font-mono text-xs uppercase tracking-widest">
-            <Link
-              href="/cart"
-              className="w-full sm:w-auto px-6 sm:px-8 py-4 border border-white/20 text-white hover:border-white transition-colors text-center"
-            >
-              VIEW CART
-            </Link>
-            <a
-              href="#modules"
-              className="w-full sm:w-auto px-6 sm:px-8 py-4 bg-white text-black font-bold uppercase hover:bg-kred hover:text-white transition-colors text-center"
-            >
-              EXPLORE MODULES →
-            </a>
-          </div>
+          <a
+            href={`tel:${SITE.supportPhone}`}
+            className="numeric inline-flex h-12 shrink-0 items-center justify-center rounded-sm bg-ember px-6 text-sm font-bold text-fg transition-colors hover:bg-ember-hover"
+          >
+            {SITE.supportPhone}
+          </a>
         </div>
       </section>
-    </div>
+    </>
   );
 }
-

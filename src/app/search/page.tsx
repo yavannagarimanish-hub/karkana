@@ -1,245 +1,216 @@
-'use client';
-
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Product } from '@/types';
-import SectionHeader from '@/components/SectionHeader';
-import ProductGrid from '@/components/ProductGrid';
-import EmptyState from '@/components/EmptyState';
+import { getAppServices } from '@/infra/db';
+import { ProductGrid } from '@/ui/product-grid';
+import { SectionHeader } from '@/ui/section-header';
+import { EmptyState } from '@/ui/empty-state';
+import { isSortKey, type SortKey } from '@/core/domain/catalogue';
+import { MODULE_SLUGS, type ProductModule } from '@/core/domain/product';
+import { cn } from '@/ui/cn';
 
-function SearchResultsContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialQuery = searchParams.get('q') || '';
+export const dynamic = 'force-dynamic';
 
-  const [inputQuery, setInputQuery] = useState(initialQuery);
-  const [activeQuery, setActiveQuery] = useState(initialQuery);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Synchronize when query param in URL changes
-  useEffect(() => {
-    const q = searchParams.get('q') || '';
-    setInputQuery(q);
-    setActiveQuery(q);
-  }, [searchParams]);
-
-  // Fetch real catalogue data
-  useEffect(() => {
-    let isMounted = true;
-    async function loadCatalogue() {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch('/api/products');
-        if (!res.ok) {
-          throw new Error('Failed to load catalogue');
-        }
-        const data = await res.json();
-        if (isMounted) {
-          if (data.success && Array.isArray(data.products)) {
-            setProducts(data.products);
-          } else {
-            setProducts([]);
-          }
-        }
-      } catch (err: unknown) {
-        if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Error fetching catalogue');
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadCatalogue();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = inputQuery.trim();
-    setActiveQuery(trimmed);
-    if (trimmed) {
-      router.push(`/search?q=${encodeURIComponent(trimmed)}`);
-    } else {
-      router.push('/search');
-    }
-  };
-
-  // Filter across active BASIC and CUSTOMIZED products using:
-  // Product ID, Product Name, Brand Name, Category, Subcategory, Search Keywords
-  // Case-insensitive & partial-word matching
-  const matchingProducts = useMemo(() => {
-    // Only search active BASIC and CUSTOMIZED products
-    const catalogue = products.filter(
-      (p) => (p.module === 'BASIC' || p.module === 'CUSTOMIZED') && p.is_visible
-    );
-
-    const queryClean = activeQuery.trim().toLowerCase();
-    if (!queryClean) {
-      return [];
-    }
-
-    // Split search into individual tokens for partial-word matching
-    const tokens = queryClean.split(/\s+/).filter(Boolean);
-
-    return catalogue.filter((product) => {
-      const searchFields = [
-        product.id || '',
-        product.name || '',
-        product.brand || '',
-        product.category || '',
-        product.subcategory || '',
-        product.search_keywords || '',
-      ].map((str) => str.toLowerCase());
-
-      // Every token must match at least one searchable field
-      return tokens.every((token) =>
-        searchFields.some((field) => field.includes(token))
-      );
-    });
-  }, [products, activeQuery]);
-
-  return (
-    <div className="w-full bg-black min-h-screen">
-      {/* Header Banner */}
-      <section className="px-4 sm:px-12 pt-16 sm:pt-24 pb-10 sm:pb-16 max-w-7xl mx-auto border-b border-white/10">
-        <div className="flex items-center space-x-3 text-xs font-mono tracking-widest text-white/50 mb-6 sm:mb-8">
-          <Link href="/" className="hover:text-white transition-colors">
-            HOME
-          </Link>
-          <span>/</span>
-          <span className="text-kred">CATALOGUE</span>
-          <span>/</span>
-          <span className="text-white uppercase">SEARCH</span>
-        </div>
-
-        <div className="max-w-4xl space-y-4 sm:space-y-6">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-kred font-mono text-sm tracking-widest">
-              [SEARCH]
-            </span>
-            <span className="text-[10px] sm:text-xs font-mono tracking-wider sm:tracking-widest uppercase border border-white/20 px-2.5 sm:px-3 py-1 text-white/70">
-              BASIC &amp; CUSTOMIZED INVENTORY
-            </span>
-          </div>
-
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold uppercase tracking-wider sm:tracking-widest text-white break-words">
-            PRODUCT SEARCH
-          </h1>
-
-          <p className="text-white/50 text-xs sm:text-sm font-mono leading-relaxed max-w-2xl">
-            Query verified fireworks formulations across product ID, product title, manufacturer brand,
-            category, subcategory, and chemical/pyrotechnic keywords.
-          </p>
-
-          {/* Search Input Bar */}
-          <form onSubmit={handleSearchSubmit} className="pt-2 max-w-xl">
-            <div className="relative flex items-center">
-              <input
-                type="text"
-                value={inputQuery}
-                onChange={(e) => setInputQuery(e.target.value)}
-                placeholder="SEARCH BY ID, NAME, BRAND, CATEGORY..."
-                className="w-full bg-white/[0.04] border border-white/20 focus:border-kred text-white placeholder-white/40 text-xs sm:text-sm font-mono px-4 py-3 sm:py-3.5 pr-24 focus:outline-none transition-colors uppercase tracking-wider"
-              />
-              <button
-                type="submit"
-                className="absolute right-1 px-4 py-2 sm:py-2.5 bg-white text-black text-xs font-mono font-bold tracking-widest uppercase hover:bg-kred hover:text-white transition-colors"
-              >
-                FIND
-              </button>
-            </div>
-            {activeQuery && (
-              <div className="flex items-center justify-between text-[11px] font-mono text-white/40 mt-2 px-1">
-                <span>QUERY: &ldquo;{activeQuery}&rdquo;</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInputQuery('');
-                    setActiveQuery('');
-                    router.push('/search');
-                  }}
-                  className="text-white/60 hover:text-kred transition-colors uppercase"
-                >
-                  CLEAR [×]
-                </button>
-              </div>
-            )}
-          </form>
-        </div>
-      </section>
-
-      {/* Results Section */}
-      <section className="px-4 sm:px-12 py-10 sm:py-20 max-w-7xl mx-auto">
-        {loading ? (
-          <div className="py-24 flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="w-2.5 h-2.5 rounded-full bg-kred animate-ping" />
-            <p className="text-xs font-mono tracking-widest text-white/50 uppercase">
-              SCANNING CATALOGUE ARCHIVE...
-            </p>
-          </div>
-        ) : error ? (
-          <EmptyState
-            title="CATALOGUE ACCESS ERROR"
-            message={error}
-            actionText="RETRY SEARCH"
-            actionHref="/search"
-          />
-        ) : !activeQuery.trim() ? (
-          <EmptyState
-            title="SEARCH THE CATALOGUE"
-            message="Enter a product ID, name, brand, category, or keyword in the box above to find crackers."
-            actionText="VIEW ALL BASIC CRACKERS"
-            actionHref="/module/basic"
-          />
-        ) : matchingProducts.length > 0 ? (
-          <div className="space-y-8 sm:space-y-12">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
-              <SectionHeader
-                title="SEARCH RESULTS"
-                subtitle={`DISPLAYING ${matchingProducts.length} MATCHING CRACKER FORMULATIONS`}
-              />
-              <div className="font-mono text-xs tracking-widest uppercase text-white/40 self-start sm:self-auto">
-                {matchingProducts.length} {matchingProducts.length === 1 ? 'PRODUCT' : 'PRODUCTS'} FOUND
-              </div>
-            </div>
-
-            <ProductGrid products={matchingProducts} />
-          </div>
-        ) : (
-          <EmptyState
-            title="NO PRODUCTS FOUND"
-            message={`No active crackers matched your search for "${activeQuery}". Try searching by ID (e.g. KRK001), brand name, category, or keyword.`}
-            actionText="BROWSE BASIC CATALOGUE"
-            actionHref="/module/basic"
-          />
-        )}
-      </section>
-    </div>
-  );
+interface Props {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function SearchPage() {
+function firstString(value: string | string[] | undefined): string | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+const PAGE_SIZE = 24;
+
+const SORT_LABELS: Record<SortKey, string> = {
+  position: 'Catalogue order',
+  'price-asc': 'Price: low to high',
+  'price-desc': 'Price: high to low',
+  discount: 'Biggest discount',
+  name: 'Name A–Z',
+};
+
+const SORT_ORDER: SortKey[] = ['position', 'price-asc', 'price-desc', 'discount', 'name'];
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { q } = await searchParams;
+  const term = (firstString(q) ?? '').trim();
+
+  return {
+    title: term ? `Search: ${term}` : 'Search',
+    description: term ? `Results for "${term}" in the Karkana catalogue.` : 'Search the Karkana catalogue.',
+    // Only the bare search page is indexable. Query strings would otherwise
+    // generate unbounded duplicate URLs.
+    alternates: { canonical: '/search' },
+    robots: term ? { index: false, follow: true } : undefined,
+  };
+}
+
+export default async function SearchPage({ searchParams }: Props) {
+  const sp = await searchParams;
+  const term = (firstString(sp.q) ?? '').trim();
+  const sortParam = firstString(sp.sort);
+  const sort: SortKey | undefined = sortParam && isSortKey(sortParam) ? sortParam : undefined;
+  const inStockOnly = firstString(sp.inStockOnly) === 'true';
+  const page = Math.max(1, Number(firstString(sp.page) ?? '1') || 1);
+
+  const services = await getAppServices();
+  const result = await services.catalogue.searchPage(term, { sort, inStockOnly }, page, PAGE_SIZE);
+
+  const totalPages = result.page.totalPages;
+  const shown = result.page.items;
+  const start = (result.page.page - 1) * PAGE_SIZE;
+
+  const hrefFor = (overrides: Record<string, string | number | null>): string => {
+    const params = new URLSearchParams();
+    if (term) params.set('q', term);
+    if (sort) params.set('sort', sort);
+    if (inStockOnly) params.set('inStockOnly', 'true');
+
+    for (const [key, value] of Object.entries(overrides)) {
+      if (value === null || value === '') params.delete(key);
+      else params.set(key, String(value));
+    }
+    return `/search?${params.toString()}`;
+  };
+
   return (
-    <Suspense
-      fallback={
-        <div className="w-full bg-black min-h-screen py-32 flex flex-col items-center justify-center">
-          <div className="w-2 h-2 rounded-full bg-kred animate-ping" />
-          <p className="text-xs font-mono tracking-widest text-white/50 mt-4 uppercase">
-            LOADING SEARCH...
-          </p>
+    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-8 lg:px-12 lg:py-16">
+      <div className="border-b border-hairline pb-8">
+        <div className="flex items-center gap-3">
+          <span className="numeric text-[11px] text-ember">[?]</span>
+          <span aria-hidden className="h-px w-10 bg-hairline-strong" />
         </div>
-      }
-    >
-      <SearchResultsContent />
-    </Suspense>
+
+        <h1 className="mt-4 font-display text-3xl leading-tight font-bold text-fg sm:text-4xl">
+          {term ? (
+            <>
+              Results for <span className="text-ember">“{term}”</span>
+            </>
+          ) : (
+            'Search the catalogue'
+          )}
+        </h1>
+
+        {term && (
+          <p className="mt-3 max-w-2xl text-sm text-fg/60">
+            {result.counts.total === 0
+              ? 'Nothing matched. Check the spelling, or browse a collection instead.'
+              : `${result.counts.total} ${result.counts.total === 1 ? 'match' : 'matches'} across name, brand, category, product id and keywords.`}
+          </p>
+        )}
+      </div>
+
+      {!term ? (
+        <div className="mt-12">
+          <EmptyState
+            title="What are you looking for?"
+            message="Try “rocket”, “sparkler”, a product id such as KRK001, or a brand name."
+            actionLabel="Browse Basic crackers"
+            actionHref={`/module/${MODULE_SLUGS.BASIC}`}
+          />
+        </div>
+      ) : result.counts.total === 0 ? (
+        <div className="mt-12">
+          <EmptyState
+            title={`No results for “${term}”`}
+            message="The catalogue runs to 138 products across three collections, so one of them is probably close."
+            actionLabel="Browse Basic crackers"
+            actionHref={`/module/${MODULE_SLUGS.BASIC}`}
+          />
+        </div>
+      ) : (
+        <>
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+            <p className="label text-fg-dim">
+              {start + 1}–{Math.min(start + PAGE_SIZE, result.counts.total)} of {result.counts.total}
+            </p>
+
+            <form action={hrefFor({ page: null })} className="flex items-center gap-2">
+              <input type="hidden" name="q" value={term} />
+              {inStockOnly && <input type="hidden" name="inStockOnly" value="true" />}
+              <label htmlFor="search-sort" className="label text-fg-dim">
+                Sort
+              </label>
+              <select
+                id="search-sort"
+                name="sort"
+                defaultValue={sort ?? 'position'}
+                className="h-9 rounded-md border border-hairline bg-panel px-3 text-xs text-fg focus:border-ember focus:ring-1 focus:ring-ember focus:outline-none"
+              >
+                {SORT_ORDER.map((key) => (
+                  <option key={key} value={key}>
+                    {SORT_LABELS[key]}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                className="h-9 rounded-md border border-hairline bg-fg px-3 text-[11px] font-bold tracking-[0.14em] text-void uppercase transition hover:bg-ember hover:text-fg"
+              >
+                Apply
+              </button>
+            </form>
+          </div>
+
+          <div className="mt-8">
+            <ProductGrid products={shown} />
+          </div>
+
+          {totalPages > 1 && (
+            <nav className="mt-12 flex flex-wrap items-center justify-center gap-2" aria-label="Search pages">
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                <Link
+                  key={pageNumber}
+                  href={hrefFor({ page: pageNumber })}
+                  aria-current={pageNumber === result.page.page ? 'page' : undefined}
+                  className={cn(
+                    'inline-flex h-10 min-w-10 items-center justify-center rounded-md border px-3 text-xs font-bold transition',
+                    pageNumber === result.page.page
+                      ? 'border-ember bg-ember/15 text-ember'
+                      : 'border-hairline bg-panel text-fg/70 hover:border-ember/50 hover:text-fg',
+                  )}
+                >
+                  {pageNumber}
+                </Link>
+              ))}
+            </nav>
+          )}
+
+          {result.counts.byModule.CUSTOMIZED > 0 || result.counts.byModule.PERSONALIZED > 0 ? (
+            <div className="mt-16">
+              <SectionHeader
+                title="In these results"
+                subtitle="How your matches break down by collection."
+              />
+              <ul className="grid gap-3 sm:grid-cols-3">
+                {(
+                  [
+                    ['BASIC', 'Basic crackers'],
+                    ['CUSTOMIZED', 'Customized'],
+                    ['PERSONALIZED', 'Personalized'],
+                  ] as [ProductModule, string][]
+                )
+                  .filter(([key]) => result.counts.byModule[key] > 0)
+                  .map(([key, label]) => (
+                    /* Slugs come from the domain, never hardcoded. */
+                    <li key={key}>
+                      <Link
+                        href={`/module/${MODULE_SLUGS[key]}`}
+                        className="surface block h-full p-5 transition hover:border-ember/60"
+                      >
+                        <div className="flex items-baseline justify-between">
+                          <span className="label text-fg">{label}</span>
+                          <span className="numeric text-xl font-bold text-ember">
+                            {result.counts.byModule[key]}
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ) : null}
+        </>
+      )}
+    </main>
   );
 }
