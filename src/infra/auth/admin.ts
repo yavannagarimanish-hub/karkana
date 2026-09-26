@@ -25,10 +25,17 @@ export function verifyAdminCredentials(username: string, password: string): bool
   }
 
   const provided = username.trim().toLowerCase();
-  const expected = env.ADMIN_USERNAME.trim().toLowerCase();
-  const expectedLocalPart = expected.split('@')[0];
 
-  if (provided !== expected && provided !== expectedLocalPart) {
+  // Accept the primary operator username and, if set, an alternate one. Either
+  // the full address or just its local part ("admin" for "admin@…") matches.
+  const accepted = [env.ADMIN_USERNAME, env.ADMIN_USERNAME_ALT]
+    .filter((value): value is string => Boolean(value && value.trim()))
+    .flatMap((value) => {
+      const full = value.trim().toLowerCase();
+      return [full, full.split('@')[0]];
+    });
+
+  if (!accepted.includes(provided)) {
     return false;
   }
 
