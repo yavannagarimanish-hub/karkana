@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import path from 'node:path';
+import { env } from '../../env';
 import * as schema from '../schema';
 
 export type Db = NodePgDatabase<typeof schema>;
@@ -9,7 +10,12 @@ export type Db = NodePgDatabase<typeof schema>;
 let pool: Pool | null = null;
 let db: Db | null = null;
 
-export function getDb(connectionString = process.env.DATABASE_URL): Db {
+/**
+ * Defaults to `env.DATABASE_URL` — the value resolved by `resolveAliases()`
+ * (which also accepts the `karkana_*`-prefixed Neon/Vercel names) — NOT the
+ * raw `process.env.DATABASE_URL`, which prefixed deployments never set.
+ */
+export function getDb(connectionString = env.DATABASE_URL): Db {
   if (db) return db;
 
   if (!connectionString) {

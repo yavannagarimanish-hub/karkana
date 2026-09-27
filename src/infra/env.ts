@@ -52,6 +52,19 @@ const envSchema = z.object({
  *   B2_ACCESS_KEY_ID / B2_SECRET_ACCESS_KEY               -> R2_*
  *   VERCEL_PROJECT_PRODUCTION_URL / VERCEL_URL            -> KARKANA_SITE_URL (https)
  *
+ * DATABASE_URL gets the same treatment, because deployments that prefix every
+ * variable (the Vercel `karkana_*` env) never define the plain name. Each
+ * source below is accepted bare and with a `karkana_` prefix, first configured
+ * wins, pooled flavours preferred over direct ones:
+ *
+ *   DATABASE_URL (canonical) > karkana_DATABASE_URL >
+ *   POSTGRES_URL > POSTGRES_PRISMA_URL >
+ *   DATABASE_URL_UNPOOLED > POSTGRES_URL_NON_POOLING > POSTGRES_URL_NO_SSL
+ *
+ * As a last resort the URL is composed from the libpq-style PGHOST / PGUSER /
+ * PGPASSWORD / PGDATABASE / PGPORT parameters (POSTGRES_HOST / POSTGRES_USER /
+ * POSTGRES_PASSWORD / POSTGRES_DATABASE also recognised).
+ *
  * ADMIN_SALT is deliberately NOT aliased: passwords use a unique per-password
  * salt stored inside each PBKDF2 hash (see src/infra/auth/password.ts), so a
  * single global salt would weaken security. It can be removed from the env.
@@ -72,6 +85,49 @@ function resolveAliases(raw: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   fallback('R2_ENDPOINT', 'B2_ENDPOINT');
   fallback('R2_ACCESS_KEY_ID', 'B2_ACCESS_KEY_ID');
   fallback('R2_SECRET_ACCESS_KEY', 'B2_SECRET_ACCESS_KEY');
+
+  // Postgres connection string. First configured wins; pooled flavours come
+  // before direct ones. Every name is honoured bare and `karkana_`-prefixed.
+  fallback('DATABASE_URL', 'karkana_DATABASE_URL');
+  for (const alias of [
+    'POSTGRES_URL',
+    'POSTGRES_PRISMA_URL',
+    'DATABASE_URL_UNPOOLED',
+    'POSTGRES_URL_NON_POOLING',
+    'POSTGRES_URL_NO_SSL',
+  ]) {
+    fallback('DATABASE_URL', alias);
+    fallback('DATABASE_URL', `karkana_${alias}`);
+  }
+
+  // Last resort: compose the URL from libpq-style parameters so a deployment
+  // that only exports PGHOST/PGUSER/… (bare or prefixed) still connects.
+  if (!resolved.DATABASE_URL) {
+    const pick = (...names: string[]): string | undefined => {
+      for (const name of names) {
+        const value = resolved[name] ?? resolved[`karkana_${name}`];
+        if (value) return value;
+      }
+      return undefined;
+    };
+
+    const host = pick('PGHOST', 'PGHOST_UNPOOLED', 'POSTGRES_HOST');
+    if (host) {
+      const user = pick('PGUSER', 'POSTGRES_USER');
+      const password = pick('PGPASSWORD', 'POSTGRES_PASSWORD');
+      const database = pick('PGDATABASE', 'POSTGRES_DATABASE');
+      const port = pick('PGPORT');
+
+      const auth = user
+        ? `${encodeURIComponent(user)}${password ? `:${encodeURIComponent(password)}` : ''}@`
+        : '';
+      const hostPart = host.includes(':') && !host.startsWith('[') ? `[${host}]` : host;
+      const portPart = port ? `:${port}` : '';
+      const dbPart = database ? `/${database}` : '';
+
+      resolved.DATABASE_URL = `postgresql://${auth}${hostPart}${portPart}${dbPart}`;
+    }
+  }
 
   if (!resolved.KARKANA_SITE_URL) {
     const vercelHost = resolved.VERCEL_PROJECT_PRODUCTION_URL ?? resolved.VERCEL_URL;
