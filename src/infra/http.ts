@@ -26,6 +26,29 @@ export function fail(
 }
 
 /** Maps domain/infra errors onto HTTP status codes in one place. */
+function errorMessageWithCauses(error: unknown): string {
+  const messages: string[] = [];
+  const seen = new Set<object>();
+  let current: unknown = error;
+
+  while (current !== null && current !== undefined) {
+    if (typeof current === 'object') {
+      if (seen.has(current)) break;
+      seen.add(current);
+
+      const nested = current as { message?: unknown; cause?: unknown };
+      const message = typeof nested.message === 'string' ? nested.message : String(current);
+      if (message) messages.push(message);
+      current = nested.cause;
+    } else {
+      messages.push(String(current));
+      break;
+    }
+  }
+
+  return messages.join('\nCaused by: ') || 'An unknown error occurred.';
+}
+
 export function toErrorResponse(error: unknown): NextResponse {
   if (error instanceof HttpError) {
     return fail(error.message, error.status, error.code);
@@ -55,7 +78,7 @@ export function toErrorResponse(error: unknown): NextResponse {
   }
 
   console.error('[karkana] Unhandled API error:', error);
-  return fail('Something went wrong on our side.', 500, 'INTERNAL');
+  return fail(errorMessageWithCauses(error), 500, 'INTERNAL');
 }
 
 /** Wraps a route handler so thrown errors become structured responses. */
