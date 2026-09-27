@@ -16,6 +16,8 @@ const envSchema = z.object({
   KARKANA_SESSION_SECRET: z.string().min(1).optional(),
 
   ADMIN_USERNAME: z.string().min(1).default('admin@karkana.com'),
+  /** Optional second operator login, accepted alongside ADMIN_USERNAME. */
+  ADMIN_USERNAME_ALT: z.string().optional(),
   ADMIN_PASSWORD_HASH: z.string().min(1).optional(),
 
   DATABASE_URL: z.string().min(1).optional(),
@@ -39,7 +41,47 @@ const envSchema = z.object({
   KARKANA_MIN_ORDER: z.coerce.number().int().min(0).default(530),
 });
 
-export const env = envSchema.parse(process.env);
+/**
+ * Alternative environment-variable names accepted as aliases, so a deployment
+ * can use either the canonical KARKANA_* / R2_* names or the shorter names some
+ * operators prefer. A canonical name always wins; an alias is used only when
+ * its canonical counterpart is unset.
+ *
+ *   ADMIN_SESSION_SECRET                                  -> KARKANA_SESSION_SECRET
+ *   B2_BUCKET / B2_REGION / B2_ENDPOINT /
+ *   B2_ACCESS_KEY_ID / B2_SECRET_ACCESS_KEY               -> R2_*
+ *   VERCEL_PROJECT_PRODUCTION_URL / VERCEL_URL            -> KARKANA_SITE_URL (https)
+ *
+ * ADMIN_SALT is deliberately NOT aliased: passwords use a unique per-password
+ * salt stored inside each PBKDF2 hash (see src/infra/auth/password.ts), so a
+ * single global salt would weaken security. It can be removed from the env.
+ *
+ * NOTE: the Vercel fallback yields the *.vercel.app origin. For correct
+ * canonicals/sitemap on a custom domain, still set KARKANA_SITE_URL explicitly.
+ */
+function resolveAliases(raw: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
+  const resolved: NodeJS.ProcessEnv = { ...raw };
+
+  const fallback = (canonical: string, alias: string) => {
+    if (!resolved[canonical] && resolved[alias]) resolved[canonical] = resolved[alias];
+  };
+
+  fallback('KARKANA_SESSION_SECRET', 'ADMIN_SESSION_SECRET');
+  fallback('R2_BUCKET', 'B2_BUCKET');
+  fallback('R2_REGION', 'B2_REGION');
+  fallback('R2_ENDPOINT', 'B2_ENDPOINT');
+  fallback('R2_ACCESS_KEY_ID', 'B2_ACCESS_KEY_ID');
+  fallback('R2_SECRET_ACCESS_KEY', 'B2_SECRET_ACCESS_KEY');
+
+  if (!resolved.KARKANA_SITE_URL) {
+    const vercelHost = resolved.VERCEL_PROJECT_PRODUCTION_URL ?? resolved.VERCEL_URL;
+    if (vercelHost) resolved.KARKANA_SITE_URL = `https://${vercelHost}`;
+  }
+
+  return resolved;
+}
+
+export const env = envSchema.parse(resolveAliases(process.env));
 
 export const isProduction = env.NODE_ENV === 'production';
 
