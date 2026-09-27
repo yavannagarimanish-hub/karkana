@@ -22,6 +22,20 @@ npm run dev          # http://localhost:3000
 With no `DATABASE_URL`, the app runs on the JSON adapter against `data/karkana.db.json` —
 the 138-product catalogue is already committed, so the storefront works immediately.
 
+### Switching to Postgres
+
+Setting `DATABASE_URL` points the whole app at Postgres, but the schema is **not** created
+automatically — an unprovisioned database answers every query with
+`relation "customers" does not exist`. Seed it once:
+
+```bash
+DATABASE_URL='postgres://…' npx tsx scripts/seed.ts
+```
+
+This applies the SQL migrations in `drizzle/` and inserts the 138 products, sections and any
+orders/customers from `data/karkana.db.json`. It is idempotent — existing rows are left
+untouched. Later schema changes are applied with `npm run db:migrate`.
+
 ### Admin access
 
 The operator account is environment-driven; there is no admin row in the database.
