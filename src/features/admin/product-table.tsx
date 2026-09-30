@@ -48,6 +48,9 @@ export function ProductRowActions({ product }: { product: Product }) {
 
   return (
     <div className="flex flex-wrap items-center justify-end gap-2">
+      <Button size="sm" variant="ghost" disabled={busy} href={`/admin/products/${product.id}/edit`}>
+        Edit
+      </Button>
       <Button size="sm" variant="ghost" disabled={busy} onClick={() => patch({ isVisible: !product.isVisible })}>
         {product.isVisible ? 'Unpublish' : 'Publish'}
       </Button>
