@@ -69,6 +69,16 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
   category: 'shopping',
+  icons: {
+    icon: [
+      { url: '/icon.jpg', type: 'image/jpeg', sizes: '1536x1536' },
+      { url: '/favicon.ico', type: 'image/x-icon', sizes: 'any' },
+    ],
+    shortcut: '/icon.jpg',
+    apple: [
+      { url: '/apple-icon.jpg', type: 'image/jpeg', sizes: '1536x1536' },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
