@@ -45,11 +45,35 @@ export function Navbar({ modules, customerName }: NavbarProps) {
     };
   }, [menuOpen]);
 
+  // Listen for search triggers from mobile bottom bar or other entry points
+  React.useEffect(() => {
+    const onOpenSearch = () => {
+      setMenuOpen(true);
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          const input = (document.getElementById('mobile-search') ?? document.getElementById('site-search')) as HTMLInputElement | null;
+          input?.focus();
+          input?.select();
+        }, 50);
+      });
+    };
+    const onCloseMenu = () => {
+      setMenuOpen(false);
+    };
+    window.addEventListener('karkana:open-search', onOpenSearch);
+    window.addEventListener('karkana:close-menu', onCloseMenu);
+    return () => {
+      window.removeEventListener('karkana:open-search', onOpenSearch);
+      window.removeEventListener('karkana:close-menu', onCloseMenu);
+    };
+  }, []);
+
   const submitSearch = (event: React.FormEvent) => {
     event.preventDefault();
     const term = query.trim();
     router.push(term ? `/search?q=${encodeURIComponent(term)}` : '/search');
     setQuery('');
+    setMenuOpen(false);
   };
 
   const isActive = (slug: string) => pathname === `/module/${slug}`;
@@ -100,6 +124,27 @@ export function Navbar({ modules, customerName }: NavbarProps) {
               ⌕
             </span>
           </form>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(true);
+              requestAnimationFrame(() => {
+                setTimeout(() => {
+                  const input = document.getElementById('mobile-search') as HTMLInputElement | null;
+                  input?.focus();
+                  input?.select();
+                }, 50);
+              });
+            }}
+            aria-label="Search catalogue"
+            className="grid size-9 place-items-center rounded-sm text-white shadow-hairline-strong transition-colors hover:bg-black/15 sm:hidden"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="size-4">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" strokeLinecap="round" />
+            </svg>
+          </button>
 
           <Link
             href="/account"

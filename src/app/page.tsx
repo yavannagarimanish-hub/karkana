@@ -54,7 +54,8 @@ export default async function HomePage() {
                 ? undefined
                 : `/module/${entry.section.key}`
             }
-            linkLabel="View all"
+            linkLabel="View All"
+            actionVariant="button"
           />
           <ProductGrid products={entry.products} />
         </section>

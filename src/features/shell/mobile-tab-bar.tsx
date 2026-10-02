@@ -70,11 +70,20 @@ export function MobileTabBar() {
   const pathname = usePathname();
   const { count, hydrated } = useCart();
 
+  const handleSearchClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('karkana:open-search'));
+  };
+
+  const handleNavClick = () => {
+    window.dispatchEvent(new CustomEvent('karkana:close-menu'));
+  };
+
   return (
     <nav
       aria-label="Primary"
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-void/95 backdrop-blur-md lg:hidden',
+        'fixed inset-x-0 bottom-0 z-40 border-t border-hairline-strong bg-ember text-white shadow-md lg:hidden',
         // Respect the iOS home-indicator area.
         'pb-[env(safe-area-inset-bottom)]',
       )}
@@ -83,31 +92,53 @@ export function MobileTabBar() {
         {TABS.map((tab) => {
           const active = tab.match(pathname);
           const isCart = tab.label === 'Cart';
+          const isSearch = tab.label === 'Search';
           const badge = isCart && hydrated && count > 0;
 
+          const content = (
+            <>
+              <span className="relative">
+                {tab.icon}
+                {badge && (
+                  <span className="numeric absolute -top-1.5 -right-2 grid min-w-4 place-items-center rounded-xs bg-white px-1 text-[9px] leading-4 font-bold text-black shadow-xs">
+                    {count}
+                  </span>
+                )}
+              </span>
+              <span>{tab.label}</span>
+              {active && (
+                <span aria-hidden className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-white" />
+              )}
+            </>
+          );
+
+          const linkClass = cn(
+            'relative flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-medium tracking-[0.08em] uppercase transition-colors',
+            active ? 'text-white font-bold' : 'text-white/80 hover:text-white',
+          );
+
           return (
-            <li key={tab.href}>
-              <Link
-                href={tab.href}
-                aria-current={active ? 'page' : undefined}
-                className={cn(
-                  'relative flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium tracking-[0.08em] uppercase transition-colors',
-                  active ? 'text-ember' : 'text-fg-dim hover:text-fg',
-                )}
-              >
-                <span className="relative">
-                  {tab.icon}
-                  {badge && (
-                    <span className="numeric absolute -top-1.5 -right-2 grid min-w-4 place-items-center rounded-xs bg-ember px-1 text-[9px] leading-4 font-bold text-fg">
-                      {count}
-                    </span>
-                  )}
-                </span>
-                {tab.label}
-                {active && (
-                  <span aria-hidden className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-ember" />
-                )}
-              </Link>
+            <li key={tab.label}>
+              {isSearch ? (
+                <button
+                  type="button"
+                  onClick={handleSearchClick}
+                  aria-label="Search"
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(linkClass, 'w-full')}
+                >
+                  {content}
+                </button>
+              ) : (
+                <Link
+                  href={tab.href}
+                  onClick={handleNavClick}
+                  aria-current={active ? 'page' : undefined}
+                  className={linkClass}
+                >
+                  {content}
+                </Link>
+              )}
             </li>
           );
         })}

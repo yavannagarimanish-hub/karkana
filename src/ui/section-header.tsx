@@ -11,6 +11,7 @@ export interface SectionHeaderProps {
   href?: string;
   linkLabel?: string;
   className?: string;
+  actionVariant?: 'link' | 'button';
 }
 
 export function SectionHeader({
@@ -21,6 +22,7 @@ export function SectionHeader({
   href,
   linkLabel = 'View all',
   className,
+  actionVariant = 'link',
 }: SectionHeaderProps) {
   return (
     <div className={cn('mb-10 sm:mb-14', className)}>
@@ -38,15 +40,24 @@ export function SectionHeader({
         </div>
 
         {href && (
-          <Link
-            href={href}
-            className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-muted transition-colors hover:text-ember"
-          >
-            {linkLabel}
-            <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
+          actionVariant === 'button' ? (
+            <Link
+              href={href}
+              className="inline-flex h-10 sm:h-11 items-center justify-center rounded-sm bg-ember px-5 sm:px-6 font-mono text-xs font-bold uppercase tracking-[0.14em] text-white shadow-sm transition-colors hover:bg-ember-hover active:scale-[0.98] shrink-0"
+            >
+              {linkLabel}
+            </Link>
+          ) : (
+            <Link
+              href={href}
+              className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-muted transition-colors hover:text-ember"
+            >
+              {linkLabel}
+              <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          )
         )}
       </div>
     </div>
