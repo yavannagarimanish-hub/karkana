@@ -40,7 +40,15 @@ export default async function AdminProductsPage({ searchParams }: Props) {
           </p>
         </div>
 
-        <form className="flex flex-wrap items-center gap-2" action="/admin/products">
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/admin/products/reorder"
+            className="inline-flex h-9 items-center gap-2 rounded-sm bg-panel px-4 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-fg shadow-hairline transition-colors hover:text-ember"
+          >
+            Reorder Products →
+          </Link>
+
+          <form className="flex flex-wrap items-center gap-2" action="/admin/products">
           <label htmlFor="q" className="label">
             Search
           </label>
@@ -72,7 +80,8 @@ export default async function AdminProductsPage({ searchParams }: Props) {
             Filter
           </button>
         </form>
-      </header>
+      </div>
+    </header>
 
       <div className="grid gap-6 lg:grid-cols-12">
         <div className="lg:col-span-8">

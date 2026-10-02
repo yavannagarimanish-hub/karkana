@@ -78,8 +78,21 @@ export function productsForSection(
   }
 }
 
+export function compareProductPositions(a: Product, b: Product): number {
+  const posA = a.displayPosition ?? 0;
+  const posB = b.displayPosition ?? 0;
+  if (posA > 0 && posB > 0) {
+    if (posA !== posB) return posA - posB;
+  } else if (posA > 0 && posB <= 0) {
+    return -1;
+  } else if (posA <= 0 && posB > 0) {
+    return 1;
+  }
+  return a.id.localeCompare(b.id);
+}
+
 function byPosition(products: Product[]): Product[] {
-  return [...products].sort((a, b) => a.displayPosition - b.displayPosition || a.id.localeCompare(b.id));
+  return [...products].sort(compareProductPositions);
 }
 
 /* ── Counts (nothing in the UI may hardcode these) ──────────────────────── */
@@ -202,7 +215,7 @@ export function rankByRelevance(
 ): Product[] {
   const sorted = sortProducts(products, tieBreaker);
   return [...sorted].sort(
-    (a, b) => searchScore(b, query) - searchScore(a, query) || a.displayPosition - b.displayPosition,
+    (a, b) => searchScore(b, query) - searchScore(a, query) || compareProductPositions(a, b),
   );
 }
 
@@ -210,16 +223,16 @@ export function sortProducts(products: readonly Product[], sort: SortKey = 'posi
   const copy = [...products];
   switch (sort) {
     case 'price-asc':
-      return copy.sort((a, b) => a.price - b.price || a.displayPosition - b.displayPosition);
+      return copy.sort((a, b) => a.price - b.price || compareProductPositions(a, b));
     case 'price-desc':
-      return copy.sort((a, b) => b.price - a.price || a.displayPosition - b.displayPosition);
+      return copy.sort((a, b) => b.price - a.price || compareProductPositions(a, b));
     case 'discount':
-      return copy.sort((a, b) => discountOf(b) - discountOf(a) || a.displayPosition - b.displayPosition);
+      return copy.sort((a, b) => discountOf(b) - discountOf(a) || compareProductPositions(a, b));
     case 'name':
       return copy.sort((a, b) => a.name.localeCompare(b.name));
     case 'position':
     default:
-      return copy.sort((a, b) => a.displayPosition - b.displayPosition || a.id.localeCompare(b.id));
+      return copy.sort(compareProductPositions);
   }
 }
 

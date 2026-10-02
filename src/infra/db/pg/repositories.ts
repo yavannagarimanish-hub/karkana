@@ -252,14 +252,15 @@ export function createPgProductRepository(db: Db): ProductRepository {
     },
 
     async reorder(ids) {
-      await db.transaction(async (tx) => {
-        for (const [index, id] of ids.entries()) {
-          await tx
-            .update(products)
-            .set({ displayPosition: index + 1, updatedAt: new Date() })
-            .where(eq(products.id, id));
-        }
-      });
+      if (ids.length === 0) return;
+      const cases = ids.map((id, index) => sql`WHEN ${id} THEN ${index + 1}`);
+      await db
+        .update(products)
+        .set({
+          displayPosition: sql`CASE ${products.id} ${sql.join(cases, sql` `)} ELSE ${products.displayPosition} END`,
+          updatedAt: new Date(),
+        })
+        .where(inArray(products.id, [...ids]));
     },
 
     async nextId() {
@@ -388,10 +389,22 @@ export function createPgOrderRepository(db: Db): OrderRepository {
     },
 
     async metrics() {
-      const rows = await db
-        .select({ status: orders.status, count: sql<number>`COUNT(*)::int`, total: sql<number>`COALESCE(SUM(${orders.totalPaise}), 0)::int` })
-        .from(orders)
-        .groupBy(orders.status);
+      let rows: { status: string; count: number; total: number }[] = [];
+      try {
+        rows = await db
+          .select({ status: orders.status, count: sql<number>`COUNT(*)::int`, total: sql<number>`COALESCE(SUM(${orders.totalPaise}), 0)::int` })
+          .from(orders)
+          .groupBy(orders.status);
+      } catch {
+        try {
+          const res = await db.execute(
+            sql`SELECT status, COUNT(*)::int as count, COALESCE(SUM((total_amount * 100)::int), 0)::int as total FROM orders GROUP BY status`,
+          );
+          rows = (res.rows ?? []) as { status: string; count: number; total: number }[];
+        } catch {
+          rows = [];
+        }
+      }
 
       const byStatus = Object.fromEntries(ORDER_STATUSES.map((status) => [status, 0])) as Record<
         OrderStatus,

@@ -11,7 +11,7 @@ import type {
   SectionRepository,
 } from '@/core/ports';
 import type { Customer, CustomerAddress } from '@/core/domain/account';
-import type { CatalogueSection } from '@/core/domain/catalogue';
+import { type CatalogueSection, compareProductPositions } from '@/core/domain/catalogue';
 import {
   ORDER_STATUSES,
   paymentStatusFor,
@@ -77,7 +77,7 @@ export function createJsonProductRepository(store: JsonStore): ProductRepository
       const { products } = await store.read();
       return products
         .filter((product) => matchesProductFilter(product, filter))
-        .sort((a, b) => a.displayPosition - b.displayPosition || a.id.localeCompare(b.id));
+        .sort(compareProductPositions);
     },
 
     async findById(id) {
@@ -98,9 +98,9 @@ export function createJsonProductRepository(store: JsonStore): ProductRepository
         if (snapshot.products.some((product) => product.id === id)) {
           throw new Error(`Product ${id} already exists.`);
         }
-        const position =
-          input.displayPosition ??
-          snapshot.products.reduce((max, product) => Math.max(max, product.displayPosition), 0) + 1;
+        const inModule = snapshot.products.filter((p) => p.module === input.module);
+        const maxPos = inModule.reduce((max, product) => Math.max(max, product.displayPosition ?? 0), 0);
+        const position = input.displayPosition && input.displayPosition > 0 ? input.displayPosition : maxPos + 1;
 
         const product = toStoredProduct({ ...input, displayPosition: position }, id, now);
         snapshot.products.push(product);

@@ -45,6 +45,13 @@ export function createAdminService(repos: Repositories, policy: PricingPolicy = 
       throw new AdminError('DUPLICATE_ID', `Product ${id} already exists.`);
     }
 
+    if (!input.displayPosition || input.displayPosition <= 0) {
+      const existing = await repos.products.list({ includeHidden: true });
+      const inModule = existing.filter((p) => p.module === input.module);
+      const maxPos = inModule.reduce((m, p) => Math.max(m, p.displayPosition ?? 0), 0);
+      return repos.products.create({ ...input, id, displayPosition: maxPos + 1 });
+    }
+
     return repos.products.create({ ...input, id });
   }
 
