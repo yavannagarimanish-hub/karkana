@@ -51,7 +51,10 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: 'en_IN',
     type: 'website',
-    images: [{ url: '/og.png', width: 1774, height: 887, alt: 'Karkana | Buy Crackers Online in Telangana' }],
+    images: [
+      { url: '/og.png', width: 1774, height: 887, alt: 'Karkana | Buy Crackers Online in Telangana' },
+      { url: '/icon.jpg', width: 1536, height: 1536, alt: 'Karkana Logo' },
+    ],
   },
   twitter: {
     card: 'summary_large_image',

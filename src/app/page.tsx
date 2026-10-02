@@ -4,6 +4,7 @@ import { SITE } from '@/infra/config';
 import { ProductGrid } from '@/ui/product-grid';
 import { SectionHeader } from '@/ui/section-header';
 import { HomepageRockets } from '@/features/home/homepage-rockets';
+import { toSafeJsonLd, buildOrganizationJsonLd } from '@/infra/seo/json-ld';
 
 export const metadata: Metadata = {
   title: 'Buy Crackers Online',
@@ -15,8 +16,24 @@ export default async function HomePage() {
   const services = await getAppServices();
   const home = await services.catalogue.home();
 
+  const siteUrl = SITE.url.startsWith('https://') ? SITE.url : 'https://karkana.setacore.com';
+  const organizationJsonLd = buildOrganizationJsonLd({
+    name: SITE.name,
+    url: siteUrl,
+    logoUrl: `${siteUrl}/icon.jpg`,
+    email: SITE.supportEmail,
+    telephone: `+91-${SITE.supportPhone}`,
+    city: SITE.city,
+  });
+
   return (
     <>
+      {/* ── Organization Structured Data (Google Search / Logo rich result) ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toSafeJsonLd(organizationJsonLd) }}
+      />
+
       {/* ── Subtle background rocket animation (homepage only, strictly behind content) ── */}
       <HomepageRockets />
 

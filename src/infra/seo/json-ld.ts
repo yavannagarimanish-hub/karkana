@@ -18,3 +18,58 @@ export function toSafeJsonLd(value: unknown): string {
     .replace(/\u2028/g, '\\u2028')
     .replace(/\u2029/g, '\\u2029');
 }
+
+export interface OrganizationStructuredDataOptions {
+  name?: string;
+  url?: string;
+  logoUrl?: string;
+  description?: string;
+  telephone?: string;
+  email?: string;
+  city?: string;
+}
+
+/**
+ * Builds Schema.org Organization structured data conforming to Google Search
+ * Logo and Organization rich result specifications.
+ */
+export function buildOrganizationJsonLd(options?: OrganizationStructuredDataOptions) {
+  const name = options?.name ?? 'Karkana';
+  const url = options?.url ?? 'https://karkana.setacore.com';
+  const logoUrl = options?.logoUrl ?? `${url.replace(/\/$/, '')}/icon.jpg`;
+  const description =
+    options?.description ??
+    'Shop crackers online with Karkana. Explore basic, customized and personalized crackers with cash on delivery across India.';
+  const telephone = options?.telephone ?? '+91-7207294554';
+  const email = options?.email ?? 'info@setacore.com';
+  const city = options?.city ?? 'Hyderabad';
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name,
+    alternateName: 'Karkana Crackers',
+    url,
+    logo: logoUrl,
+    image: logoUrl,
+    description,
+    email,
+    telephone,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: city,
+      addressRegion: 'Telangana',
+      addressCountry: 'IN',
+    },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone,
+        contactType: 'customer service',
+        areaServed: 'IN',
+        availableLanguage: ['English', 'Telugu', 'Hindi'],
+      },
+    ],
+  };
+}
+

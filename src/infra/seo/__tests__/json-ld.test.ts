@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toSafeJsonLd } from '../json-ld';
+import { toSafeJsonLd, buildOrganizationJsonLd } from '../json-ld';
 
 describe('toSafeJsonLd', () => {
   // Regression: JSON.stringify leaves `<`, `>` and `&` alone, so a product
@@ -46,3 +46,37 @@ describe('toSafeJsonLd', () => {
     expect(html.match(/<\/script>/gi)).toHaveLength(1);
   });
 });
+
+describe('buildOrganizationJsonLd', () => {
+  it('builds standard schema.org Organization matching Google Search logo requirements', () => {
+    const org = buildOrganizationJsonLd({
+      url: 'https://karkana.setacore.com',
+      logoUrl: 'https://karkana.setacore.com/icon.jpg',
+    });
+
+    expect(org['@context']).toBe('https://schema.org');
+    expect(org['@type']).toBe('Organization');
+    expect(org.name).toBe('Karkana');
+    expect(org.url).toBe('https://karkana.setacore.com');
+    expect(org.logo).toBe('https://karkana.setacore.com/icon.jpg');
+    expect(org.image).toBe('https://karkana.setacore.com/icon.jpg');
+    expect(org.telephone).toBe('+91-7207294554');
+    expect(org.email).toBe('info@setacore.com');
+    expect(org.address).toEqual({
+      '@type': 'PostalAddress',
+      addressLocality: 'Hyderabad',
+      addressRegion: 'Telangana',
+      addressCountry: 'IN',
+    });
+    expect(org.contactPoint).toHaveLength(1);
+  });
+
+  it('safely serializes with toSafeJsonLd', () => {
+    const org = buildOrganizationJsonLd();
+    const serialized = toSafeJsonLd(org);
+    expect(JSON.parse(serialized)).toEqual(org);
+    expect(serialized).not.toContain('<');
+    expect(serialized).not.toContain('>');
+  });
+});
+
