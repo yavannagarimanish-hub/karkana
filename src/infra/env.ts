@@ -32,13 +32,13 @@ const envSchema = z.object({
 
   /** Whole rupees; converted to paise for pricing. */
   KARKANA_PERSONALIZATION_FEE: z.coerce.number().int().min(0).default(0),
-  KARKANA_SHIPPING_FEE: z.coerce.number().int().min(0).default(0),
-  KARKANA_FREE_SHIPPING_OVER: z.coerce.number().int().min(0).optional(),
+  KARKANA_SHIPPING_FEE: z.coerce.number().int().min(0).default(199),
+  KARKANA_FREE_SHIPPING_OVER: z.coerce.number().int().min(0).default(799),
   /**
    * Minimum merchandise value in whole rupees before an order can be placed.
    * Enforced server-side; the cart and checkout show the shortfall. 0 disables.
    */
-  KARKANA_MIN_ORDER: z.coerce.number().int().min(0).default(530),
+  KARKANA_MIN_ORDER: z.coerce.number().int().min(0).default(599),
 });
 
 /**
@@ -180,8 +180,8 @@ export function pricingPolicyFromEnv(): PricingPolicy {
     personalizationFeePaise: rupeesToPaise(env.KARKANA_PERSONALIZATION_FEE),
     shippingPaise: rupeesToPaise(env.KARKANA_SHIPPING_FEE),
     freeShippingOverPaise:
-      env.KARKANA_FREE_SHIPPING_OVER === undefined
-        ? null
+      env.KARKANA_FREE_SHIPPING_OVER === undefined || env.KARKANA_FREE_SHIPPING_OVER === null
+        ? 79900
         : rupeesToPaise(env.KARKANA_FREE_SHIPPING_OVER),
     minOrderPaise: rupeesToPaise(env.KARKANA_MIN_ORDER),
   };

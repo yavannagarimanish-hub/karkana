@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { formatINR } from '@/core/domain/money';
+import { calculateDelivery } from '@/core/domain/pricing';
 import type { CustomerAddress } from '@/core/domain/account';
 import { useCart } from '@/features/cart/cart-provider';
 import { Button } from '@/ui/button';
@@ -85,9 +86,10 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
   const emptyCart = lines.length === 0;
   const quote: Quote | null = emptyCart ? null : quoted;
 
-  // Server-authoritative minimum; the CTA is gated on the shortfall it reports.
-  const shortfallPaise = quote?.shortfallPaise ?? 0;
-  const belowMinimum = shortfallPaise > 0;
+  const subtotalPaise = quote?.totals.subtotalPaise ?? 0;
+  const feesPaise = quote?.totals.feesPaise ?? 0;
+  const delivery = calculateDelivery(subtotalPaise, feesPaise);
+  const belowMinimum = delivery.isBelowMinimum;
 
   /* Re-quote whenever the cart changes. */
   React.useEffect(() => {
@@ -152,11 +154,8 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
      * The server enforces this too and returns a MIN_ORDER error, but gating
      * here keeps a below-minimum order from ever being submitted.
      */
-    if ((quote.shortfallPaise ?? 0) > 0) {
-      setError(
-        `Orders start at ${formatINR(quote.minimumPaise ?? 0)}. ` +
-          `Add ${formatINR(quote.shortfallPaise ?? 0)} more to place this order.`,
-      );
+    if (delivery.isBelowMinimum) {
+      setError(delivery.progressMessage);
       return;
     }
 
@@ -411,37 +410,57 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
             <dl className="mt-4 space-y-2 border-t border-hairline pt-4 text-sm">
               <div className="flex justify-between">
                 <dt className="text-fg-muted">Subtotal</dt>
-                <dd className="numeric">{formatINR(quote?.totals.subtotalPaise ?? 0)}</dd>
+                <dd className="numeric">{formatINR(delivery.subtotalPaise)}</dd>
               </div>
-              {(quote?.totals.feesPaise ?? 0) > 0 && (
+              {delivery.feesPaise > 0 && (
                 <div className="flex justify-between">
                   <dt className="text-fg-muted">Personalization</dt>
-                  <dd className="numeric">{formatINR(quote?.totals.feesPaise ?? 0)}</dd>
+                  <dd className="numeric">{formatINR(delivery.feesPaise)}</dd>
                 </div>
               )}
               <div className="flex justify-between">
-                <dt className="text-fg-muted">Shipping</dt>
+                <dt className="text-fg-muted">Delivery</dt>
                 <dd className="numeric">
-                  {(quote?.totals.shippingPaise ?? 0) === 0
-                    ? 'Free'
-                    : formatINR(quote?.totals.shippingPaise ?? 0)}
+                  {delivery.isFreeDelivery ? (
+                    <span className="font-medium text-emerald-400">Free (₹0)</span>
+                  ) : (
+                    formatINR(delivery.deliveryChargePaise)
+                  )}
                 </dd>
               </div>
               <div className="flex justify-between border-t border-hairline pt-3 text-base font-bold">
                 <dt>Payable on delivery</dt>
-                <dd className="numeric">{formatINR(quote?.totals.totalPaise ?? 0)}</dd>
+                <dd className="numeric">{formatINR(delivery.totalPaise)}</dd>
               </div>
             </dl>
 
-            {belowMinimum && (
+            {/* Minimum order and free delivery status */}
+            {delivery.isBelowMinimum ? (
               <p
                 role="status"
                 aria-live="polite"
                 className="mt-4 rounded-sm border border-status-warn/40 bg-status-warn/10 p-3 text-xs leading-relaxed text-status-warn"
               >
-                Orders start at <strong className="numeric">{formatINR(quote?.minimumPaise ?? 0)}</strong>.
-                Add <strong className="numeric">{formatINR(shortfallPaise)}</strong> more to place
-                this order.
+                <strong className="block font-semibold">{delivery.progressMessage}</strong>
+                <span className="mt-1 block text-fg-muted">
+                  Minimum cart value of ₹599 is required to place an order.
+                </span>
+              </p>
+            ) : !delivery.isFreeDelivery ? (
+              <p
+                role="status"
+                aria-live="polite"
+                className="mt-4 rounded-sm border border-ember/30 bg-ember/10 p-3 text-xs leading-relaxed text-ember"
+              >
+                <strong>{delivery.progressMessage}</strong>
+              </p>
+            ) : (
+              <p
+                role="status"
+                aria-live="polite"
+                className="mt-4 rounded-sm border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs leading-relaxed text-emerald-400"
+              >
+                <strong>Free delivery applied</strong>
               </p>
             )}
 
@@ -455,7 +474,7 @@ export function CheckoutForm({ addresses, customerName, customerPhone }: Checkou
               {placing
                 ? 'Placing order…'
                 : belowMinimum
-                  ? 'Minimum not met'
+                  ? 'Add more than ₹599 to place an order'
                   : 'Place order · COD'}
             </Button>
 

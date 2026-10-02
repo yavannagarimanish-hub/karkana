@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
 import { formatINR } from '@/core/domain/money';
+import { calculateDelivery } from '@/core/domain/pricing';
 import { useCart, type CartLine } from '@/features/cart/cart-provider';
 import { Button } from '@/ui/button';
 import { EmptyState } from '@/ui/empty-state';
@@ -118,12 +119,8 @@ export function CartView() {
   };
   const view: Quote = emptyCart ? EMPTY : (quote ?? EMPTY);
 
-  /*
-   * The minimum order value is server-authoritative; the quote reports how far
-   * the merchandise subtotal falls short so the CTA can be gated client-side.
-   */
-  const shortfallPaise = view.shortfallPaise ?? 0;
-  const belowMinimum = shortfallPaise > 0 && view.totals.itemCount > 0;
+  const delivery = calculateDelivery(view.totals.subtotalPaise ?? 0, view.totals.feesPaise ?? 0);
+  const belowMinimum = delivery.isBelowMinimum && view.totals.itemCount > 0;
 
 
   const lineFor = (line: CartLine) =>
@@ -286,37 +283,57 @@ export function CartView() {
             <dl className="mt-4 space-y-2.5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-fg-muted">Subtotal</dt>
-                <dd className="numeric text-fg">{formatINR(view.totals.subtotalPaise ?? 0)}</dd>
+                <dd className="numeric text-fg">{formatINR(delivery.subtotalPaise)}</dd>
               </div>
-              {(view.totals.feesPaise ?? 0) > 0 && (
+              {delivery.feesPaise > 0 && (
                 <div className="flex justify-between">
                   <dt className="text-fg-muted">Personalization</dt>
-                  <dd className="numeric text-fg">{formatINR(view.totals.feesPaise ?? 0)}</dd>
+                  <dd className="numeric text-fg">{formatINR(delivery.feesPaise)}</dd>
                 </div>
               )}
               <div className="flex justify-between">
-                <dt className="text-fg-muted">Shipping</dt>
+                <dt className="text-fg-muted">Delivery</dt>
                 <dd className="numeric text-fg">
-                  {(view.totals.shippingPaise ?? 0) === 0
-                    ? 'Free'
-                    : formatINR(view.totals.shippingPaise ?? 0)}
+                  {delivery.isFreeDelivery ? (
+                    <span className="font-medium text-emerald-400">Free (₹0)</span>
+                  ) : (
+                    formatINR(delivery.deliveryChargePaise)
+                  )}
                 </dd>
               </div>
               <div className="flex justify-between border-t border-hairline pt-3 text-base font-bold">
                 <dt>Total</dt>
-                <dd className="numeric text-fg">{formatINR(view.totals.totalPaise ?? 0)}</dd>
+                <dd className="numeric text-fg">{formatINR(delivery.totalPaise)}</dd>
               </div>
             </dl>
 
-            {belowMinimum && (
+            {/* Minimum order and free delivery status */}
+            {delivery.isBelowMinimum ? (
               <p
                 role="status"
                 aria-live="polite"
                 className="mt-4 rounded-sm border border-status-warn/40 bg-status-warn/10 p-3 text-xs leading-relaxed text-status-warn"
               >
-                Orders start at <strong className="numeric">{formatINR(view.minimumPaise ?? 0)}</strong>.
-                Add <strong className="numeric">{formatINR(shortfallPaise)}</strong> more to unlock
-                checkout.
+                <strong className="block font-semibold">{delivery.progressMessage}</strong>
+                <span className="mt-1 block text-fg-muted">
+                  Minimum cart value of ₹599 is required to place an order.
+                </span>
+              </p>
+            ) : !delivery.isFreeDelivery ? (
+              <p
+                role="status"
+                aria-live="polite"
+                className="mt-4 rounded-sm border border-ember/30 bg-ember/10 p-3 text-xs leading-relaxed text-ember"
+              >
+                <strong>{delivery.progressMessage}</strong>
+              </p>
+            ) : (
+              <p
+                role="status"
+                aria-live="polite"
+                className="mt-4 rounded-sm border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs leading-relaxed text-emerald-400"
+              >
+                <strong>Free delivery applied</strong>
               </p>
             )}
 
@@ -327,7 +344,11 @@ export function CartView() {
               className="mt-6"
               disabled={!quote || quote.totals.itemCount === 0 || belowMinimum}
             >
-              {loading ? 'Re-pricing…' : belowMinimum ? 'Minimum not met' : 'Checkout'}
+              {loading
+                ? 'Re-pricing…'
+                : belowMinimum
+                  ? 'Add more than ₹599 to place an order'
+                  : 'Proceed to Checkout'}
             </Button>
 
             <p className="mt-4 text-[11px] text-fg-dim">

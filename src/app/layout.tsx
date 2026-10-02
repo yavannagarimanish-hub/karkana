@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import { CartProvider } from '@/features/cart/cart-provider';
+import { FloatingCartBar } from '@/features/cart/floating-cart-bar';
 import { SiteHeader } from '@/app/_shell/site-header';
 import { SiteFooter } from '@/app/_shell/site-footer';
 import { MobileTabBar } from '@/features/shell/mobile-tab-bar';
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <SiteFooter className="mb-16 lg:mb-0" />
+          <FloatingCartBar />
           <MobileTabBar />
         </CartProvider>
       </body>

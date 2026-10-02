@@ -43,7 +43,7 @@ export function ProductCard({ product, action, priority, className }: ProductCar
   const qty = hydrated && line ? line.quantity : 0;
   const purchasable = product.inStock && product.isVisible;
 
-  const increment = () => add({ productId: product.id, quantity: 1 });
+  const increment = () => add({ productId: product.id, quantity: 1, unitPricePaise: price });
   const decrement = () => setQuantity(product.id, qty - 1);
 
   return (

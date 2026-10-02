@@ -188,12 +188,12 @@ describe('checkout service', () => {
 
 
 describe('minimum order value', () => {
-  // 530 rupees, mirroring the shipped default. Product price is 109 rupees.
-  const MIN = 53000;
+  // 599 rupees, mirroring the Karkana rule. Product price is 109 rupees.
+  const MIN = 59900;
   const policy = {
     personalizationFeePaise: 0,
-    shippingPaise: 0,
-    freeShippingOverPaise: null,
+    shippingPaise: 19900,
+    freeShippingOverPaise: 79900,
     minOrderPaise: MIN,
   };
 
@@ -221,15 +221,18 @@ describe('minimum order value', () => {
     expect(quote.totals.subtotalPaise).toBe(21800);
     expect(quote.minimumPaise).toBe(MIN);
     expect(quote.shortfallPaise).toBe(MIN - 21800);
+    expect(quote.freeShippingOverPaise).toBe(79900);
+    expect(quote.freeShippingShortfallPaise).toBe(79900 - 21800);
   });
 
-  it('refuses to place a below-minimum order with MIN_ORDER', async () => {
+  it('refuses to place a below-minimum order with MIN_ORDER and exact error message', async () => {
     const saved: Order[] = [];
     const repos = makeRepos([product()], saved);
     const checkout = createCheckoutService(repos, policy);
 
     await expect(checkout.placeOrder(input(2), { customerId: null })).rejects.toMatchObject({
       code: 'MIN_ORDER',
+      message: 'Add more than ₹599 to place an order.',
     });
     expect(saved).toHaveLength(0);
   });
@@ -239,10 +242,12 @@ describe('minimum order value', () => {
     const repos = makeRepos([product()], saved);
     const checkout = createCheckoutService(repos, policy);
 
-    // 5 x 10900 = 54500 >= 53000
-    const order = await checkout.placeOrder(input(5), { customerId: null });
+    // 6 x 10900 = 65400 >= 59900; shipping 19900 applies as 65400 < 79900
+    const order = await checkout.placeOrder(input(6), { customerId: null });
 
-    expect(order.totalPaise).toBe(54500);
+    expect(order.subtotalPaise).toBe(65400);
+    expect(order.shippingPaise).toBe(19900);
+    expect(order.totalPaise).toBe(65400 + 19900);
     expect(saved).toHaveLength(1);
   });
 

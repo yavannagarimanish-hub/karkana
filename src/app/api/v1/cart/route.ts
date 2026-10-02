@@ -38,6 +38,8 @@ export async function POST(request: Request) {
       unavailable: quote.unavailable,
       minimumPaise: quote.minimumPaise,
       shortfallPaise: quote.shortfallPaise,
+      freeShippingOverPaise: quote.freeShippingOverPaise,
+      freeShippingShortfallPaise: quote.freeShippingShortfallPaise,
     });
   } catch (error) {
     return toErrorResponse(error);

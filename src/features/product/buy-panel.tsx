@@ -88,6 +88,7 @@ export function BuyPanel({ product, signedIn, wishlisted }: BuyPanelProps) {
       quantity,
       personalizationImage: photoUrl,
       customizationNotes: notes.trim() || null,
+      unitPricePaise: pricePaise(product),
     });
 
     setAdded(true);

@@ -20,6 +20,10 @@ export interface CartQuote {
   minimumPaise: number;
   /** How far the current subtotal falls short of the minimum, in paise. */
   shortfallPaise: number;
+  /** Threshold at or above which shipping is free, in paise. */
+  freeShippingOverPaise: number | null;
+  /** How far the current subtotal falls short of free shipping, in paise. */
+  freeShippingShortfallPaise: number;
 }
 
 export interface PlaceOrderContext {
@@ -60,6 +64,8 @@ export function createCheckoutService(
         unavailable: [],
         minimumPaise: policy.minOrderPaise ?? 0,
         shortfallPaise: policy.minOrderPaise ?? 0,
+        freeShippingOverPaise: policy.freeShippingOverPaise ?? null,
+        freeShippingShortfallPaise: policy.freeShippingOverPaise ?? 0,
       };
     }
 
@@ -69,6 +75,11 @@ export function createCheckoutService(
       ...cartQuote,
       minimumPaise: policy.minOrderPaise ?? 0,
       shortfallPaise: minimumOrderShortfallPaise(cartQuote.totals.subtotalPaise, policy),
+      freeShippingOverPaise: policy.freeShippingOverPaise ?? null,
+      freeShippingShortfallPaise:
+        policy.freeShippingOverPaise !== null && policy.freeShippingOverPaise !== undefined
+          ? Math.max(0, policy.freeShippingOverPaise - cartQuote.totals.subtotalPaise)
+          : 0,
     };
   }
 
@@ -89,8 +100,7 @@ export function createCheckoutService(
     if (shortfall > 0) {
       throw new CheckoutError(
         'MIN_ORDER',
-        `Orders start at ${formatINR(policy.minOrderPaise ?? 0)}. ` +
-          `Add ${formatINR(shortfall)} more to place this order.`,
+        `Add more than ${formatINR(policy.minOrderPaise ?? 0)} to place an order.`,
       );
     }
 

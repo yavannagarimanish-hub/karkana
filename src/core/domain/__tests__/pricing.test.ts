@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { priceOrder, quoteCart, mergeCartLines, PricingError, MAX_LINE_QUANTITY } from '../pricing';
+import { priceOrder, quoteCart, mergeCartLines, PricingError, MAX_LINE_QUANTITY, calculateDelivery } from '../pricing';
 import type { Product } from '../product';
 
 function product(overrides: Partial<Product> = {}): Product {
@@ -157,5 +157,77 @@ describe('mergeCartLines', () => {
       { productId: 'B', quantity: 2 },
     ];
     expect(mergeCartLines(lines)).toHaveLength(2);
+  });
+});
+
+describe('calculateDelivery', () => {
+  it('enforces below minimum for ₹500 and ₹598', () => {
+    const res500 = calculateDelivery(50000);
+    expect(res500.isBelowMinimum).toBe(true);
+    expect(res500.isFreeDelivery).toBe(false);
+    expect(res500.progressMessage).toBe('Add more than ₹599 to place an order.');
+    expect(res500.deliveryChargeLabel).toBe('₹199');
+    expect(res500.deliveryChargePaise).toBe(19900);
+
+    const res598 = calculateDelivery(59800);
+    expect(res598.isBelowMinimum).toBe(true);
+    expect(res598.isFreeDelivery).toBe(false);
+    expect(res598.progressMessage).toBe('Add more than ₹599 to place an order.');
+  });
+
+  it('allows order at exactly ₹599 with ₹199 delivery and dynamic shortfall of ₹200 for free delivery', () => {
+    const res599 = calculateDelivery(59900);
+    expect(res599.isBelowMinimum).toBe(false);
+    expect(res599.isFreeDelivery).toBe(false);
+    expect(res599.deliveryChargePaise).toBe(19900);
+    expect(res599.deliveryChargeLabel).toBe('₹199');
+    expect(res599.freeDeliveryShortfallPaise).toBe(20000);
+    expect(res599.progressMessage).toBe('Add more products worth ₹200 to get free delivery.');
+    expect(res599.totalPaise).toBe(59900 + 19900);
+  });
+
+  it('dynamically computes shortfall for ₹650 (Add ₹149)', () => {
+    const res = calculateDelivery(65000);
+    expect(res.isBelowMinimum).toBe(false);
+    expect(res.isFreeDelivery).toBe(false);
+    expect(res.freeDeliveryShortfallPaise).toBe(14900);
+    expect(res.progressMessage).toBe('Add more products worth ₹149 to get free delivery.');
+    expect(res.deliveryChargeLabel).toBe('₹199');
+  });
+
+  it('dynamically computes shortfall for ₹750 (Add ₹49)', () => {
+    const res = calculateDelivery(75000);
+    expect(res.isBelowMinimum).toBe(false);
+    expect(res.isFreeDelivery).toBe(false);
+    expect(res.freeDeliveryShortfallPaise).toBe(4900);
+    expect(res.progressMessage).toBe('Add more products worth ₹49 to get free delivery.');
+    expect(res.deliveryChargeLabel).toBe('₹199');
+  });
+
+  it('dynamically computes shortfall for ₹798 (Add ₹1)', () => {
+    const res = calculateDelivery(79800);
+    expect(res.isBelowMinimum).toBe(false);
+    expect(res.isFreeDelivery).toBe(false);
+    expect(res.freeDeliveryShortfallPaise).toBe(100);
+    expect(res.progressMessage).toBe('Add more products worth ₹1 to get free delivery.');
+    expect(res.deliveryChargeLabel).toBe('₹199');
+  });
+
+  it('provides free delivery for exactly ₹799 and ₹1,000', () => {
+    const res799 = calculateDelivery(79900);
+    expect(res799.isBelowMinimum).toBe(false);
+    expect(res799.isFreeDelivery).toBe(true);
+    expect(res799.deliveryChargePaise).toBe(0);
+    expect(res799.deliveryChargeLabel).toBe('₹0');
+    expect(res799.progressMessage).toBe('Free delivery');
+    expect(res799.totalPaise).toBe(79900);
+
+    const res1000 = calculateDelivery(100000);
+    expect(res1000.isBelowMinimum).toBe(false);
+    expect(res1000.isFreeDelivery).toBe(true);
+    expect(res1000.deliveryChargePaise).toBe(0);
+    expect(res1000.deliveryChargeLabel).toBe('₹0');
+    expect(res1000.progressMessage).toBe('Free delivery');
+    expect(res1000.totalPaise).toBe(100000);
   });
 });

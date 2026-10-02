@@ -1,6 +1,6 @@
 import type { Product, ProductModule } from './product';
 import { isPurchasable, primaryImage, pricePaise, requiresPersonalization } from './product';
-import { sumPaise } from './money';
+import { formatINR, sumPaise } from './money';
 
 /**
  * The single place an order total is ever computed.
@@ -81,12 +81,88 @@ export interface PricingPolicy {
   minOrderPaise?: number;
 }
 
+export const MIN_ORDER_RUPEES = 599;
+export const MIN_ORDER_PAISE = 59900;
+
+export const FREE_SHIPPING_THRESHOLD_RUPEES = 799;
+export const FREE_SHIPPING_THRESHOLD_PAISE = 79900;
+
+export const STANDARD_SHIPPING_RUPEES = 199;
+export const STANDARD_SHIPPING_PAISE = 19900;
+
+export const KARKANA_PRICING_POLICY: PricingPolicy = {
+  personalizationFeePaise: 0,
+  shippingPaise: STANDARD_SHIPPING_PAISE,
+  freeShippingOverPaise: FREE_SHIPPING_THRESHOLD_PAISE,
+  minOrderPaise: MIN_ORDER_PAISE,
+};
+
 export const DEFAULT_PRICING_POLICY: PricingPolicy = {
   personalizationFeePaise: 0,
   shippingPaise: 0,
   freeShippingOverPaise: null,
   minOrderPaise: 0,
 };
+
+export interface DeliveryCalculation {
+  subtotalPaise: number;
+  feesPaise: number;
+  deliveryChargePaise: number;
+  totalPaise: number;
+  isBelowMinimum: boolean;
+  minOrderPaise: number;
+  minimumOrderShortfallPaise: number;
+  isFreeDelivery: boolean;
+  freeShippingOverPaise: number;
+  freeDeliveryShortfallPaise: number;
+  progressMessage: string;
+  deliveryChargeLabel: string;
+}
+
+export function calculateDelivery(
+  subtotalPaise: number,
+  feesPaise: number = 0,
+  policy: PricingPolicy = KARKANA_PRICING_POLICY,
+): DeliveryCalculation {
+  const minOrderPaise = policy.minOrderPaise ?? MIN_ORDER_PAISE;
+  const freeShippingOverPaise = policy.freeShippingOverPaise ?? FREE_SHIPPING_THRESHOLD_PAISE;
+  const standardShippingPaise = policy.shippingPaise ?? STANDARD_SHIPPING_PAISE;
+
+  const isBelowMinimum = subtotalPaise < minOrderPaise;
+  const minShortfall = Math.max(0, minOrderPaise - subtotalPaise);
+  const isFreeDelivery = !isBelowMinimum && subtotalPaise >= freeShippingOverPaise;
+  const freeShortfall = Math.max(0, freeShippingOverPaise - subtotalPaise);
+  const deliveryChargePaise = isFreeDelivery ? 0 : standardShippingPaise;
+
+  let progressMessage: string;
+  let deliveryChargeLabel: string;
+
+  if (isBelowMinimum) {
+    progressMessage = `Add more than ${formatINR(minOrderPaise)} to place an order.`;
+    deliveryChargeLabel = formatINR(standardShippingPaise);
+  } else if (isFreeDelivery) {
+    progressMessage = 'Free delivery';
+    deliveryChargeLabel = '₹0';
+  } else {
+    progressMessage = `Add more products worth ${formatINR(freeShortfall)} to get free delivery.`;
+    deliveryChargeLabel = formatINR(standardShippingPaise);
+  }
+
+  return {
+    subtotalPaise,
+    feesPaise,
+    deliveryChargePaise,
+    totalPaise: subtotalPaise + feesPaise + deliveryChargePaise,
+    isBelowMinimum,
+    minOrderPaise,
+    minimumOrderShortfallPaise: minShortfall,
+    isFreeDelivery,
+    freeShippingOverPaise,
+    freeDeliveryShortfallPaise: freeShortfall,
+    progressMessage,
+    deliveryChargeLabel,
+  };
+}
 
 /**
  * How far a cart's merchandise subtotal falls short of the policy minimum, in
