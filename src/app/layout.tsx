@@ -25,13 +25,15 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} | ${SITE.tagline}`,
+    default: 'Karkana | Buy Crackers Online in Telangana',
     template: `%s | ${SITE.name}`,
   },
-  description: `Buy crackers online from ${SITE.name}, an independent pyrotechnic workshop. Basic, customized and personalized fireworks with cash on delivery across India.`,
+  description:
+    'Shop crackers online with Karkana. Explore basic, customized and personalized crackers with cash on delivery across India.',
   applicationName: SITE.name,
   keywords: [
     'crackers online',
+    'buy crackers online Telangana',
     'buy fireworks India',
     'Hyderabad crackers',
     'personalized crackers',
@@ -42,18 +44,20 @@ export const metadata: Metadata = {
   // Canonicals are declared per page. A root default would point every product
   // and category page back at the homepage and collapse them in search.
   openGraph: {
-    title: `${SITE.name} | ${SITE.tagline}`,
-    description: `Basic, customized and personalized crackers dispatched direct from the workshop with cash on delivery.`,
+    title: 'Karkana | Buy Crackers Online in Telangana',
+    description:
+      'Shop basic, customized and personalized crackers online with cash on delivery.',
     url: SITE.url,
     siteName: SITE.name,
     locale: 'en_IN',
     type: 'website',
-    images: [{ url: '/og.png', width: 1774, height: 887, alt: `${SITE.name} ${SITE.tagline}` }],
+    images: [{ url: '/og.png', width: 1774, height: 887, alt: 'Karkana | Buy Crackers Online in Telangana' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE.name} | ${SITE.tagline}`,
-    description: `Basic, customized and personalized crackers with cash on delivery.`,
+    title: 'Karkana | Buy Crackers Online in Telangana',
+    description:
+      'Shop basic, customized and personalized crackers with cash on delivery.',
     images: ['/og.png'],
   },
   robots: {
