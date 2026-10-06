@@ -12,6 +12,8 @@ export interface CartLine {
   personalizationImage?: string | null;
   customizationNotes?: string | null;
   unitPricePaise?: number;
+  variantLabel?: string | null;
+  parentTitle?: string | null;
 }
 
 export interface CartQuoteData {
@@ -237,6 +239,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           ...next[index]!,
           quantity: Math.min(99, next[index]!.quantity + line.quantity),
           unitPricePaise: line.unitPricePaise ?? next[index]!.unitPricePaise,
+          variantLabel: line.variantLabel ?? next[index]!.variantLabel,
+          parentTitle: line.parentTitle ?? next[index]!.parentTitle,
         };
         emit(next);
         return;

@@ -1,15 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { formatINR } from '@/core/domain/money';
 import { useCart } from './cart-provider';
 
 export function FloatingCartBar() {
+  const pathname = usePathname();
   const { count, subtotalPaise, delivery, hydrated } = useCart();
 
-  // If not hydrated or cart is empty, the floating popup must disappear
-  if (!hydrated || count === 0) {
+  // If not hydrated, cart is empty, or already on /cart or /checkout, hide the floating bar
+  if (!hydrated || count === 0 || pathname === '/cart' || pathname === '/checkout') {
     return null;
   }
 

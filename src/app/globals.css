@@ -186,6 +186,14 @@
     background-size: 200% 100%;
     animation: karkana-shimmer 1.4s linear infinite;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @keyframes karkana-pulse {
@@ -198,13 +206,23 @@
   }
 }
 
-@keyframes karkana-shimmer {
-  from {
-    background-position: 200% 0;
+@keyframes karkana-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
   }
-  to {
-    background-position: -200% 0;
+  100% {
+    transform: translate3d(-50%, 0, 0);
   }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: karkana-marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {

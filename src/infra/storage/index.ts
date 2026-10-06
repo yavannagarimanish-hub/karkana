@@ -111,9 +111,10 @@ export function resolveUploadPath(key: string, root: string = LOCAL_ROOT): strin
   const safeKey = sanitizeUploadKey(key);
   if (safeKey === null) return null;
 
-  const target = path.resolve(root, safeKey);
-  const rootPrefix = root.endsWith(path.sep) ? root : root + path.sep;
-  if (target !== root && !target.startsWith(rootPrefix)) return null;
+  const resolvedRoot = path.resolve(root);
+  const target = path.resolve(resolvedRoot, safeKey);
+  const rootPrefix = resolvedRoot.endsWith(path.sep) ? resolvedRoot : resolvedRoot + path.sep;
+  if (target !== resolvedRoot && !target.startsWith(rootPrefix)) return null;
 
   return target;
 }

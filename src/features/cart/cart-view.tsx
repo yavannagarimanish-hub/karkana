@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { formatINR } from '@/core/domain/money';
 import { calculateDelivery } from '@/core/domain/pricing';
 import { useCart, type CartLine } from '@/features/cart/cart-provider';
@@ -51,10 +52,12 @@ const REASON_LABEL: Record<string, string> = {
  * `localStorage` can never change what the customer is charged.
  */
 export function CartView() {
+  const router = useRouter();
   const { lines, hydrated, setQuantity, remove, clear } = useCart();
   const [quote, setQuote] = React.useState<Quote | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [isNavigating, setIsNavigating] = React.useState(false);
 
   const signature = React.useMemo(
     () => JSON.stringify(lines.map((line) => [line.productId, line.quantity, line.personalizationImage])),
@@ -231,10 +234,15 @@ export function CartView() {
                           href={`/product/${line.productId}`}
                           className="line-clamp-2 text-sm font-semibold tracking-[0.04em] uppercase transition-colors hover:text-ember"
                         >
-                          {quoted?.productName ?? line.productId}
+                          {line.parentTitle ? `${line.parentTitle} (${line.variantLabel})` : (quoted?.productName ?? line.productId)}
                         </Link>
                         <p className="numeric mt-1 text-[11px] text-fg-dim">
-                          {line.productId}
+                          <span className="font-mono text-fg-dim mr-1.5">{line.productId}</span>
+                          {line.variantLabel && !line.parentTitle && (
+                            <span className="mr-1.5 rounded-xs bg-panel-raised px-1.5 py-0.5 text-[10px] text-fg-muted font-medium">
+                              {line.variantLabel}
+                            </span>
+                          )}
                           {quoted ? ` · ${formatINR(quoted.unitPricePaise)} each` : ''}
                         </p>
                       </div>
@@ -338,17 +346,24 @@ export function CartView() {
             )}
 
             <Button
-              href={quote && quote.totals.itemCount > 0 && !belowMinimum ? '/checkout' : undefined}
+              type="button"
+              onClick={() => {
+                if (isNavigating || loading || !quote || quote.totals.itemCount === 0 || belowMinimum) return;
+                setIsNavigating(true);
+                router.push('/checkout');
+              }}
               block
               size="lg"
               className="mt-6"
-              disabled={!quote || quote.totals.itemCount === 0 || belowMinimum}
+              disabled={isNavigating || !quote || quote.totals.itemCount === 0 || belowMinimum}
             >
-              {loading
-                ? 'Re-pricing…'
-                : belowMinimum
-                  ? 'Add more than ₹599 to place an order'
-                  : 'Proceed to Checkout'}
+              {isNavigating
+                ? 'Proceeding…'
+                : loading
+                  ? 'Re-pricing…'
+                  : belowMinimum
+                    ? 'Add more than ₹599 to place an order'
+                    : 'Proceed to Checkout'}
             </Button>
 
             <p className="mt-4 text-[11px] text-fg-dim">

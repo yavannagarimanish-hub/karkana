@@ -2,15 +2,15 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { resolveUploadPath } from '../index';
 
-const ROOT = path.join('/app', 'public', 'uploads');
+const ROOT = path.resolve('/app', 'public', 'uploads');
 
 describe('resolveUploadPath', () => {
   it('allows ordinary generated keys', () => {
     expect(resolveUploadPath('personalizations/2026/09/1758.jpg', ROOT)).toBe(
-      path.join(ROOT, 'personalizations/2026/09/1758.jpg'),
+      path.resolve(ROOT, 'personalizations/2026/09/1758.jpg'),
     );
     expect(resolveUploadPath('products/12_abc123.png', ROOT)).toBe(
-      path.join(ROOT, 'products/12_abc123.png'),
+      path.resolve(ROOT, 'products/12_abc123.png'),
     );
   });
 

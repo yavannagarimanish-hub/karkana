@@ -3,48 +3,45 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
-import { primaryImage, pricePaise, mrpPaise, requiresPersonalization } from '@/core/domain/product';
+import type { ProductFamily } from '@/core/domain/catalog-families';
 import { formatINR, discountPercent } from '@/core/domain/money';
-import type { Product } from '@/core/domain/product';
+import { requiresPersonalization } from '@/core/domain/product';
 import { useCart } from '@/features/cart/cart-provider';
 import { cn } from './cn';
 
-export interface ProductCardProps {
-  product: Product;
-  /** Rendered in the top-right corner, e.g. a wishlist toggle. */
-  action?: React.ReactNode;
+export interface FamilyCardProps {
+  family: ProductFamily;
   priority?: boolean;
   className?: string;
 }
 
 /**
- * Grocery-app style card, in the house palette (Instamart / BigBasket layout):
- * square image well, name, unit, then a price block on the left and an
- * ADD control on the right that turns into a quantity stepper once the item
- * is in the cart. Tapping the image or name still opens the detail page.
- *
- * PERSONALIZED items cannot be added from the grid (they need an uploaded
- * photograph), so their control is a link through to the product page.
+ * Customer-facing family card:
+ * Displays product family name, variant count, starting price, and "View options"
+ * for grouped families, or instant "Add" / stepper for single-variant items.
  */
-export function ProductCard({ product, action, priority, className }: ProductCardProps) {
+export function FamilyCard({ family, priority, className }: FamilyCardProps) {
   const { lines, hydrated, add, setQuantity } = useCart();
 
-  const image = primaryImage(product);
-  const price = pricePaise(product);
-  const mrp = mrpPaise(product);
-  const off = mrp ? discountPercent(mrp, price) : 0;
-  const width = product.imageWidth ?? 1200;
-  const height = product.imageHeight ?? 1200;
-  const needsPersonalization = requiresPersonalization(product.module);
+  const defaultVariant = family.defaultVariant;
+  const image = defaultVariant.image;
+  const price = family.fromPricePaise;
+  const mrp = defaultVariant.mrpPaise;
+  const off = mrp && mrp > price ? discountPercent(mrp, price) : 0;
+  const width = defaultVariant.product.imageWidth ?? 1200;
+  const height = defaultVariant.product.imageHeight ?? 1200;
+  const needsPersonalization = requiresPersonalization(defaultVariant.product.module);
 
   const line = lines.find(
-    (entry) => entry.productId === product.id && (entry.personalizationImage ?? null) === null,
+    (entry) => entry.productId === defaultVariant.id && (entry.personalizationImage ?? null) === null,
   );
   const qty = hydrated && line ? line.quantity : 0;
-  const purchasable = product.inStock && product.isVisible;
+  const purchasable = family.inStock;
 
-  const increment = () => add({ productId: product.id, quantity: 1, unitPricePaise: price });
-  const decrement = () => setQuantity(product.id, qty - 1);
+  const increment = () => add({ productId: defaultVariant.id, quantity: 1, unitPricePaise: price });
+  const decrement = () => setQuantity(defaultVariant.id, qty - 1);
+
+  const productUrl = `/product/${defaultVariant.id}`;
 
   return (
     <div
@@ -55,15 +52,15 @@ export function ProductCard({ product, action, priority, className }: ProductCar
       )}
     >
       <Link
-        href={`/product/${product.id}`}
+        href={productUrl}
         className="flex flex-1 flex-col focus-visible:shadow-[inset_0_0_0_1px_var(--color-ember)]"
-        aria-label={product.name}
+        aria-label={family.title}
       >
         <div className="relative flex aspect-square items-center justify-center overflow-hidden border-b border-hairline bg-void p-1.5 sm:p-5">
           {image ? (
             <Image
               src={image}
-              alt={product.name}
+              alt={family.title}
               width={width}
               height={height}
               priority={priority}
@@ -71,16 +68,20 @@ export function ProductCard({ product, action, priority, className }: ProductCar
               className="max-h-full w-auto max-w-full object-contain transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.03]"
             />
           ) : (
-            <span className="label text-[9px] sm:text-label">No image</span>
+            <div className="flex flex-col items-center justify-center gap-1 text-center p-2">
+              <span className="label text-[9px] sm:text-label text-fg-ghost">No image</span>
+            </div>
           )}
 
-          {off > 0 && (
+          {family.hasMultipleVariants ? (
+            <span className="numeric absolute top-1 left-1 sm:top-2 sm:left-2 rounded-xs bg-ember px-1 py-0.5 sm:px-1.5 text-[7px] sm:text-[9px] font-bold text-fg leading-none tracking-tight">
+              {family.variants.length} VARIANTS
+            </span>
+          ) : off > 0 ? (
             <span className="numeric absolute top-1 left-1 sm:top-2 sm:left-2 rounded-xs bg-ember px-1 py-0.5 sm:px-1.5 text-[8px] sm:text-[10px] font-bold text-fg leading-none">
               {off}% OFF
             </span>
-          )}
-
-          {action && <div className="absolute top-1 right-1 sm:top-2 sm:right-2">{action}</div>}
+          ) : null}
 
           {!purchasable && (
             <div className="absolute inset-0 grid place-items-center bg-void/80 p-1 text-center">
@@ -92,17 +93,19 @@ export function ProductCard({ product, action, priority, className }: ProductCar
         </div>
 
         <div className="flex flex-1 flex-col gap-0.5 sm:gap-1 p-1.5 sm:p-3">
-          {product.category && (
-            <span className="label truncate text-[8px] sm:text-[9px] text-fg-dim">
-              {product.category}
-            </span>
-          )}
+          <span className="label truncate text-[8px] sm:text-[9px] text-fg-dim">
+            {family.section}
+          </span>
           <h3 className="line-clamp-2 min-h-[2.4em] text-[10px] sm:text-[13px] leading-tight sm:leading-snug font-semibold tracking-[0.02em] sm:tracking-[0.03em] text-fg uppercase">
-            {product.name}
+            {family.title}
           </h3>
-          {product.unit && (
-            <span className="truncate text-[9px] sm:text-[11px] text-fg-dim">
-              {product.unit}
+          {family.hasMultipleVariants ? (
+            <span className="truncate text-[8px] sm:text-[10px] text-ember font-mono font-medium">
+              {family.variants.length} options available
+            </span>
+          ) : (
+            <span className="truncate text-[8px] sm:text-[10px] text-fg-dim">
+              {defaultVariant.label && defaultVariant.label !== 'Standard' ? defaultVariant.label : '1 option'}
             </span>
           )}
         </div>
@@ -110,17 +113,27 @@ export function ProductCard({ product, action, priority, className }: ProductCar
 
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1 sm:gap-2 border-t border-hairline p-1.5 sm:p-3">
         <div className="numeric flex sm:flex-col items-baseline sm:items-start gap-1 sm:gap-0">
+          {family.hasMultipleVariants && (
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-fg-dim">From</span>
+          )}
           <span className="text-xs sm:text-sm font-bold text-fg">{formatINR(price)}</span>
-          {mrp && mrp > price && (
+          {!family.hasMultipleVariants && mrp && mrp > price && (
             <span className="text-[9px] sm:text-[11px] text-fg-ghost line-through">
               {formatINR(mrp)}
             </span>
           )}
         </div>
 
-        {needsPersonalization ? (
+        {family.hasMultipleVariants ? (
           <Link
-            href={`/product/${product.id}`}
+            href={productUrl}
+            className="flex items-center justify-center rounded-sm border border-ember px-1.5 py-1 sm:px-3 sm:py-1.5 font-mono text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.04em] sm:tracking-[0.08em] text-ember transition-colors hover:bg-ember hover:text-fg text-center whitespace-nowrap"
+          >
+            View options
+          </Link>
+        ) : needsPersonalization ? (
+          <Link
+            href={productUrl}
             className="flex items-center justify-center rounded-sm border border-ember px-2 py-1 sm:px-4 sm:py-1.5 font-mono text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.08em] sm:tracking-[0.14em] text-ember transition-colors hover:bg-ember hover:text-fg text-center"
           >
             Add
@@ -130,7 +143,7 @@ export function ProductCard({ product, action, priority, className }: ProductCar
             type="button"
             onClick={increment}
             disabled={!purchasable}
-            aria-label={`Add ${product.name} to cart`}
+            aria-label={`Add ${family.title} to cart`}
             className="flex items-center justify-center rounded-sm border border-ember px-2 py-1 sm:px-4 sm:py-1.5 font-mono text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.08em] sm:tracking-[0.14em] text-ember transition-colors hover:bg-ember hover:text-fg disabled:cursor-not-allowed disabled:border-hairline disabled:text-fg-dim disabled:hover:bg-transparent text-center"
           >
             Add
@@ -140,7 +153,7 @@ export function ProductCard({ product, action, priority, className }: ProductCar
             <button
               type="button"
               onClick={decrement}
-              aria-label={`Decrease quantity of ${product.name}`}
+              aria-label={`Decrease quantity of ${family.title}`}
               className="px-1.5 py-0.5 sm:px-2.5 sm:py-1.5 text-xs font-bold transition-colors hover:bg-ember-hover"
             >
               −
@@ -151,7 +164,7 @@ export function ProductCard({ product, action, priority, className }: ProductCar
             <button
               type="button"
               onClick={increment}
-              aria-label={`Increase quantity of ${product.name}`}
+              aria-label={`Increase quantity of ${family.title}`}
               className="px-1.5 py-0.5 sm:px-2.5 sm:py-1.5 text-xs font-bold transition-colors hover:bg-ember-hover"
             >
               +
@@ -162,3 +175,4 @@ export function ProductCard({ product, action, priority, className }: ProductCar
     </div>
   );
 }
+

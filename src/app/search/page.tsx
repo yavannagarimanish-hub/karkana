@@ -7,6 +7,9 @@ import { EmptyState } from '@/ui/empty-state';
 import { isSortKey, type SortKey } from '@/core/domain/catalogue';
 import { MODULE_SLUGS, type ProductModule } from '@/core/domain/product';
 import { cn } from '@/ui/cn';
+import { CategoryBar } from '@/ui/category-bar';
+import { assignPrimarySection, buildProductFamilies } from '@/core/domain/catalog-families';
+import { FamilyGrid } from '@/ui/family-grid';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,29 +34,74 @@ const SORT_LABELS: Record<SortKey, string> = {
 const SORT_ORDER: SortKey[] = ['position', 'price-asc', 'price-desc', 'discount', 'name'];
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const { q } = await searchParams;
+  const { q, category } = await searchParams;
   const term = (firstString(q) ?? '').trim();
+  const cat = (firstString(category) ?? '').trim();
+  const label = cat ? `${cat} Crackers` : term ? `Search: ${term}` : 'Search';
 
   return {
-    title: term ? `Search: ${term}` : 'Search',
-    description: term ? `Results for "${term}" in the Karkana catalogue.` : 'Search the Karkana catalogue.',
-    // Only the bare search page is indexable. Query strings would otherwise
-    // generate unbounded duplicate URLs.
+    title: label,
+    description: `Results for ${label} in the Karkana catalogue.`,
     alternates: { canonical: '/search' },
-    robots: term ? { index: false, follow: true } : undefined,
+    robots: term || cat ? { index: false, follow: true } : undefined,
   };
 }
 
 export default async function SearchPage({ searchParams }: Props) {
   const sp = await searchParams;
   const term = (firstString(sp.q) ?? '').trim();
+  const categoryParam = (firstString(sp.category) ?? '').trim();
   const sortParam = firstString(sp.sort);
   const sort: SortKey | undefined = sortParam && isSortKey(sortParam) ? sortParam : undefined;
   const inStockOnly = firstString(sp.inStockOnly) === 'true';
   const page = Math.max(1, Number(firstString(sp.page) ?? '1') || 1);
 
   const services = await getAppServices();
-  const result = await services.catalogue.searchPage(term, { sort, inStockOnly }, page, PAGE_SIZE);
+  let result = await services.catalogue.searchPage(term, { sort, inStockOnly }, 1, 1000);
+
+  // If a primary section category is selected, filter products using the 9 primary section domain mapping
+  if (categoryParam) {
+    const matchedProducts = result.products.filter((p) => {
+      const section = assignPrimarySection(p);
+      return section.toLowerCase() === categoryParam.toLowerCase();
+    });
+    const total = matchedProducts.length;
+    const totalPages = Math.ceil(total / PAGE_SIZE) || 1;
+    const start = (page - 1) * PAGE_SIZE;
+    const items = matchedProducts.slice(start, start + PAGE_SIZE);
+
+    result = {
+      query: term || categoryParam,
+      products: matchedProducts,
+      page: {
+        items,
+        page,
+        pageSize: PAGE_SIZE,
+        totalItems: total,
+        totalPages,
+      },
+      counts: {
+        ...result.counts,
+        total,
+      },
+    };
+  } else {
+    // Standard pagination if not filtered by section
+    const total = result.products.length;
+    const totalPages = Math.ceil(total / PAGE_SIZE) || 1;
+    const start = (page - 1) * PAGE_SIZE;
+    const items = result.products.slice(start, start + PAGE_SIZE);
+    result = {
+      ...result,
+      page: {
+        items,
+        page,
+        pageSize: PAGE_SIZE,
+        totalItems: total,
+        totalPages,
+      },
+    };
+  }
 
   const totalPages = result.page.totalPages;
   const shown = result.page.items;
@@ -62,6 +110,7 @@ export default async function SearchPage({ searchParams }: Props) {
   const hrefFor = (overrides: Record<string, string | number | null>): string => {
     const params = new URLSearchParams();
     if (term) params.set('q', term);
+    if (categoryParam) params.set('category', categoryParam);
     if (sort) params.set('sort', sort);
     if (inStockOnly) params.set('inStockOnly', 'true');
 
@@ -73,48 +122,52 @@ export default async function SearchPage({ searchParams }: Props) {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-8 lg:px-12 lg:py-16">
-      <div className="border-b border-hairline pb-8">
-        <div className="flex items-center gap-3">
-          <span className="numeric text-[11px] text-ember">[?]</span>
-          <span aria-hidden className="h-px w-10 bg-hairline-strong" />
-        </div>
+    <>
+      <CategoryBar activeSection={categoryParam || null} />
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-8 lg:px-12 lg:py-16">
+        <div className="border-b border-hairline pb-8">
+          <div className="flex items-center gap-3">
+            <span className="numeric text-[11px] text-ember">[?]</span>
+            <span aria-hidden className="h-px w-10 bg-hairline-strong" />
+          </div>
 
-        <h1 className="mt-4 font-display text-3xl leading-tight font-bold text-fg sm:text-4xl">
-          {term ? (
-            <>
-              Results for <span className="text-ember">“{term}”</span>
-            </>
-          ) : (
-            'Search the catalogue'
-          )}
-        </h1>
+          <h1 className="mt-4 font-display text-3xl leading-tight font-bold text-fg sm:text-4xl uppercase">
+            {categoryParam ? (
+              <>
+                <span className="text-ember">{categoryParam}</span> Catalogue
+              </>
+            ) : term ? (
+              <>
+                Results for <span className="text-ember">“{term}”</span>
+              </>
+            ) : (
+              'Search the catalogue'
+            )}
+          </h1>
 
-        {term && (
           <p className="mt-3 max-w-2xl text-sm text-fg/60">
             {result.counts.total === 0
-              ? 'Nothing matched. Check the spelling, or browse a collection instead.'
-              : `${result.counts.total} ${result.counts.total === 1 ? 'match' : 'matches'} across name, brand, category, product id and keywords.`}
+              ? 'Nothing matched. Check the spelling, or browse a collection above.'
+              : `${result.counts.total} ${result.counts.total === 1 ? 'item' : 'items'} available with direct workshop dispatch.`}
           </p>
-        )}
-      </div>
-
-      {!term ? (
-        <div className="mt-12">
-          <EmptyState
-            title="What are you looking for?"
-            message="Try “rocket”, “sparkler”, a product id such as KRK001, or a brand name."
-            actionLabel="Browse Basic crackers"
-            actionHref={`/module/${MODULE_SLUGS.BASIC}`}
-          />
         </div>
-      ) : result.counts.total === 0 ? (
-        <div className="mt-12">
-          <EmptyState
-            title={`No results for “${term}”`}
-            message="The catalogue runs to 138 products across three collections, so one of them is probably close."
-            actionLabel="Browse Basic crackers"
-            actionHref={`/module/${MODULE_SLUGS.BASIC}`}
+
+        {!term && !categoryParam ? (
+          <div className="mt-12">
+            <EmptyState
+              title="What are you looking for?"
+              message="Select a category above, or search for products like 1000 Wala, Electric Sparklers, or Rockets."
+              actionLabel="Browse Basic crackers"
+              actionHref={`/module/${MODULE_SLUGS.BASIC}`}
+            />
+          </div>
+        ) : result.counts.total === 0 ? (
+          <div className="mt-12">
+            <EmptyState
+              title={`No results for “${term || categoryParam}”`}
+              message="Try browsing another section or clear your query."
+              actionLabel="Browse Basic crackers"
+              actionHref={`/module/${MODULE_SLUGS.BASIC}`}
           />
         </div>
       ) : (
@@ -152,7 +205,11 @@ export default async function SearchPage({ searchParams }: Props) {
           </div>
 
           <div className="mt-8">
-            <ProductGrid products={shown} />
+            {categoryParam ? (
+              <FamilyGrid families={buildProductFamilies(result.products)} />
+            ) : (
+              <ProductGrid products={shown} />
+            )}
           </div>
 
           {totalPages > 1 && (
@@ -212,5 +269,6 @@ export default async function SearchPage({ searchParams }: Props) {
         </>
       )}
     </main>
+  </>
   );
 }
