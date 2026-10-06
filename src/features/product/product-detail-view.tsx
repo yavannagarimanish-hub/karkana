@@ -173,20 +173,12 @@ export function ProductDetailView({
             </div>
           )}
         </div>
-
-        {activeProduct.safetyInstructions && (
-          <div className="surface mt-4 rounded-sm p-5">
-            <h2 className="label text-status-warn">Safety instructions</h2>
-            <p className="mt-2 text-sm whitespace-pre-line text-fg-muted">
-              {activeProduct.safetyInstructions}
-            </p>
-          </div>
-        )}
       </div>
 
       {/* Buy column */}
       <div className="lg:col-span-5">
         <div className="lg:sticky lg:top-28">
+          {/* 1. PRODUCT NAME — at the top */}
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone={activeProduct.module === 'PERSONALIZED' ? 'ember' : 'neutral'}>
               {activeProduct.module}
@@ -198,20 +190,36 @@ export function ProductDetailView({
             {family?.section && <Badge tone="outline">{family.section}</Badge>}
           </div>
 
-          <h1 className="mt-4 text-2xl leading-tight font-extrabold tracking-[0.01em] text-fg uppercase sm:text-4xl">
+          <h1 className="mt-3 text-2xl leading-tight font-extrabold tracking-[0.01em] text-fg uppercase sm:text-4xl">
             {family?.hasMultipleVariants ? family.title : activeProduct.name}
           </h1>
 
-          {/* From pricing info for families */}
+          {/* 2. PRICE — immediately below/near the product name */}
+          <div className="mt-4 flex flex-wrap items-baseline gap-3">
+            <span className="numeric text-3xl font-bold text-fg">{formatINR(price)}</span>
+            {mrp && mrp > price && (
+              <>
+                <span className="numeric text-base text-fg-ghost line-through">{formatINR(mrp)}</span>
+                <Badge tone="ember">Save {formatINR(mrp - price)}</Badge>
+              </>
+            )}
+          </div>
+
+          {mrp && mrp > price && (
+            <p className="numeric mt-1 text-[11px] text-fg-dim">
+              {discountPercent(mrp, price)}% below MRP · inclusive of taxes
+            </p>
+          )}
+
           {family?.hasMultipleVariants && (
-            <p className="mt-1 font-mono text-xs uppercase tracking-[0.12em] text-ember font-semibold">
+            <p className="mt-1.5 font-mono text-xs uppercase tracking-[0.12em] text-ember font-semibold">
               From {formatINR(family.fromPricePaise)} · {family.variants.length} options available
             </p>
           )}
 
-          {/* Size / Variant Selector Chips */}
+          {/* 3. PRODUCT OPTIONS / VARIANTS — directly below the price */}
           {family && family.hasMultipleVariants && (
-            <div className="mt-6 rounded-sm border border-hairline bg-panel p-4">
+            <div className="mt-5 rounded-sm border border-hairline bg-panel p-4">
               <div className="flex items-center justify-between">
                 <span className="label text-fg">Select Option / Size</span>
                 <span className="numeric text-xs font-semibold text-fg-muted">
@@ -248,30 +256,8 @@ export function ProductDetailView({
             </div>
           )}
 
-          {(activeProduct.shortDescription || family?.description) && (
-            <p className="mt-4 text-sm text-fg-muted leading-relaxed">
-              {activeProduct.shortDescription || family?.description}
-            </p>
-          )}
-
-          <div className="mt-5 flex flex-wrap items-baseline gap-3">
-            <span className="numeric text-3xl font-bold text-fg">{formatINR(price)}</span>
-            {mrp && mrp > price && (
-              <>
-                <span className="numeric text-base text-fg-ghost line-through">{formatINR(mrp)}</span>
-                <Badge tone="ember">Save {formatINR(mrp - price)}</Badge>
-              </>
-            )}
-          </div>
-
-          {mrp && mrp > price && (
-            <p className="numeric mt-1 text-[11px] text-fg-dim">
-              {discountPercent(mrp, price)}% below MRP · inclusive of taxes
-            </p>
-          )}
-
-          {/* Add to Cart Actions */}
-          <div className="mt-8 space-y-6">
+          {/* 4. ADD TO CART / purchase controls */}
+          <div className="mt-6 space-y-6">
             {needsPhoto && (
               <section
                 aria-labelledby="personalization-heading"
@@ -437,7 +423,14 @@ export function ProductDetailView({
             </div>
           </div>
 
-          <dl className="mt-8 divide-y divide-hairline border-y border-hairline">
+          {/* 5. PRODUCT DESCRIPTION / other product information */}
+          {(activeProduct.shortDescription || family?.description) && (
+            <p className="mt-8 text-sm text-fg-muted leading-relaxed">
+              {activeProduct.shortDescription || family?.description}
+            </p>
+          )}
+
+          <dl className="mt-6 divide-y divide-hairline border-y border-hairline">
             <div className="flex items-baseline justify-between gap-4 py-2.5">
               <dt className="label">Product / SKU ID</dt>
               <dd className="numeric text-right text-xs text-fg-muted">{activeVariant.id}</dd>
@@ -455,6 +448,19 @@ export function ProductDetailView({
               <h2 className="label">Specification / notes</h2>
               <p className="mt-2 text-sm leading-relaxed whitespace-pre-line text-fg-muted">
                 {activeProduct.description}
+              </p>
+            </div>
+          )}
+
+          {/* 6. SAFETY INSTRUCTIONS — BELOW THE MAIN PRODUCT INFORMATION */}
+          {activeProduct.safetyInstructions && (
+            <div className="surface mt-8 rounded-sm border border-hairline p-5">
+              <div className="flex items-center gap-2">
+                <span className="size-2 rounded-full bg-status-warn" />
+                <h2 className="label text-status-warn">Safety instructions</h2>
+              </div>
+              <p className="mt-2.5 text-sm whitespace-pre-line text-fg-muted leading-relaxed">
+                {activeProduct.safetyInstructions}
               </p>
             </div>
           )}
