@@ -11,6 +11,7 @@ import { Button } from '@/ui/button';
 import { EmptyState } from '@/ui/empty-state';
 import { QuantityStepper } from '@/ui/quantity-stepper';
 import { ProductGridSkeleton } from '@/ui/skeleton';
+import { Badge } from '@/ui/badge';
 
 interface QuoteLine {
   productId: string;
@@ -254,13 +255,35 @@ export function CartView() {
                       )}
                     </div>
 
-                    {line.customizationNotes && (
+                    {line.personalizationImage && (
+                      <div className="mt-3 flex items-center gap-3 rounded-xs border border-ember/30 bg-ember/5 p-2.5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={
+                            line.personalizationImage.startsWith('http') || line.personalizationImage.startsWith('/')
+                              ? line.personalizationImage
+                              : `/api/v1/uploads/preview?key=${encodeURIComponent(line.personalizationImage)}`
+                          }
+                          alt="Customer photograph"
+                          className="size-11 shrink-0 rounded-xs object-cover border border-hairline bg-void"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <Badge tone="ember">Personalised</Badge>
+                            <span className="font-mono text-[10px] uppercase tracking-wider text-fg-dim">Photo Attached</span>
+                          </div>
+                          {line.customizationNotes && (
+                            <p className="mt-1 truncate text-xs font-mono text-fg-muted">
+                              {line.customizationNotes.split(' | ')[0] || line.customizationNotes}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {!line.personalizationImage && line.customizationNotes && (
                       <p className="mt-2 rounded-sm bg-panel-raised p-2 text-xs text-fg-muted">
                         “{line.customizationNotes}”
                       </p>
-                    )}
-                    {line.personalizationImage && (
-                      <p className="mt-2 text-[11px] text-ember">Personalized box · photo attached</p>
                     )}
 
                     <div className="mt-4 flex flex-wrap items-center gap-3">

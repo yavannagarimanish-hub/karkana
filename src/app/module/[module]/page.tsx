@@ -12,6 +12,7 @@ import { EmptyState } from '@/ui/empty-state';
 import { ProductGrid } from '@/ui/product-grid';
 import { SectionHeader } from '@/ui/section-header';
 import { FilterBar } from '@/features/catalogue/filter-bar';
+import { PersonalisedStudio } from '@/features/personalised/personalised-studio';
 
 interface Props {
   params: Promise<{ module: string }>;
@@ -52,6 +53,13 @@ function buildPriceBands(products: readonly Product[]): PriceBand[] {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { module: slug } = await params;
+  if (slug === 'personalized' || slug === 'personalised') {
+    return {
+      title: 'Personalised Fireworks Boxes · Create Your Own',
+      description: 'Upload your photograph and print your family name directly on authentic handcrafted Sivakasi celebration boxes.',
+      alternates: { canonical: `/module/${slug}` },
+    };
+  }
   const label = slug.charAt(0).toUpperCase() + slug.slice(1).toLowerCase();
   return {
     title: `${label} catalogue`,
@@ -74,6 +82,23 @@ export default async function ModulePage({ params, searchParams }: Props) {
 
   const preview = await services.catalogue.modulePage(slug);
   if (!preview) notFound();
+
+  // If this is the PERSONALIZED section, render the dedicated customisation experience!
+  if (preview.module === 'PERSONALIZED') {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-8 sm:py-16 lg:px-12">
+        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[11px] text-fg-dim">
+          <Link href="/" className="transition-colors hover:text-fg">
+            Home
+          </Link>
+          <span aria-hidden>/</span>
+          <span className="font-mono uppercase tracking-[0.14em] text-fg-muted">Personalised Atelier</span>
+        </nav>
+
+        <PersonalisedStudio templates={preview.products} isStandalonePage={true} />
+      </div>
+    );
+  }
 
   // Filter facets are always derived from the whole module, never from the
   // already-filtered result, so narrowing cannot hide the way back out.

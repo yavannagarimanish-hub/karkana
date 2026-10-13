@@ -123,7 +123,7 @@ export function ProductCard({ product, action, priority, className }: ProductCar
             href={`/product/${product.id}`}
             className="flex items-center justify-center rounded-sm border border-ember px-2 py-1 sm:px-4 sm:py-1.5 font-mono text-[9px] sm:text-[11px] font-bold uppercase tracking-[0.08em] sm:tracking-[0.14em] text-ember transition-colors hover:bg-ember hover:text-fg text-center"
           >
-            Add
+            Customise
           </Link>
         ) : qty === 0 ? (
           <button

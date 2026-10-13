@@ -13,6 +13,7 @@ import { HomepageRockets } from '@/features/home/homepage-rockets';
 import { CategoryBar } from '@/ui/category-bar';
 import { CategoryGrid, type CategorySummary } from '@/ui/category-card';
 import { toSafeJsonLd, buildOrganizationJsonLd } from '@/infra/seo/json-ld';
+import { PersonalisedStudio } from '@/features/personalised/personalised-studio';
 
 export const metadata: Metadata = {
   title: 'Buy Crackers Online',
@@ -139,21 +140,22 @@ export default async function HomePage() {
           </section>
         )}
 
-        {/* ── 5. PERSONALIZED CATALOGUE ── */}
-        {personalized && personalized.products.length > 0 && (
+        {/* ── 5. PERSONALIZED ATELIER · CREATE YOUR OWN ── */}
+        {personalized && (
           <section
+            id="personalized"
             key={personalized.section.id}
-            className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 sm:py-24 lg:px-12"
+            className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 sm:py-24 lg:px-12 scroll-mt-24"
           >
             <SectionHeader
               index="05"
-              title={personalized.section.title}
-              subtitle={personalized.section.subtitle || undefined}
-              href={`/module/${personalized.section.key}`}
-              linkLabel="View All"
+              title="PERSONALISED BOXES"
+              subtitle="Design your bespoke celebration box with personal portraits and custom name inscription"
+              href="/module/personalized"
+              linkLabel="Open Full Studio"
               actionVariant="button"
             />
-            <ProductGrid products={personalized.products} />
+            <PersonalisedStudio templates={products.filter((p) => p.module === 'PERSONALIZED')} />
           </section>
         )}
 
