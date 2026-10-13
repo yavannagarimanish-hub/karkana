@@ -649,26 +649,30 @@ export function createPgImageRepository(db: Db): ImageRepository {
     },
 
     async findByKey(storageKey) {
-      const rows = await db
-        .select()
-        .from(uploadedImages)
-        .where(eq(uploadedImages.storageKey, storageKey))
-        .limit(1);
+      try {
+        const rows = await db
+          .select()
+          .from(uploadedImages)
+          .where(eq(uploadedImages.storageKey, storageKey))
+          .limit(1);
 
-      if (!rows[0]) return null;
-      const row = rows[0];
-      return {
-        id: row.id,
-        storageKey: row.storageKey,
-        token: row.token,
-        originalFilename: row.originalFilename,
-        mimeType: row.mimeType,
-        sizeBytes: row.sizeBytes,
-        kind: row.kind,
-        orderId: row.orderId,
-        customerId: row.customerId,
-        createdAt: row.createdAt.toISOString(),
-      };
+        if (!rows[0]) return null;
+        const row = rows[0];
+        return {
+          id: row.id,
+          storageKey: row.storageKey,
+          token: row.token,
+          originalFilename: row.originalFilename,
+          mimeType: row.mimeType,
+          sizeBytes: row.sizeBytes,
+          kind: row.kind,
+          orderId: row.orderId,
+          customerId: row.customerId,
+          createdAt: row.createdAt.toISOString(),
+        };
+      } catch {
+        return null;
+      }
     },
 
     async linkToOrder(orderId, storageKeys) {

@@ -31,7 +31,7 @@ function jsonRepositories(): Repositories {
 
 async function postgresRepositories(): Promise<Repositories> {
   // Imported lazily so `pg` is never loaded in a JSON-only process.
-  const { getDb } = await import('./pg/client');
+  const { getDb, ensureSchemaInitialized } = await import('./pg/client');
   const {
     createPgCustomerRepository,
     createPgImageRepository,
@@ -41,6 +41,7 @@ async function postgresRepositories(): Promise<Repositories> {
   } = await import('./pg/repositories');
 
   const db = getDb();
+  await ensureSchemaInitialized(db);
 
   return {
     products: createPgProductRepository(db),
