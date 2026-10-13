@@ -81,6 +81,11 @@ function makeRepos(catalogue: Product[], saved: Order[] = []): Repositories {
       isWishlisted: vi.fn(async () => false),
       toggleWishlist: vi.fn(async () => true),
     },
+    images: {
+      record: vi.fn(async (input) => ({ ...input, createdAt: new Date().toISOString() })),
+      findByKey: vi.fn(async () => null),
+      linkToOrder: vi.fn(async () => {}),
+    },
     storage: { isConfigured: () => false, put: vi.fn() },
     passwords: { hash: vi.fn(), verify: vi.fn() },
     clock: fixedClock('2026-09-27T10:00:00Z'),

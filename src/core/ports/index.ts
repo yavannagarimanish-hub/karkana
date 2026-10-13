@@ -112,6 +112,37 @@ export interface StoredObject {
 export interface ObjectStorage {
   isConfigured(): boolean;
   put(key: string, body: Buffer, contentType: string): Promise<StoredObject>;
+  get?(key: string): Promise<{ body: Buffer; contentType: string } | null>;
+  delete?(key: string): Promise<boolean>;
+}
+
+export interface UploadedImage {
+  id: string;
+  storageKey: string;
+  token: string;
+  originalFilename?: string | null;
+  mimeType: string;
+  sizeBytes: number;
+  kind: string;
+  orderId?: string | null;
+  customerId?: string | null;
+  createdAt: string;
+}
+
+export interface ImageRepository {
+  record(input: {
+    id: string;
+    storageKey: string;
+    token: string;
+    originalFilename?: string | null;
+    mimeType: string;
+    sizeBytes: number;
+    kind: string;
+    orderId?: string | null;
+    customerId?: string | null;
+  }): Promise<UploadedImage>;
+  findByKey(storageKey: string): Promise<UploadedImage | null>;
+  linkToOrder(orderId: string, storageKeys: string[]): Promise<void>;
 }
 
 /** Password hashing is a port so the algorithm can be tested and rotated. */
@@ -137,6 +168,7 @@ export interface Repositories {
   sections: SectionRepository;
   orders: OrderRepository;
   customers: CustomerRepository;
+  images: ImageRepository;
   storage: ObjectStorage;
   passwords: PasswordHasher;
   clock: Clock;

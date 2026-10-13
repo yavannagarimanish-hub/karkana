@@ -61,9 +61,29 @@ export function createAdminService(repos: Repositories, policy: PricingPolicy = 
     return updated;
   }
 
-  async function deleteProduct(id: string): Promise<void> {
+  async function archiveProduct(id: string): Promise<Product> {
+    const updated = await repos.products.update(id, { isVisible: false });
+    if (!updated) throw new AdminError('NOT_FOUND', `No product ${id} exists.`);
+    return updated;
+  }
+
+  async function deleteProduct(id: string): Promise<{ archived: boolean; message: string }> {
+    const allOrders = await repos.orders.list({ limit: 1000 });
+    const isReferenced = allOrders.some((order) =>
+      order.items.some((item) => item.productId === id),
+    );
+
+    if (isReferenced) {
+      await repos.products.update(id, { isVisible: false });
+      return {
+        archived: true,
+        message: `Product ${id} is present in existing orders. It has been safely archived from the storefront to preserve historical order records.`,
+      };
+    }
+
     const removed = await repos.products.remove(id);
     if (!removed) throw new AdminError('NOT_FOUND', `No product ${id} exists.`);
+    return { archived: false, message: `Product ${id} deleted.` };
   }
 
   async function reorderProducts(ids: readonly string[]): Promise<void> {
@@ -129,6 +149,7 @@ export function createAdminService(repos: Repositories, policy: PricingPolicy = 
     listProducts,
     createProduct,
     updateProduct,
+    archiveProduct,
     deleteProduct,
     reorderProducts,
     listSections,

@@ -114,7 +114,8 @@ async function main() {
       await db
         .insert(orderItems)
         .values(
-          order.items.map((item) => ({
+          order.items.map((item, idx) => ({
+            id: `${order.id}_${idx}`,
             orderId: order.id,
             productId: item.productId,
             productName: item.productName,

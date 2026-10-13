@@ -42,9 +42,9 @@ export async function DELETE(_request: Request, context: Context) {
     const { id } = await context.params;
 
     const services = await getAppServices();
-    await services.admin.deleteProduct(id);
+    const result = await services.admin.deleteProduct(id);
 
-    return ok({ deleted: id });
+    return ok({ deleted: id, ...result });
   } catch (error) {
     return toErrorResponse(error);
   }

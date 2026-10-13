@@ -1,5 +1,6 @@
 import type {
   CustomerRepository,
+  ImageRepository,
   NewAddress,
   NewCustomer,
   OrderListFilter,
@@ -9,6 +10,7 @@ import type {
   ProductRepository,
   SectionPatch,
   SectionRepository,
+  UploadedImage,
 } from '@/core/ports';
 import type { Customer, CustomerAddress } from '@/core/domain/account';
 import { type CatalogueSection, compareProductPositions } from '@/core/domain/catalogue';
@@ -377,6 +379,39 @@ export function createJsonCustomerRepository(store: JsonStore): CustomerReposito
         snapshot.wishlist.push({ customerId, productId, createdAt: new Date().toISOString() });
         return true;
       });
+    },
+  };
+}
+
+export function createJsonImageRepository(_store?: JsonStore): ImageRepository {
+  const images = new Map<string, UploadedImage>();
+  return {
+    async record(input) {
+      const record: UploadedImage = {
+        id: input.id,
+        storageKey: input.storageKey,
+        token: input.token,
+        originalFilename: input.originalFilename ?? null,
+        mimeType: input.mimeType,
+        sizeBytes: input.sizeBytes,
+        kind: input.kind,
+        orderId: input.orderId ?? null,
+        customerId: input.customerId ?? null,
+        createdAt: new Date().toISOString(),
+      };
+      images.set(input.storageKey, record);
+      return record;
+    },
+    async findByKey(storageKey) {
+      return images.get(storageKey) ?? null;
+    },
+    async linkToOrder(orderId, storageKeys) {
+      for (const key of storageKeys) {
+        const img = images.get(key);
+        if (img) {
+          img.orderId = orderId;
+        }
+      }
     },
   };
 }

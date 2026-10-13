@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import type { ObjectStorage, StoredObject } from '@/core/ports';
 import { env } from '../env';
 
@@ -19,10 +19,13 @@ function readConfig(): StorageConfig | null {
   const secretAccessKey = env.R2_SECRET_ACCESS_KEY;
   if (!bucket || !accessKeyId || !secretAccessKey) return null;
 
-  const endpoint =
+  let endpoint =
     env.R2_ENDPOINT ??
     (env.R2_ACCOUNT_ID ? `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com` : '');
   if (!endpoint) return null;
+  if (!endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
+    endpoint = `https://${endpoint}`;
+  }
 
   return {
     endpoint,
@@ -70,6 +73,41 @@ export function createObjectStorage(): ObjectStorage {
         : `${config.endpoint.replace(/\/$/, '')}/${config.bucket}/${key}`;
 
       return { url, key, size: body.length };
+    },
+    async get(key): Promise<{ body: Buffer; contentType: string } | null> {
+      try {
+        const response = await client.send(
+          new GetObjectCommand({
+            Bucket: config.bucket,
+            Key: key,
+          }),
+        );
+        if (!response.Body) return null;
+        const bytes = await response.Body.transformToByteArray();
+        return {
+          body: Buffer.from(bytes),
+          contentType: response.ContentType ?? 'application/octet-stream',
+        };
+      } catch (err: unknown) {
+        const error = err as { name?: string; $metadata?: { httpStatusCode?: number } };
+        if (error.name === 'NoSuchKey' || error.$metadata?.httpStatusCode === 404) {
+          return null;
+        }
+        throw err;
+      }
+    },
+    async delete(key): Promise<boolean> {
+      try {
+        await client.send(
+          new DeleteObjectCommand({
+            Bucket: config.bucket,
+            Key: key,
+          }),
+        );
+        return true;
+      } catch {
+        return false;
+      }
     },
   };
 }
@@ -133,6 +171,39 @@ export function createLocalStorage(): ObjectStorage {
       await fs.writeFile(target, body);
 
       return { url: `/uploads/${safeKey}`, key: safeKey, size: body.length };
+    },
+    async get(key): Promise<{ body: Buffer; contentType: string } | null> {
+      const safeKey = sanitizeUploadKey(key);
+      const target = safeKey === null ? null : resolveUploadPath(safeKey);
+      if (safeKey === null || target === null) return null;
+      try {
+        const data = await fs.readFile(target);
+        const ext = path.extname(target).toLowerCase();
+        const contentType =
+          ext === '.jpg' || ext === '.jpeg'
+            ? 'image/jpeg'
+            : ext === '.png'
+              ? 'image/png'
+              : ext === '.webp'
+                ? 'image/webp'
+                : ext === '.gif'
+                  ? 'image/gif'
+                  : 'application/octet-stream';
+        return { body: data, contentType };
+      } catch {
+        return null;
+      }
+    },
+    async delete(key): Promise<boolean> {
+      const safeKey = sanitizeUploadKey(key);
+      const target = safeKey === null ? null : resolveUploadPath(safeKey);
+      if (safeKey === null || target === null) return false;
+      try {
+        await fs.unlink(target);
+        return true;
+      } catch {
+        return false;
+      }
     },
   };
 }

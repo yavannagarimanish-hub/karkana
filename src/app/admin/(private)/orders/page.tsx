@@ -99,6 +99,58 @@ export default async function AdminOrdersPage({ searchParams }: Props) {
                       {order.items.length} {order.items.length === 1 ? 'item' : 'items'} ·{' '}
                       {order.customerId ? 'account' : 'guest'}
                     </p>
+
+                    {order.items.some((i) => i.personalizationImage || i.customizationNotes) && (
+                      <div className="mt-3 space-y-2 border-t border-hairline pt-2">
+                        {order.items
+                          .filter((i) => i.personalizationImage || i.customizationNotes)
+                          .map((item, idx) => {
+                            const photoSrc = item.personalizationImage
+                              ? item.personalizationImage.startsWith('http') || item.personalizationImage.startsWith('/')
+                                ? item.personalizationImage
+                                : `/api/v1/uploads/preview?key=${encodeURIComponent(item.personalizationImage)}`
+                              : null;
+                            return (
+                              <div key={idx} className="rounded-xs border border-ember/30 bg-ember/5 p-2 text-xs">
+                                <div className="flex items-center gap-2">
+                                  <Badge tone="ember">Personalized</Badge>
+                                  <span className="font-semibold text-fg truncate">{item.productName}</span>
+                                </div>
+                                {item.customizationNotes && (
+                                  <p className="mt-1 text-[11px] text-fg-muted font-mono break-words">
+                                    {item.customizationNotes}
+                                  </p>
+                                )}
+                                {photoSrc && (
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <a
+                                      href={photoSrc}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="group relative block size-12 shrink-0 overflow-hidden rounded-xs border border-hairline bg-void"
+                                    >
+                                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                                      <img
+                                        src={photoSrc}
+                                        alt="Customer photograph"
+                                        className="size-full object-cover transition-transform group-hover:scale-110"
+                                      />
+                                    </a>
+                                    <a
+                                      href={photoSrc}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="font-mono text-[10px] uppercase tracking-wider text-ember hover:underline"
+                                    >
+                                      View full photo ↗
+                                    </a>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                      </div>
+                    )}
                   </TD>
                   <TD>
                     <p className="text-sm text-fg">{order.customerName}</p>

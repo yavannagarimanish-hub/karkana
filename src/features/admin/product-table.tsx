@@ -36,10 +36,14 @@ export function ProductRowActions({ product }: { product: Product }) {
   };
 
   const remove = async () => {
-    if (!window.confirm(`Delete ${product.id} (${product.name})? This cannot be undone.`)) return;
+    if (!window.confirm(`Remove ${product.id} (${product.name})? If present in existing orders, it will be safely archived instead of deleted.`)) return;
     setBusy(true);
     try {
-      await fetch(`/api/v1/products/${product.id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/v1/products/${product.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.message) {
+        window.alert(data.message);
+      }
       router.refresh();
     } finally {
       setBusy(false);
@@ -52,7 +56,7 @@ export function ProductRowActions({ product }: { product: Product }) {
         Edit
       </Button>
       <Button size="sm" variant="ghost" disabled={busy} onClick={() => patch({ isVisible: !product.isVisible })}>
-        {product.isVisible ? 'Unpublish' : 'Publish'}
+        {product.isVisible ? 'Archive (Hide)' : 'Unarchive (Publish)'}
       </Button>
       <Button size="sm" variant="ghost" disabled={busy} onClick={() => patch({ inStock: !product.inStock })}>
         {product.inStock ? 'Mark out' : 'Mark in'}

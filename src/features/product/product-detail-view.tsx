@@ -11,10 +11,8 @@ import { pricePaise, mrpPaise, primaryImage } from '@/core/domain/product';
 import { useCart } from '@/features/cart/cart-provider';
 import { Badge } from '@/ui/badge';
 import { Button } from '@/ui/button';
-import { Field, Textarea } from '@/ui/field';
 import { QuantityStepper } from '@/ui/quantity-stepper';
-
-const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+import { PersonalisedProductTemplate } from './personalised-template';
 
 export interface ProductDetailViewProps {
   family: ProductFamily | null;
@@ -64,65 +62,18 @@ export function ProductDetailView({
   const purchasable = activeVariant.inStock;
 
   const [quantity, setQuantity] = React.useState(1);
-  const [photoUrl, setPhotoUrl] = React.useState<string | null>(null);
-  const [notes, setNotes] = React.useState('');
-  const [uploading, setUploading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [added, setAdded] = React.useState(false);
   const [saved, setSaved] = React.useState(wishlisted);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const needsPhoto = activeProduct.module === 'PERSONALIZED';
-
-  const uploadPhoto = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    setError(null);
-
-    if (!file.type.startsWith('image/')) {
-      setError('Please choose an image file (JPG, PNG or WebP).');
-      return;
-    }
-    if (file.size > MAX_UPLOAD_BYTES) {
-      setError('That image is larger than 10 MB. Please choose a smaller file.');
-      return;
-    }
-
-    setUploading(true);
-    try {
-      const form = new FormData();
-      form.append('file', file);
-      form.append('kind', 'personalization');
-
-      const response = await fetch('/api/v1/uploads', { method: 'POST', body: form });
-      const payload = (await response.json()) as { success?: boolean; url?: string; error?: string };
-
-      if (!response.ok || !payload.success || !payload.url) {
-        throw new Error(payload.error ?? 'Upload failed');
-      }
-      setPhotoUrl(payload.url);
-    } catch (uploadError) {
-      setError(uploadError instanceof Error ? uploadError.message : 'Upload failed. Please try again.');
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  };
 
   const addToCart = () => {
     setError(null);
 
-    if (needsPhoto && !photoUrl) {
-      setError('Upload your photograph first. It is printed on the box.');
-      return;
-    }
-
     add({
       productId: activeVariant.id, // Underlying SKU
       quantity,
-      personalizationImage: photoUrl,
-      customizationNotes: notes.trim() || null,
       unitPricePaise: price,
       variantLabel: activeVariant.label,
       parentTitle: family && family.hasMultipleVariants ? family.title : null,
@@ -258,107 +209,41 @@ export function ProductDetailView({
 
           {/* 4. ADD TO CART / purchase controls */}
           <div className="mt-6 space-y-6">
-            {needsPhoto && (
-              <section
-                aria-labelledby="personalization-heading"
-                className="rounded-sm border border-ember/40 bg-ember-wash p-5"
-              >
-                <h2
-                  id="personalization-heading"
-                  className="live-dot font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-ember"
-                >
-                  Personalization
-                </h2>
-                <p className="mt-2 text-sm text-fg-muted">
-                  Upload a photograph and we print it on this box. Maximum 10 MB.
-                </p>
+            {needsPhoto ? (
+              <PersonalisedProductTemplate product={activeProduct} />
+            ) : (
+              <>
+                {error && (
+                  <p role="alert" className="rounded-sm border border-status-danger/50 bg-status-danger/10 p-3 text-sm text-status-danger">
+                    {error}
+                  </p>
+                )}
 
-                <div className="mt-4">
-                  <input
-                    ref={fileInputRef}
-                    id="personalization-photo"
-                    type="file"
-                    accept="image/*"
-                    onChange={uploadPhoto}
-                    disabled={uploading}
-                    className="sr-only"
-                  />
+                <div className="flex flex-wrap items-center gap-3">
+                  <QuantityStepper value={quantity} onChange={setQuantity} disabled={!purchasable} />
 
-                  {photoUrl ? (
-                    <div className="space-y-3">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- user upload */}
-                      <img
-                        src={photoUrl}
-                        alt="Your uploaded photograph"
-                        className="max-h-72 w-full rounded-sm bg-void object-contain p-2 shadow-hairline"
-                      />
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-fg-muted">Photo attached</span>
-                        <button
-                          type="button"
-                          onClick={() => setPhotoUrl(null)}
-                          className="font-mono uppercase tracking-[0.14em] text-ember hover:underline"
-                        >
-                          Replace
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <label
-                      htmlFor="personalization-photo"
-                      className="flex cursor-pointer flex-col items-center gap-2 rounded-sm border border-dashed border-hairline-strong p-8 text-center transition-colors hover:border-ember"
-                    >
-                      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-fg">
-                        {uploading ? 'Uploading…' : 'Choose a photograph'}
-                      </span>
-                      <span className="text-[11px] text-fg-dim">JPG, PNG or WebP · up to 10 MB</span>
-                    </label>
-                  )}
+                  <Button
+                    size="lg"
+                    variant={purchasable ? 'solid' : 'outline'}
+                    disabled={!purchasable}
+                    onClick={addToCart}
+                    className="flex-1"
+                  >
+                    {!purchasable ? 'Out of stock' : 'Add to cart'}
+                  </Button>
+
+                  <button
+                    type="button"
+                    onClick={toggleWishlist}
+                    aria-pressed={saved}
+                    className="grid size-11 place-items-center rounded-sm text-lg shadow-hairline-strong transition-colors hover:text-ember"
+                    aria-label={saved ? 'Remove from wishlist' : 'Save to wishlist'}
+                  >
+                    {saved ? '♥' : '♡'}
+                  </button>
                 </div>
-
-                <div className="mt-4">
-                  <Field label="Printing instructions (optional)" htmlFor="customization-notes">
-                    <Textarea
-                      id="customization-notes"
-                      rows={3}
-                      value={notes}
-                      onChange={(event) => setNotes(event.target.value)}
-                      placeholder="e.g. Add the greeting “Happy Diwali, Sharma family” below the photo."
-                    />
-                  </Field>
-                </div>
-              </section>
+              </>
             )}
-
-            {error && (
-              <p role="alert" className="rounded-sm border border-status-danger/50 bg-status-danger/10 p-3 text-sm text-status-danger">
-                {error}
-              </p>
-            )}
-
-            <div className="flex flex-wrap items-center gap-3">
-              <QuantityStepper value={quantity} onChange={setQuantity} disabled={!purchasable} />
-
-              <Button
-                size="lg"
-                variant={purchasable ? 'solid' : 'outline'}
-                disabled={!purchasable || uploading}
-                onClick={addToCart}
-                className="flex-1"
-              >
-                {!purchasable ? 'Out of stock' : uploading ? 'Uploading photo…' : 'Add to cart'}
-              </Button>
-
-              <button
-                type="button"
-                onClick={toggleWishlist}
-                aria-pressed={saved}
-                className="grid size-11 place-items-center rounded-sm text-lg shadow-hairline-strong transition-colors hover:text-ember"
-                aria-label={saved ? 'Remove from wishlist' : 'Save to wishlist'}
-              >
-                {saved ? '♥' : '♡'}
-              </button>
-            </div>
 
             {!signedIn && (
               <p className="text-xs text-fg-dim">
@@ -399,28 +284,30 @@ export function ProductDetailView({
             </ul>
 
             {/* Mobile bottom sticky buy bar */}
-            <div className="fixed inset-x-0 bottom-16 z-30 border-t border-hairline bg-void/95 px-4 py-3 backdrop-blur-md lg:hidden">
-              <div className="flex items-center gap-3">
-                <div className="min-w-0 flex-1">
-                  <p className="numeric text-base leading-tight font-bold text-fg">
-                    {formatINR(price * quantity)}
-                  </p>
-                  <p className="label truncate text-fg-dim">
-                    {quantity} &times; {formatINR(price)} ({activeVariant.label})
-                  </p>
-                </div>
+            {!needsPhoto && (
+              <div className="fixed inset-x-0 bottom-16 z-30 border-t border-hairline bg-void/95 px-4 py-3 backdrop-blur-md lg:hidden">
+                <div className="flex items-center gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="numeric text-base leading-tight font-bold text-fg">
+                      {formatINR(price * quantity)}
+                    </p>
+                    <p className="label truncate text-fg-dim">
+                      {quantity} &times; {formatINR(price)} ({activeVariant.label})
+                    </p>
+                  </div>
 
-                <Button
-                  size="lg"
-                  variant={purchasable ? 'solid' : 'outline'}
-                  disabled={!purchasable || uploading || (needsPhoto && !photoUrl)}
-                  onClick={addToCart}
-                  className="shrink-0"
-                >
-                  {!purchasable ? 'Out of stock' : uploading ? 'Uploading…' : 'Add to cart'}
-                </Button>
+                  <Button
+                    size="lg"
+                    variant={purchasable ? 'solid' : 'outline'}
+                    disabled={!purchasable}
+                    onClick={addToCart}
+                    className="shrink-0"
+                  >
+                    {!purchasable ? 'Out of stock' : 'Add to cart'}
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* 5. PRODUCT DESCRIPTION / other product information */}

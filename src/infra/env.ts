@@ -84,7 +84,11 @@ function resolveAliases(raw: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   fallback('R2_REGION', 'B2_REGION');
   fallback('R2_ENDPOINT', 'B2_ENDPOINT');
   fallback('R2_ACCESS_KEY_ID', 'B2_ACCESS_KEY_ID');
+  fallback('R2_ACCESS_KEY_ID', 'B2_KEY_ID');
+  fallback('R2_ACCESS_KEY_ID', 'B2_APPLICATION_KEY_ID');
   fallback('R2_SECRET_ACCESS_KEY', 'B2_SECRET_ACCESS_KEY');
+  fallback('R2_SECRET_ACCESS_KEY', 'B2_APPLICATION_KEY');
+  fallback('R2_SECRET_ACCESS_KEY', 'B2_APP_KEY');
 
   // Postgres connection string. First configured wins; pooled flavours come
   // before direct ones. Every name is honoured bare and `karkana_`-prefixed.

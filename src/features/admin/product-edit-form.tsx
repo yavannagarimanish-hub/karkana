@@ -59,6 +59,39 @@ export function ProductEditForm({ product }: { product: Product }) {
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [saved, setSaved] = React.useState<string | null>(null);
+  const [artworkUploading, setArtworkUploading] = React.useState(false);
+  const artworkInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleArtworkUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setArtworkUploading(true);
+    setError(null);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('kind', 'product');
+      const res = await fetch('/api/v1/uploads', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to upload artwork');
+      }
+      const uploadedUrl = data.url || data.previewUrl || `/uploads/${data.key}`;
+      setForm((cur) => {
+        const existing = cur.images ? cur.images.split('\n').filter(Boolean) : [];
+        return {
+          ...cur,
+          images: [uploadedUrl, ...existing].join('\n'),
+        };
+      });
+      setSaved('Template artwork uploaded successfully.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Artwork upload failed.');
+    } finally {
+      setArtworkUploading(false);
+      if (artworkInputRef.current) artworkInputRef.current.value = '';
+    }
+  };
 
   const update =
     (name: keyof Draft) =>
@@ -235,6 +268,32 @@ export function ProductEditForm({ product }: { product: Product }) {
       <Field label="Notes" htmlFor="e-notes" hint="Internal — never shown to customers">
         <Textarea id="e-notes" rows={2} value={form.notes} onChange={update('notes')} />
       </Field>
+
+      <div className="rounded-sm border border-hairline bg-panel-raised p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <label className="font-mono text-xs uppercase tracking-[0.12em] text-fg font-semibold">
+            Template Artwork / Image
+          </label>
+          <input
+            ref={artworkInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={handleArtworkUpload}
+            className="sr-only"
+            id="artwork-upload"
+            disabled={artworkUploading}
+          />
+          <label
+            htmlFor="artwork-upload"
+            className="cursor-pointer rounded-xs border border-ember bg-ember/10 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ember hover:bg-ember hover:text-white transition-colors"
+          >
+            {artworkUploading ? 'Uploading to B2…' : 'Upload or Replace Artwork'}
+          </label>
+        </div>
+        <p className="text-[11px] text-fg-dim">
+          Upload product or personalized template artwork directly to persistent Backblaze B2 storage.
+        </p>
+      </div>
 
       <Field label="Image URLs" htmlFor="e-images" hint="One URL per line, up to 10">
         <Textarea id="e-images" rows={3} value={form.images} onChange={update('images')} />

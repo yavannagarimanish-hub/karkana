@@ -7,6 +7,7 @@ import { systemClock, systemIds } from '../system';
 import { getJsonStore } from './json/store';
 import {
   createJsonCustomerRepository,
+  createJsonImageRepository,
   createJsonOrderRepository,
   createJsonProductRepository,
   createJsonSectionRepository,
@@ -19,6 +20,7 @@ function jsonRepositories(): Repositories {
     sections: createJsonSectionRepository(store),
     orders: createJsonOrderRepository(store),
     customers: createJsonCustomerRepository(store),
+    images: createJsonImageRepository(store),
     storage: createObjectStorage(),
     passwords: passwordHasher,
     clock: systemClock,
@@ -32,6 +34,7 @@ async function postgresRepositories(): Promise<Repositories> {
   const { getDb } = await import('./pg/client');
   const {
     createPgCustomerRepository,
+    createPgImageRepository,
     createPgOrderRepository,
     createPgProductRepository,
     createPgSectionRepository,
@@ -44,6 +47,7 @@ async function postgresRepositories(): Promise<Repositories> {
     sections: createPgSectionRepository(db),
     orders: createPgOrderRepository(db),
     customers: createPgCustomerRepository(db),
+    images: createPgImageRepository(db),
     storage: createObjectStorage(),
     passwords: passwordHasher,
     clock: systemClock,

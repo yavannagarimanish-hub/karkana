@@ -168,6 +168,7 @@ export const orders = pgTable(
 export const orderItems = pgTable(
   'order_items',
   {
+    id: varchar('id', { length: 60 }).primaryKey(),
     orderId: varchar('order_id', { length: 20 })
       .notNull()
       .references(() => orders.id, { onDelete: 'cascade' }),
@@ -182,7 +183,27 @@ export const orderItems = pgTable(
     personalizationImage: varchar('personalization_image', { length: 500 }),
     customizationNotes: text('customization_notes'),
   },
-  (table) => [primaryKey({ columns: [table.orderId, table.productId] })],
+  (table) => [index('order_items_order_id_idx').on(table.orderId)],
+);
+
+export const uploadedImages = pgTable(
+  'uploaded_images',
+  {
+    id: varchar('id', { length: 50 }).primaryKey(),
+    storageKey: varchar('storage_key', { length: 500 }).notNull().unique(),
+    token: varchar('token', { length: 100 }).notNull(),
+    originalFilename: varchar('original_filename', { length: 255 }),
+    mimeType: varchar('mime_type', { length: 100 }).notNull(),
+    sizeBytes: integer('size_bytes').notNull(),
+    kind: varchar('kind', { length: 50 }).notNull().default('personalization'),
+    orderId: varchar('order_id', { length: 20 }),
+    customerId: varchar('customer_id', { length: 40 }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('uploaded_images_token_idx').on(table.token),
+    index('uploaded_images_order_idx').on(table.orderId),
+  ],
 );
 
 /* ── Relations (used by Drizzle's relational query builder) ─────────────── */
@@ -213,6 +234,7 @@ export const schema = {
   wishlistItems,
   orders,
   orderItems,
+  uploadedImages,
 };
 
 export type ProductRow = typeof products.$inferSelect;
@@ -221,3 +243,4 @@ export type OrderItemRow = typeof orderItems.$inferSelect;
 export type CustomerRow = typeof customers.$inferSelect;
 export type AddressRow = typeof customerAddresses.$inferSelect;
 export type SectionRow = typeof sections.$inferSelect;
+export type UploadedImageRow = typeof uploadedImages.$inferSelect;

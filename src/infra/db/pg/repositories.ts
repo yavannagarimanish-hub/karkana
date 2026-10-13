@@ -1,6 +1,7 @@
 import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import type {
   CustomerRepository,
+  ImageRepository,
   NewAddress,
   NewCustomer,
   OrderListFilter,
@@ -29,6 +30,7 @@ import {
   orders,
   products,
   sections,
+  uploadedImages,
   wishlistItems,
   type AddressRow,
   type CustomerRow,
@@ -128,20 +130,26 @@ function toOrderItem(row: OrderItemRow): OrderItem {
 }
 
 function toOrder(row: OrderRow, items: OrderItem[] = []): Order {
+  let finalItems = items;
+  if (finalItems.length === 0 && Array.isArray((row as unknown as { items?: OrderItem[] }).items)) {
+    finalItems = (row as unknown as { items: OrderItem[] }).items;
+  }
+  const totalAmountFallback = (row as unknown as { total_amount?: string | number }).total_amount;
+  const fallbackTotal = totalAmountFallback ? Math.round(Number(totalAmountFallback) * 100) : 0;
   return {
     id: row.id,
-    customerId: row.customerId,
+    customerId: row.customerId ?? null,
     customerName: row.customerName,
     mobile: row.mobile,
     address: row.address,
-    items,
-    subtotalPaise: row.subtotalPaise,
-    feesPaise: row.feesPaise,
-    shippingPaise: row.shippingPaise,
-    totalPaise: row.totalPaise,
-    paymentMethod: row.paymentMethod as Order['paymentMethod'],
-    paymentStatus: row.paymentStatus as Order['paymentStatus'],
-    status: row.status as OrderStatus,
+    items: finalItems,
+    subtotalPaise: row.subtotalPaise ?? fallbackTotal,
+    feesPaise: row.feesPaise ?? 0,
+    shippingPaise: row.shippingPaise ?? 0,
+    totalPaise: row.totalPaise ?? fallbackTotal,
+    paymentMethod: (row.paymentMethod as Order['paymentMethod']) ?? 'COD',
+    paymentStatus: (row.paymentStatus as Order['paymentStatus']) ?? 'PENDING',
+    status: (row.status as OrderStatus) ?? 'NEW',
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };
@@ -332,7 +340,8 @@ export function createPgOrderRepository(db: Db): OrderRepository {
 
         if (order.items.length > 0) {
           await tx.insert(orderItems).values(
-            order.items.map((item) => ({
+            order.items.map((item, idx) => ({
+              id: `${order.id}_${idx}`,
               orderId: order.id,
               productId: item.productId,
               productName: item.productName,
@@ -346,6 +355,16 @@ export function createPgOrderRepository(db: Db): OrderRepository {
               customizationNotes: item.customizationNotes,
             })),
           );
+
+          const imageKeys = order.items
+            .map((item) => item.personalizationImage)
+            .filter((img): img is string => Boolean(img));
+          if (imageKeys.length > 0) {
+            await tx
+              .update(uploadedImages)
+              .set({ orderId: order.id })
+              .where(inArray(uploadedImages.storageKey, imageKeys));
+          }
         }
       });
 
@@ -591,6 +610,73 @@ export function createPgCustomerRepository(db: Db): CustomerRepository {
 
       await db.insert(wishlistItems).values({ customerId, productId });
       return true;
+    },
+  };
+}
+
+/* ── Uploaded images ────────────────────────────────────────────────────── */
+
+export function createPgImageRepository(db: Db): ImageRepository {
+  return {
+    async record(input) {
+      const [row] = await db
+        .insert(uploadedImages)
+        .values({
+          id: input.id,
+          storageKey: input.storageKey,
+          token: input.token,
+          originalFilename: input.originalFilename ?? null,
+          mimeType: input.mimeType,
+          sizeBytes: input.sizeBytes,
+          kind: input.kind,
+          orderId: input.orderId ?? null,
+          customerId: input.customerId ?? null,
+        })
+        .returning();
+
+      return {
+        id: row!.id,
+        storageKey: row!.storageKey,
+        token: row!.token,
+        originalFilename: row!.originalFilename,
+        mimeType: row!.mimeType,
+        sizeBytes: row!.sizeBytes,
+        kind: row!.kind,
+        orderId: row!.orderId,
+        customerId: row!.customerId,
+        createdAt: row!.createdAt.toISOString(),
+      };
+    },
+
+    async findByKey(storageKey) {
+      const rows = await db
+        .select()
+        .from(uploadedImages)
+        .where(eq(uploadedImages.storageKey, storageKey))
+        .limit(1);
+
+      if (!rows[0]) return null;
+      const row = rows[0];
+      return {
+        id: row.id,
+        storageKey: row.storageKey,
+        token: row.token,
+        originalFilename: row.originalFilename,
+        mimeType: row.mimeType,
+        sizeBytes: row.sizeBytes,
+        kind: row.kind,
+        orderId: row.orderId,
+        customerId: row.customerId,
+        createdAt: row.createdAt.toISOString(),
+      };
+    },
+
+    async linkToOrder(orderId, storageKeys) {
+      if (storageKeys.length === 0) return;
+      await db
+        .update(uploadedImages)
+        .set({ orderId })
+        .where(inArray(uploadedImages.storageKey, storageKeys));
     },
   };
 }
