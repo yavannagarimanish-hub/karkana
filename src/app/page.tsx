@@ -74,35 +74,35 @@ export default async function HomePage() {
         {/* ── 9 Primary Sections Quick Category Bar ── */}
         <CategoryBar />
 
-        {/* ── 1. FEATURED PRODUCTS (Above categories) ── */}
-        {featured && featured.products.length > 0 && (
-          <section
-            key={featured.section.id}
-            className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 sm:py-24 lg:px-12"
-          >
-            <SectionHeader
-              index="01"
-              title={featured.section.title}
-              subtitle={featured.section.subtitle || undefined}
-              actionVariant="button"
-            />
-            <ProductGrid products={featured.products} />
-          </section>
-        )}
-
-        {/* ── 2. POPULAR CRACKERS (Above categories) ── */}
+        {/* ── 1. POPULAR CRACKERS ── */}
         {popular && popular.products.length > 0 && (
           <section
             key={popular.section.id}
             className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 sm:py-24 lg:px-12"
           >
             <SectionHeader
-              index="02"
+              index="01"
               title={popular.section.title}
               subtitle={popular.section.subtitle || undefined}
               actionVariant="button"
             />
             <ProductGrid products={popular.products} />
+          </section>
+        )}
+
+        {/* ── 2. FEATURED CRACKERS ── */}
+        {featured && featured.products.length > 0 && (
+          <section
+            key={featured.section.id}
+            className="mx-auto max-w-7xl border-t border-hairline px-4 py-16 sm:px-8 sm:py-24 lg:px-12"
+          >
+            <SectionHeader
+              index="02"
+              title={featured.section.title}
+              subtitle={featured.section.subtitle || undefined}
+              actionVariant="button"
+            />
+            <ProductGrid products={featured.products} />
           </section>
         )}
 
