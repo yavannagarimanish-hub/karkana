@@ -13,7 +13,7 @@ const remotePatterns = [
   {
     protocol: 'https' as const,
     hostname: 'raw.githubusercontent.com',
-    pathname: '/yavannagarimanish-hub/karkana/master/public/uploads/products/**',
+    pathname: '/yavannagarimanish-hub/karkana/*/public/uploads/products/**',
   },
 ].filter((pattern): pattern is { protocol: 'https'; hostname: string } => pattern !== null);
 
