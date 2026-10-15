@@ -10,6 +10,11 @@ const remotePatterns = [
     ? { protocol: 'https' as const, hostname: `${r2AccountId}.r2.cloudflarestorage.com` }
     : null,
   cdnHost ? { protocol: 'https' as const, hostname: cdnHost } : null,
+  {
+    protocol: 'https' as const,
+    hostname: 'raw.githubusercontent.com',
+    pathname: '/yavannagarimanish-hub/karkana/master/public/uploads/products/**',
+  },
 ].filter((pattern): pattern is { protocol: 'https'; hostname: string } => pattern !== null);
 
 const securityHeaders = [
